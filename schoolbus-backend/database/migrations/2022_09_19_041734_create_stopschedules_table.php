@@ -20,8 +20,8 @@ return new class extends Migration
             $table->tinyInteger('order');
             $table->timestamps();
 
-            $table->foreign('stop_id')->references('stop_id')->on('stops');
-            $table->foreign('schedule_id')->references('schedule_id')->on('schedules');
+            $table->foreign('stop_id')->references('stop_id')->on('stops')->onDelete('cascade');
+            $table->foreign('schedule_id')->references('schedule_id')->on('schedules')->onDelete('cascade');
         });
     }
 

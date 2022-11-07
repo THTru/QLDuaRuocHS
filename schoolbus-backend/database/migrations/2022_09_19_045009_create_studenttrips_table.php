@@ -25,9 +25,9 @@ return new class extends Migration
             $table->tinyInteger('absence_req');
             $table->timestamps();
 
-            $table->foreign('student_id')->references('student_id')->on('students');
-            $table->foreign('trip_id')->references('trip_id')->on('trips');
-            $table->foreign('stop_id')->references('stop_id')->on('stops');
+            $table->foreign('student_id')->references('student_id')->on('students')->onDelete('cascade');
+            $table->foreign('trip_id')->references('trip_id')->on('trips')->onDelete('cascade');
+            $table->foreign('stop_id')->references('stop_id')->on('stops')->onDelete('cascade');
         });
     }
 

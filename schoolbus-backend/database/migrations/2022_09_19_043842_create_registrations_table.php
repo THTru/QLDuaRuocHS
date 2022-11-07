@@ -21,9 +21,9 @@ return new class extends Migration
             $table->unsignedBigInteger('stop_id');
             $table->timestamps();
 
-            $table->foreign('student_id')->references('student_id')->on('students');
-            $table->foreign('line_id')->references('line_id')->on('lines');
-            $table->foreign('stop_id')->references('stop_id')->on('stops');
+            $table->foreign('student_id')->references('student_id')->on('students')->onDelete('cascade');
+            $table->foreign('line_id')->references('line_id')->on('lines')->onDelete('cascade');
+            $table->foreign('stop_id')->references('stop_id')->on('stops')->onDelete('cascade');
         });
     }
 

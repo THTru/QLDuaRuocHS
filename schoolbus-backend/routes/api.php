@@ -4,6 +4,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\GeneralController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\AdminController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -72,3 +74,35 @@ Route::post('register', [AuthController::class, 'register']);
 Route::post('login2', [AuthController::class, 'login2']);
 Route::post('logout2', [AuthController::class, 'logout2']);
 Route::get('user2', [AuthController::class, 'user2']);
+
+//Admin API
+Route::post('newUser', [AdminController::class, 'newUser']); //Tạo người dùng mới
+Route::patch('editUser', [AdminController::class, 'editUser']); //Sửa thông tin người dùng
+Route::patch('changePassword', [AdminController::class, 'changePassword']); //Đổi mật khẩu người dùng
+Route::delete('deleteUser', [AdminController::class, 'deleteUser']); //Xóa người dùng
+
+Route::post('newClass', [AdminController::class, 'newClass']); //Tạo lớp học mới
+Route::patch('editClass', [AdminController::class, 'editClass']); //Đổi tên lớp
+Route::delete('deleteClass', [AdminController::class, 'deleteClass']); //Xóa lớp
+
+Route::post('newStudent', [AdminController::class, 'newStudent']); //Tạo học sinh mới
+Route::patch('editStudent', [AdminController::class, 'editStudent']); //Sửa thông tin học sinh
+Route::patch('bondParentStudent', [AdminController::class, 'bondParentStudent']); //Liên kết phụ huynh với học sinh
+Route::delete('deleteStudent', [AdminController::class, 'deleteStudent']); //Xóa học sinh
+
+
+Route::post('newVehicle', [AdminController::class, 'newVehicle']); //Tạo xe mới
+Route::patch('editVehicle', [AdminController::class, 'editVehicle']); //Sửa thông tin xe
+Route::delete('deleteVehicle', [AdminController::class, 'deleteVehicle']); //Xóa xe
+
+Route::post('newDriver', [AdminController::class, 'newDriver']); //Tạo tài xế mới
+Route::patch('editDriver', [AdminController::class, 'editDriver']); //Sửa thông tin tài xế
+Route::delete('deleteDriver', [AdminController::class, 'deleteDriver']); //Xóa tài xế
+
+Route::post('newStop', [AdminController::class, 'newStop']); //Tạo điểm dừng mới
+Route::patch('editStop', [AdminController::class, 'editStop']); //chỉnh sửa điểm dừng mới
+Route::delete('deleteStop', [AdminController::class, 'deleteStop']); //Xóa điểm dừng
+
+Route::post('newLineType', [AdminController::class, 'newLineType']); //Tạo loại tuyến mới
+Route::patch('editLineType', [AdminController::class, 'editLineType']); //Sửa thông tin loại tuyến
+Route::delete('deleteLineType', [AdminController::class, 'deleteLineType']); //Xóa loại tuyến
