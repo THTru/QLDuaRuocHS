@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id('stopschedule_id');
             $table->unsignedBigInteger('stop_id');
             $table->unsignedBigInteger('schedule_id');
-            $table->tinyInteger('order');
+            $table->time('time_take')->default('00:00');
             $table->timestamps();
 
             $table->foreign('stop_id')->references('stop_id')->on('stops')->onDelete('cascade');

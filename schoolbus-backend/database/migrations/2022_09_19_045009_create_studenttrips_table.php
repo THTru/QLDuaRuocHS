@@ -18,9 +18,9 @@ return new class extends Migration
             $table->string('student_id');
             $table->unsignedBigInteger('trip_id');
             $table->unsignedBigInteger('stop_id');
-            $table->time('est_time');
-            $table->time('on_at');
-            $table->time('off_at');
+            $table->time('est_time')->nullable();
+            $table->time('on_at')->nullable();
+            $table->time('off_at')->nullable();
             $table->tinyInteger('absence');
             $table->tinyInteger('absence_req');
             $table->timestamps();

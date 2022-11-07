@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Hclass;
@@ -21,5 +22,70 @@ use App\Models\User;
 
 class ParentController extends Controller
 {
-    //
+    //=========================================== REGISTRATION ==============================================
+    //Đăng ký tuyến cho học sinh
+    public function registerLine(Request $req){
+        $response = [ 'message' => 'OK'];
+        $rules = [
+            'parent_id' => 'required',
+            'student_id' =>'required',
+            'line_id' => 'required',
+            'stop_id' => 'required'
+        ];
+        $validator = Validator::make($req->all(), $rules);
+        if($validator->fails()){
+            $response = [ 'message ' => 'Xin nhập đủ thông tin đúng yêu cầu' ];
+            return response()->json($response, 400);
+        }
+
+        $parent_id = $req->parent_id;
+        $student_id = $req->student_id;
+        $line_id = $req->line_id;
+        $stop_id = $req->stop_id;
+
+        $parent = User::find($parent_id);
+        if($parent == NULL || $parent->type != 3){
+            $response = [ 'message ' => 'Mã phụ huynh sai' ];
+            return response()->json($response, 400);
+        }
+        $student = Student::find($student_id);
+        if($student == NULL || $student->parent_id != $parent_id){
+            $response = [ 'message ' => 'Sai thông tin học sinh' ];
+            return response()->json($response, 400);
+        }
+        if(Line::find($line_id) == NULL || Line::find($line_id)->line_status != 1){
+            $response = [ 'message ' => 'Không tìm thấy tuyến' ];
+            return response()->json($response, 400);
+        }
+        if(Stop::find($stop_id) == NULL){
+            $response = [ 'message ' => 'Không tìm thấy điểm dừng' ];
+            return response()->json($response, 400);
+        }
+
+        $today = Carbon::now();
+        $deadline = new Carbon(Line::find($line_id)->reg_deadline);
+        if($today->gt($deadline)){
+            $response = [ 'message ' => 'Quá thời hạn đăng ký' ];
+            return response()->json($response, 400);
+        }
+
+        if(Registration::where('line_id', $line_id)->where('student_id', $student_id)->exists()){
+            $response = [ 'message ' => 'Đã đăng ký rồi' ];
+            return response()->json($response, 400);
+        }
+
+        $countRegistered = Registration::where('line_id', $line_id)->get()->count();
+        if($countRegistered >= Line::find($line_id)->slot){
+            $response = [ 'message ' => 'Hết lượt đăng ký' ];
+            return response()->json($response, 400);
+        }
+
+        $newRegistration = new Registration;
+        $newRegistration->reg_time = $today;
+        $newRegistration->student_id = $student_id;
+        $newRegistration->line_id = $line_id;
+        $newRegistration->stop_id = $stop_id;
+        $newRegistration->save();
+        return response()->json($response, 200);
+    }
 }

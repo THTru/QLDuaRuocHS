@@ -5,7 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\GeneralController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
-
+use App\Http\Controllers\ParentController;
+use App\Http\Controllers\CarerController;
 
 /*
 |--------------------------------------------------------------------------
@@ -103,6 +104,22 @@ Route::post('newStop', [AdminController::class, 'newStop']); //Tạo điểm d�
 Route::patch('editStop', [AdminController::class, 'editStop']); //chỉnh sửa điểm dừng mới
 Route::delete('deleteStop', [AdminController::class, 'deleteStop']); //Xóa điểm dừng
 
+Route::post('newSchedule', [AdminController::class, 'newSchedule']); //Tạo lịch trình mới
+Route::patch('editSchedule', [AdminController::class, 'editSchedule']); //Sửa tên và mô tả lịch trình
+Route::delete('deleteSchedule', [AdminController::class, 'deleteSchedule']); //Xóa lịch trình
+
 Route::post('newLineType', [AdminController::class, 'newLineType']); //Tạo loại tuyến mới
 Route::patch('editLineType', [AdminController::class, 'editLineType']); //Sửa thông tin loại tuyến
 Route::delete('deleteLineType', [AdminController::class, 'deleteLineType']); //Xóa loại tuyến
+
+Route::post('newLine', [AdminController::class, 'newLine']); //Tạo tuyến mới
+Route::patch('editLine', [AdminController::class, 'editLine']); //Sửa thông tin tuyến
+Route::patch('changeLineStatus', [AdminController::class, 'changeLineStatus']); //Chuyển trạng thái tuyến
+Route::delete('deleteLine', [AdminController::class, 'deleteLine']); //Xóa tuyến
+
+Route::post('newDayOff', [AdminController::class, 'newDayOff']); //Tạo loại tuyến mới
+Route::patch('editDayOff', [AdminController::class, 'editDayOff']); //Sửa thông tin loại tuyến
+Route::delete('deleteDayOff', [AdminController::class, 'deleteDayOff']); //Xóa loại 
+
+//Parent API
+Route::post('registerLine', [ParentController::class, 'registerLine']); //Đăng ký

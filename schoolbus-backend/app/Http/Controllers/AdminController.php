@@ -10,17 +10,89 @@ use App\Models\Student; //New, Edit, Delete, BondwithParent
 use App\Models\Vehicle; //New, Edit, Delete
 use App\Models\Driver; //New, Edit, Delete
 use App\Models\Stop; //New, Edit, Delete
-use App\Models\Schedule;
+use App\Models\Schedule; //New, Edit name+des, Delete
 use App\Models\StopSchedule;
 use App\Models\LineType; //New, Edit, Delete
-use App\Models\Line;
+use App\Models\Line; //New, Edit (-schedule, linetype), ChangeStatus,Delete
 use App\Models\Registration;
 use App\Models\Trip;
 use App\Models\StudentTrip;
+use App\Models\DayOff; //New, Edit, Delete
 use App\Models\User; //New, Edit, Delete, ChangePW
 
 class AdminController extends Controller
 {
+    //=========================================== DAYOFF ==============================================
+    //Tạo ngày nghỉ mới
+    public function newDayOff(Request $req){
+        $response = [ 'message' => 'OK'];
+        $rules = [
+            'date' =>'required|date_format:Y/m/d',
+            'name' => 'required',
+        ];
+        $validator = Validator::make($req->all(), $rules);
+        if($validator->fails()){
+            $response = [ 'message ' => 'Xin nhập đủ thông tin đúng yêu cầu' ];
+            return response()->json($response, 400);
+        }
+
+        $date = $req->date;
+        $name = $req->name;
+
+        $newDayOff = new DayOff;
+        $newDayOff->date = $date;
+        $newDayOff->name = $name;
+        $newDayOff->save();
+
+        return response()->json($response, 200);
+    }
+
+    //Sửa ngày nghỉ
+    public function editDayOff(Request $req){
+        $response = [ 'message' => 'OK'];
+        $rules = [
+            'id' => 'required',
+            'date' =>'required|date_format:Y/m/d',
+            'name' => 'required',
+        ];
+        $validator = Validator::make($req->all(), $rules);
+        if($validator->fails()){
+            $response = [ 'message ' => 'Xin nhập đủ thông tin đúng yêu cầu' ];
+            return response()->json($response, 400);
+        }
+
+        $id = $req->id;
+        $date = $req->date;
+        $name = $req->name;
+
+        $dayOff = DayOff::find($id);
+        if($dayOff == NULL){
+            $response = ['message' => 'Không tìm thấy user'];
+            return response()->json($response, 400);
+        }
+        $dayOff->date = $date;
+        $dayOff->name = $name;
+        $dayOff->save();
+
+        return response()->json($response, 200);
+    }
+
+    //Xóa ngày nghỉ
+    public function deleteDayOff(Request $req){
+        $response = [ 'message' => 'OK'];
+
+        $id = $req->id;
+
+        $dayOff = DayOff::find($id);
+        if($dayOff == NULL){
+            $response = ['message' => 'Không tìm thấy người dùng'];
+            return response()->json($response, 400);
+        }
+
+        $dayOff->delete();
+        return response()->json($response, 200);
+    }
+    
     //=========================================== USER ==============================================
     //Tạo người dùng mới
     public function newUser(Request $req){
@@ -684,4 +756,269 @@ class AdminController extends Controller
         $lineType->delete();
         return response()->json($response, 200);
     }
+
+    //=========================================== SCHEDULE ==============================================
+    //Tạo lịch trình
+    public function newSchedule(Request $req){
+        $response = [ 'message' => 'OK'];
+        $rules = [
+            'schedule_name' => 'required',
+            'schedule_des' => 'required',
+            'stops' => 'required|array|min:1',
+            'time_take' => 'required|array|min:1',
+        ];
+        $validator = Validator::make($req->all(), $rules);
+        if($validator->fails()){
+            $response = [ 'message ' => 'Xin nhập đủ thông tin đúng yêu cầu' ];
+            return response()->json($response, 400);
+        }
+
+        $schedule_name = $req->schedule_name;
+        $schedule_des = $req->schedule_des;
+        $stops = $req->stops;
+        $time_take = $req->time_take;
+
+        for($i=0; $i<count($stops); $i++){
+            if(Stop::find($stops[$i]) == NULL){
+                $response = ['message' => 'Không tìm thấy điểm dừng'];
+                return response()->json($response, 400);
+            }
+        }
+
+        $newSchedule = new Schedule;
+        $newSchedule->schedule_name = $schedule_name;
+        $newSchedule->schedule_des = $schedule_des;
+        $newSchedule->save();
+
+        for($i=0; $i<count($stops); $i++){
+            $newStopSchedule = new StopSchedule;
+            $newStopSchedule->schedule_id = $newSchedule->schedule_id;
+            $newStopSchedule->stop_id = $stops[$i];
+            $newStopSchedule->time_take = $time_take[$i];
+            $newStopSchedule->save();
+        }
+
+        return response()->json($response, 200);
+    }
+
+    //Sửa tên và mô tả lịch trình
+    public function editSchedule(Request $req){
+        $response = [ 'message' => 'OK'];
+        $rules = [
+            'schedule_name' => 'required',
+            'schedule_des' => 'required',
+            'schedule_id' => 'required',
+        ];
+
+        $validator = Validator::make($req->all(), $rules);
+        if($validator->fails()){
+            $response = [ 'message ' => 'Xin nhập đủ thông tin đúng yêu cầu' ];
+            return response()->json($response, 400);
+        }
+
+        $schedule_id = $req->schedule_id;
+        $schedule_name = $req->schedule_name;
+        $schedule_des = $req->schedule_des;
+
+        $schedule = Schedule::find($schedule_id);
+        if($schedule == NULL){
+            $response = ['message' => 'Không tìm thấy lịch trình'];
+            return response()->json($response, 400);
+        }
+        $schedule->schedule_name = $schedule_name;
+        $schedule->schedule_des = $schedule_des;
+        $schedule->save();
+
+        return response()->json($response, 200);
+    }
+    
+    //Xóa lịch trình
+    public function deleteSchedule(Request $req){
+        $response = [ 'message' => 'OK'];
+
+        $schedule_id = $req->schedule_id;
+
+        $schedule = Schedule::find($schedule_id);
+        if($schedule == NULL){
+            $response = ['message' => 'Không tìm thấy lịch trình'];
+            return response()->json($response, 400);
+        }
+
+        $schedule->delete();
+        return response()->json($response, 200);
+    }
+
+    //=========================================== LINE ==============================================
+    //Tạo tuyến
+    public function newLine(Request $req){
+        $response = [ 'message' => 'OK'];
+        $rules = [
+            'line_name' => 'required',
+            'first_date' => 'required|date_format:Y/m/d',
+            'last_date' => 'required|date_format:Y/m/d|after:first_date',
+            'slot' => 'required|integer',
+            'reg_deadline' => 'required|date_format:Y/m/d',
+            'linetype_id' => 'required',
+            'schedule_id' => 'required'
+        ];
+        $validator = Validator::make($req->all(), $rules);
+        if($validator->fails()){
+            $response = [ 'message ' => 'Xin nhập đủ thông tin đúng yêu cầu' ];
+            return response()->json($response, 400);
+        }
+
+        $line_name = $req->line_name;
+        $first_date = $req->first_date;
+        $last_date = $req->last_date;
+        $slot = $req->slot;
+        $reg_deadline = $req->reg_deadline;
+        $linetype_id = $req->linetype_id;
+        $schedule_id = $req->schedule_id;
+        $vehicle_id = $req->vehicle_id;
+        $driver_id = $req->driver_id;
+        $carer_id = $req->carer_id;
+
+        if(!LineType::where('linetype_id', $linetype_id)->exists()){
+            $response = ['message' => 'Mã loại tuyến không tồn tại'];
+            return response()->json($response, 400);
+        }
+        if(!Schedule::where('schedule_id', $schedule_id)->exists()){
+            $response = ['message' => 'Mã lịch trình không tồn tại'];
+            return response()->json($response, 400);
+        }
+        if($vehicle_id != NULL && !Vehicle::where('vehicle_id', $vehicle_id)->exists()){
+            $response = ['message' => 'Mã xe không tồn tại'];
+            return response()->json($response, 400);
+        }
+        if($driver_id != NULL && !Driver::where('driver_id', $driver_id)->exists()){
+            $response = ['message' => 'Mã tài xế không tồn tại'];
+            return response()->json($response, 400);
+        }
+        if($carer_id != NULL && !User::where('id', $carer_id)->exists()){
+            $response = ['message' => 'Mã bảo mẫu không tồn tại'];
+            return response()->json($response, 400);
+        }
+
+        $newLine = new Line;
+        $newLine->line_name = $line_name;
+        $newLine->first_date = $first_date;
+        $newLine->last_date = $last_date;
+        $newLine->slot = $slot;
+        $newLine->reg_deadline = $reg_deadline;
+        $newLine->linetype_id = $linetype_id;
+        $newLine->schedule_id = $schedule_id;
+        $newLine->vehicle_id = $vehicle_id;
+        $newLine->driver_id = $driver_id;
+        $newLine->carer_id = $carer_id;
+        $newLine->line_status = 0;
+        $newLine->save();
+
+        return response()->json($response, 200);
+    }
+
+    //Sửa thông tin tuyến
+    public function editLine(Request $req){
+        $response = [ 'message' => 'OK'];
+        $rules = [
+            'line_id' => 'required',
+            'line_name' => 'required',
+            'first_date' => 'required|date_format:Y/m/d',
+            'last_date' => 'required|date_format:Y/m/d|after:first_date',
+            'slot' => 'required|integer',
+            'reg_deadline' => 'required|date_format:Y/m/d',
+        ];
+        $validator = Validator::make($req->all(), $rules);
+        if($validator->fails()){
+            $response = [ 'message ' => 'Xin nhập đủ thông tin đúng yêu cầu' ];
+            return response()->json($response, 400);
+        }
+
+        $line_id = $req->line_id;
+        $line_name = $req->line_name;
+        $first_date = $req->first_date;
+        $last_date = $req->last_date;
+        $slot = $req->slot;
+        $reg_deadline = $req->reg_deadline;
+        $vehicle_id = $req->vehicle_id;
+        $driver_id = $req->driver_id;
+        $carer_id = $req->carer_id;
+
+        
+        if($vehicle_id != NULL && !Vehicle::where('vehicle_id', $vehicle_id)->exists()){
+            $response = ['message' => 'Mã xe không tồn tại'];
+            return response()->json($response, 400);
+        }
+        if($driver_id != NULL && !Driver::where('driver_id', $driver_id)->exists()){
+            $response = ['message' => 'Mã tài xế không tồn tại'];
+            return response()->json($response, 400);
+        }
+        if($carer_id != NULL && !User::where('id', $carer_id)->exists()){
+            $response = ['message' => 'Mã bảo mẫu không tồn tại'];
+            return response()->json($response, 400);
+        }
+
+        $line = Line::find($line_id);
+        if($line == NULL){
+            $response = ['message' => 'Không tìm thấy tuyến'];
+            return response()->json($response, 400);
+        }
+
+        $line->line_name = $line_name;
+        $line->first_date = $first_date;
+        $line->last_date = $last_date;
+        $line->slot = $slot;
+        $line->reg_deadline = $reg_deadline;
+        $line->vehicle_id = $vehicle_id;
+        $line->driver_id = $driver_id;
+        $line->carer_id = $carer_id;
+        $line->save();
+
+        return response()->json($response, 200);
+    }
+
+    //Chuyển trạng thái tuyến
+    public function changeLineStatus(Request $req){
+        $response = [ 'message' => 'OK'];
+        $rules = [
+            'line_id' => 'required',
+            'line_status' => 'required|integer',
+        ];
+        $validator = Validator::make($req->all(), $rules);
+        if($validator->fails()){
+            $response = [ 'message ' => 'Xin nhập đủ thông tin đúng yêu cầu' ];
+            return response()->json($response, 400);
+        }
+
+        $line_id = $req->line_id;
+        $line_status = $req->line_status; //0: chưa công bố, 1: công bố, 2: chốt đăng ký, 3: hủy
+
+        $line = Line::find($line_id);
+        if($line == NULL){
+            $response = ['message' => 'Không tìm thấy tuyến'];
+            return response()->json($response, 400);
+        }
+
+        $line->line_status = $line_status;
+        $line->save();
+        return response()->json($response, 200);
+    }
+
+    //Xóa tuyến
+    public function deleteLine(Request $req){
+        $response = [ 'message' => 'OK'];
+
+        $line_id = $req->line_id;
+
+        $line = Line::find($line_id);
+        if($line == NULL){
+            $response = ['message' => 'Không tìm thấy tuyến'];
+            return response()->json($response, 400);
+        }
+
+        $line->delete();
+        return response()->json($response, 200);
+    }
+
+    //=========================================== TRIP ==============================================
+    //Chốt đăng ký
 }

@@ -205,7 +205,7 @@ class GeneralController extends Controller
     //Lọc, tìm kiếm các tuyến theo ngày, trạng thái, loại tuyến, bảo mẫu, tài xế, xe
     public function linesFilter(Request $req){
         $keyword1 = $req->date; //ngày trong thời gian tuyến chạy, -1 là tất cả
-        $keyword2 = $req->line_status; // 0 là chưa công bố, 1 là công bố, 2 là đóng đăng ký, 3 là chốt đăng ký, 4 là hủy, -1 là tất cả
+        $keyword2 = $req->line_status; // 0: chưa công bố, 1: công bố, 2: chốt đăng ký, 3: hủy
         $keyword3 = $req->linetype_id; // -1 là tất cả
         $keyword4 = $req->carer_id; // -1 là tất cả
         $keyword5 = $req->driver_id; // -1 là tất cả

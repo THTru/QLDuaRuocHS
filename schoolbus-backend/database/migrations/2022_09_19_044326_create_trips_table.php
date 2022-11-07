@@ -17,8 +17,8 @@ return new class extends Migration
             $table->id('trip_id');
             $table->string('trip_name');
             $table->date('date');
-            $table->time('start_at');
-            $table->time('end_at');
+            $table->time('start_at')->nullable();
+            $table->time('end_at')->nullable();
             $table->string('note')->nullable();
             $table->unsignedBigInteger('line_id');
             $table->unsignedBigInteger('vehicle_id')->nullable();
