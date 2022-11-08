@@ -15,9 +15,9 @@ use App\Models\Schedule;
 use App\Models\StopSchedule;
 use App\Models\LineType;
 use App\Models\Line;
-use App\Models\Registration; // Register, Cancel
+use App\Models\Registration; //Register, Cancel
 use App\Models\Trip;
-use App\Models\StudentTrip;
+use App\Models\StudentTrip; //RequestAbsence
 use App\Models\User;
 
 class ParentController extends Controller
@@ -117,6 +117,41 @@ class ParentController extends Controller
 
         $registration->delete();
 
+        return response()->json($response, 200);
+    }
+
+    //Xin phép nghỉ cho học sinh
+    public function requestAbsence(Request $req){
+        $response = [ 'message' => 'OK'];
+        $rules = [
+            'parent_id' => 'required',
+            'studenttrip_id' =>'required'
+        ];
+        $validator = Validator::make($req->all(), $rules);
+        if($validator->fails()){
+            $response = [ 'message ' => 'Xin nhập đủ thông tin đúng yêu cầu' ];
+            return response()->json($response, 400);
+        }
+
+        $parent_id = $req->parent_id;
+        $studenttrip_id = $req->studenttrip_id;
+
+        $studenttrip = StudentTrip::find($studenttrip_id);
+        if($studenttrip == NULL){
+            $response = [ 'message ' => 'Không có thông tin đi xe của học sinh' ];
+            return response()->json($response, 400);
+        }
+        if($studenttrip->student->parent_id != $parent_id){
+            $response = [ 'message ' => 'Không có quyền xin phép cho học sinh' ];
+            return response()->json($response, 400);
+        }
+        if($studenttrip->on_at != NULL){
+            $response = [ 'message ' => 'Học sinh đã tham gia chuyến' ];
+            return response()->json($response, 400);
+        }
+
+        $studenttrip->absence_req = 1;
+        $studenttrip->save();
         return response()->json($response, 200);
     }
 }

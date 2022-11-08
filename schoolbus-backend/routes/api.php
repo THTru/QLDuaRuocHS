@@ -127,3 +127,13 @@ Route::patch('editTrip', [AdminController::class, 'editTrip']); //Sửa thông 
 //Parent API
 Route::post('regLine', [ParentController::class, 'regLine']); //Đăng ký
 Route::delete('cancelRegLine', [ParentController::class, 'cancelRegLine']); //Đăng ký
+
+Route::patch('requestAbsence', [ParentController::class, 'requestAbsence']); //Xin phép học sinh không tham gia chuyến
+
+//Carer API
+Route::patch('startTrip', [CarerController::class, 'startTrip']); //Bắt đầu chuyến
+Route::patch('endTrip', [CarerController::class, 'endTrip']); //Kết thúc chuyến
+
+Route::patch('checkOnStudentTrip', [CarerController::class, 'checkOnStudentTrip']); //Điểm danh học sinh lên xe
+Route::patch('checkOffStudentTrip', [CarerController::class, 'checkOffStudentTrip']); //Điểm danh học sinh xuống xe
+Route::patch('checkAbsenceStudentTrip', [CarerController::class, 'checkAbsenceStudentTrip']); //Điểm danh học sinh vắng
