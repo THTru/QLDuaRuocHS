@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use DateTime;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -13,9 +15,9 @@ use App\Models\Stop; //New, Edit, Delete
 use App\Models\Schedule; //New, Edit name+des, Delete
 use App\Models\StopSchedule;
 use App\Models\LineType; //New, Edit, Delete
-use App\Models\Line; //New, Edit (-schedule, linetype), ChangeStatus,Delete
+use App\Models\Line; //New, Edit (-schedule, linetype), ChangeStatus, Delete
 use App\Models\Registration;
-use App\Models\Trip;
+use App\Models\Trip; //Create, Edit
 use App\Models\StudentTrip;
 use App\Models\DayOff; //New, Edit, Delete
 use App\Models\User; //New, Edit, Delete, ChangePW
@@ -1020,5 +1022,119 @@ class AdminController extends Controller
     }
 
     //=========================================== TRIP ==============================================
-    //Chốt đăng ký
+    //Chốt đăng ký tuyến, tạo chuyến xe
+    public function createTrips(Request $req){
+        $response = [ 'message' => 'OK'];
+        $rules = [
+            'line_id' => 'required',
+        ];
+        $validator = Validator::make($req->all(), $rules);
+        if($validator->fails()){
+            $response = [ 'message ' => 'Xin nhập đủ thông tin đúng yêu cầu' ];
+            return response()->json($response, 400);
+        }
+
+        $line_id = $req->line_id;
+
+        $line = Line::find($line_id);
+        if($line == NULL || $line->line_status > 1){
+            $response = [ 'message ' => 'Không tìm thấy tuyến' ];
+            return response()->json($response, 400);
+        }
+        if($line->carer_id == NULL || $line->driver_id == NULL || $line->vehicle_id == NULL || $line->carer->id != 2){
+            $response = [ 'message ' => 'Xin xác định tài xế, xe và bảo mẫu' ];
+            return response()->json($response, 400);
+        }
+
+        $first_date = new DateTime($line->first_date);
+        $last_date = new DateTime($line->last_date);
+
+        $count = 0;
+        for($i = $first_date; $i <= $last_date; $i->modify('+1 day')){
+            $checkDayOfWeek = true;
+            $tempDate = new Carbon($i);
+            $dayOfWeek = $tempDate->dayOfWeek;
+            if($dayOfWeek == 0 && $line->linetype->sun == 0) $checkDayOfWeek = false;
+            if($dayOfWeek == 1 && $line->linetype->mon == 0) $checkDayOfWeek = false;
+            if($dayOfWeek == 2 && $line->linetype->tue == 0) $checkDayOfWeek = false;
+            if($dayOfWeek == 3 && $line->linetype->wed == 0) $checkDayOfWeek = false;
+            if($dayOfWeek == 4 && $line->linetype->thu == 0) $checkDayOfWeek = false;
+            if($dayOfWeek == 5 && $line->linetype->fri == 0) $checkDayOfWeek = false;
+            if($dayOfWeek == 6 && $line->linetype->sat == 0) $checkDayOfWeek = false;
+            if(!DayOff::where('date', $i->format('Y/m/d'))->exists() && $checkDayOfWeek){
+                $newTrip = new Trip;
+                $newTrip->trip_name = $line->line_name.' '.$i->format('Y/m/d');
+                $newTrip->date = $i->format('Y/m/d');
+                $newTrip->line_id = $line->line_id;
+                $newTrip->vehicle_id = $line->vehicle_id;
+                $newTrip->driver_id = $line->driver_id;
+                $newTrip->carer_id = $line->carer_id;
+                $newTrip->save();
+                
+                $regList = $line->registration;
+                foreach($regList as $regInfo){
+                    $newStudentTrip = new StudentTrip;
+                    $newStudentTrip->student_id = $regInfo->student_id;
+                    $newStudentTrip->stop_id = $regInfo->stop_id;
+                    $newStudentTrip->trip_id = $newTrip->trip_id;
+                    $newStudentTrip->absence = 0;
+                    $newStudentTrip->absence_req = 0;
+                    $time_take = StopSchedule::where('schedule_id', $line->schedule->schedule_id)
+                                ->where('stop_id', $regInfo->stop_id)->first()->time_take;
+                    if($time_take == NULL) $time_take = '00:00:00';
+                    $newStudentTrip->est_time = gmdate('H:i:s' , strtotime($line->linetype->time_start) + strtotime($time_take));
+                    $newStudentTrip->save();
+                }
+            }
+        }
+        $line->line_status = 2;
+        $line->save();
+        return response()->json($response, 200);
+    }
+
+    //Sửa chuyến
+    public function editTrip(Request $req){
+        $response = [ 'message' => 'OK'];
+        $rules = [
+            'trip_id' => 'required',
+            'carer_id' => 'required',
+            'vehicle_id' => 'required',
+            'driver_id' => 'required'
+        ];
+        $validator = Validator::make($req->all(), $rules);
+        if($validator->fails()){
+            $response = [ 'message ' => 'Xin nhập đủ thông tin đúng yêu cầu' ];
+            return response()->json($response, 400);
+        }
+
+        $trip_id = $req->trip_id;
+        $carer_id = $req->carer_id;
+        $vehicle_id = $req->vehicle_id;
+        $driver_id = $req->driver_id;
+
+        $trip = Trip::find($trip_id);
+        if($trip == NULL){
+            $response = [ 'message ' => 'Không tìm thấy chuyến xe' ];
+            return response()->json($response, 400);
+        }
+        if(User::find($carer_id) == NULL || User::find($carer_id)->type != 2){
+            $response = [ 'message ' => 'Không tìm thấy bảo mẫu' ];
+            return response()->json($response, 400);
+        }
+        if(Vehicle::find($vehicle_id) == NULL){
+            $response = [ 'message ' => 'Không tìm thấy xe' ];
+            return response()->json($response, 400);
+        }
+        if(Driver::find($driver_id) == NULL){
+            $response = [ 'message ' => 'Không tìm thấy tài xế' ];
+            return response()->json($response, 400);
+        }
+
+        $trip->carer_id = $carer_id;
+        $trip->vehicle_id = $vehicle_id;
+        $trip->driver_id = $driver_id;
+        $trip->save();
+
+        return response()->json($response, 200);
+    }
 }

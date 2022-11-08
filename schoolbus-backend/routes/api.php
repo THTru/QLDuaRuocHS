@@ -117,9 +117,13 @@ Route::patch('editLine', [AdminController::class, 'editLine']); //Sửa thông 
 Route::patch('changeLineStatus', [AdminController::class, 'changeLineStatus']); //Chuyển trạng thái tuyến
 Route::delete('deleteLine', [AdminController::class, 'deleteLine']); //Xóa tuyến
 
-Route::post('newDayOff', [AdminController::class, 'newDayOff']); //Tạo loại tuyến mới
-Route::patch('editDayOff', [AdminController::class, 'editDayOff']); //Sửa thông tin loại tuyến
-Route::delete('deleteDayOff', [AdminController::class, 'deleteDayOff']); //Xóa loại 
+Route::post('newDayOff', [AdminController::class, 'newDayOff']); //Taọ ngày nghỉ mới
+Route::patch('editDayOff', [AdminController::class, 'editDayOff']); //Sửa thông tin ngày nghỉ
+Route::delete('deleteDayOff', [AdminController::class, 'deleteDayOff']); //Xóa ngày nghỉ
+
+Route::post('createTrips', [AdminController::class, 'createTrips']); //Tạo các chuyến theo tuyến
+Route::patch('editTrip', [AdminController::class, 'editTrip']); //Sửa thông tin chuyến
 
 //Parent API
-Route::post('registerLine', [ParentController::class, 'registerLine']); //Đăng ký
+Route::post('regLine', [ParentController::class, 'regLine']); //Đăng ký
+Route::delete('cancelRegLine', [ParentController::class, 'cancelRegLine']); //Đăng ký

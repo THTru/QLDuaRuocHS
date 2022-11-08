@@ -15,7 +15,7 @@ use App\Models\Schedule;
 use App\Models\StopSchedule;
 use App\Models\LineType;
 use App\Models\Line;
-use App\Models\Registration;
+use App\Models\Registration; // Register, Cancel
 use App\Models\Trip;
 use App\Models\StudentTrip;
 use App\Models\User;
@@ -24,7 +24,7 @@ class ParentController extends Controller
 {
     //=========================================== REGISTRATION ==============================================
     //Đăng ký tuyến cho học sinh
-    public function registerLine(Request $req){
+    public function regLine(Request $req){
         $response = [ 'message' => 'OK'];
         $rules = [
             'parent_id' => 'required',
@@ -70,7 +70,7 @@ class ParentController extends Controller
         }
 
         if(Registration::where('line_id', $line_id)->where('student_id', $student_id)->exists()){
-            $response = [ 'message ' => 'Đã đăng ký rồi' ];
+            $response = [ 'message ' => 'Đã đăng ký tuyến này rồi' ];
             return response()->json($response, 400);
         }
 
@@ -86,6 +86,37 @@ class ParentController extends Controller
         $newRegistration->line_id = $line_id;
         $newRegistration->stop_id = $stop_id;
         $newRegistration->save();
+        return response()->json($response, 200);
+    }
+
+    //Hủy đăng ký
+    public function cancelRegLine(Request $req){
+        $response = [ 'message' => 'OK'];
+        $rules = [
+            'parent_id' => 'required',
+            'reg_id' => 'required'
+        ];
+        $validator = Validator::make($req->all(), $rules);
+        if($validator->fails()){
+            $response = [ 'message ' => 'Xin nhập đủ thông tin đúng yêu cầu' ];
+            return response()->json($response, 400);
+        }
+
+        $parent_id = $req->parent_id;
+        $reg_id = $req->reg_id;
+
+        $registration = Registration::find($reg_id);
+        if($registration == NULL){
+            $response = [ 'message ' => 'Không tìm thấy đăng ký' ];
+            return response()->json($response, 400);
+        }
+        if($registration->student->first()->parent_id != $parent_id){
+            $response = [ 'message ' => 'Không có quyền hủy đăng ký này' ];
+            return response()->json($response, 400);
+        }
+
+        $registration->delete();
+
         return response()->json($response, 200);
     }
 }
