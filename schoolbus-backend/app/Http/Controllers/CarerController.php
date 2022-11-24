@@ -33,7 +33,7 @@ class CarerController extends Controller
         $validator = Validator::make($req->all(), $rules);
         if($validator->fails()){
             $response = [ 'message ' => 'Xin nhập đủ thông tin đúng yêu cầu' ];
-            return response()->json($response, 400);
+            return response()->json($response, 430);
         }
 
         $trip_id = $req->trip_id;
@@ -42,15 +42,15 @@ class CarerController extends Controller
         $trip = Trip::find($trip_id);
         if($trip == NULL){
             $response = [ 'message ' => 'Không tìm thấy chuyến' ];
-            return response()->json($response, 400);
+            return response()->json($response, 430);
         }
         if($trip->start_at != NULL){
             $response = [ 'message ' => 'Chuyến đã khởi hành' ];
-            return response()->json($response, 400);
+            return response()->json($response, 430);
         }
         if($trip->carer_id != $carer_id){
             $response = [ 'message ' => 'Không có quyền bắt đầu chuyến' ];
-            return response()->json($response, 400);
+            return response()->json($response, 430);
         }
         if($trip->line->linetype->is_back == 1){
             $allIn = true;
@@ -59,7 +59,7 @@ class CarerController extends Controller
             }
             if(!$allIn){
                 $response = [ 'message ' => 'Học sinh chưa lên xe đủ' ];
-                return response()->json($response, 400);
+                return response()->json($response, 430);
             }
         }
 
@@ -81,7 +81,7 @@ class CarerController extends Controller
         $validator = Validator::make($req->all(), $rules);
         if($validator->fails()){
             $response = [ 'message ' => 'Xin nhập đủ thông tin đúng yêu cầu' ];
-            return response()->json($response, 400);
+            return response()->json($response, 430);
         }
 
         $studenttrip_id = $req->studenttrip_id;
@@ -90,15 +90,15 @@ class CarerController extends Controller
         $studenttrip = StudentTrip::find($studenttrip_id);
         if($studenttrip == NULL){
             $response = [ 'message ' => 'Không tìm thấy thông tin đi xe của học sinh' ];
-            return response()->json($response, 400);
+            return response()->json($response, 430);
         }
         if($studenttrip->trip->carer_id != $carer_id){
             $response = [ 'message ' => 'Không có quyền điểm danh' ];
-            return response()->json($response, 400);
+            return response()->json($response, 430);
         }
         if($studenttrip->trip->line->linetype->is_back == 0 && $studenttrip->trip->start_at == NULL){
             $response = [ 'message ' => 'Xe chưa khởi hành' ];
-            return response()->json($response, 400);
+            return response()->json($response, 430);
         }
 
         $on_at = Carbon::now()->setTimezone('+7');
@@ -118,7 +118,7 @@ class CarerController extends Controller
         $validator = Validator::make($req->all(), $rules);
         if($validator->fails()){
             $response = [ 'message ' => 'Xin nhập đủ thông tin đúng yêu cầu' ];
-            return response()->json($response, 400);
+            return response()->json($response, 430);
         }
 
         $studenttrip_id = $req->studenttrip_id;
@@ -127,15 +127,15 @@ class CarerController extends Controller
         $studenttrip = StudentTrip::find($studenttrip_id);
         if($studenttrip == NULL){
             $response = [ 'message ' => 'Không tìm thấy thông tin đi xe của học sinh' ];
-            return response()->json($response, 400);
+            return response()->json($response, 430);
         }
         if($studenttrip->trip->carer_id != $carer_id){
             $response = [ 'message ' => 'Không có quyền điểm danh' ];
-            return response()->json($response, 400);
+            return response()->json($response, 430);
         }
         if($studenttrip->on_at == NULL){
             $response = [ 'message ' => 'Học sinh chưa lên xe' ];
-            return response()->json($response, 400);
+            return response()->json($response, 430);
         }
 
         $off_at = Carbon::now()->setTimezone('+7');
@@ -155,7 +155,7 @@ class CarerController extends Controller
         $validator = Validator::make($req->all(), $rules);
         if($validator->fails()){
             $response = [ 'message ' => 'Xin nhập đủ thông tin đúng yêu cầu' ];
-            return response()->json($response, 400);
+            return response()->json($response, 430);
         }
 
         $studenttrip_id = $req->studenttrip_id;
@@ -164,15 +164,15 @@ class CarerController extends Controller
         $studenttrip = StudentTrip::find($studenttrip_id);
         if($studenttrip == NULL){
             $response = [ 'message ' => 'Không tìm thấy thông tin đi xe của học sinh' ];
-            return response()->json($response, 400);
+            return response()->json($response, 430);
         }
         if($studenttrip->trip->carer_id != $carer_id){
             $response = [ 'message ' => 'Không có quyền điểm danh' ];
-            return response()->json($response, 400);
+            return response()->json($response, 430);
         }
         if($studenttrip->on_at != NULL){
             $response = [ 'message ' => 'Học sinh đã tham gia chuyến' ];
-            return response()->json($response, 400);
+            return response()->json($response, 430);
         }
 
         $studenttrip->absence = 1;
@@ -190,7 +190,7 @@ class CarerController extends Controller
         $validator = Validator::make($req->all(), $rules);
         if($validator->fails()){
             $response = [ 'message ' => 'Xin nhập đủ thông tin đúng yêu cầu' ];
-            return response()->json($response, 400);
+            return response()->json($response, 430);
         }
 
         $trip_id = $req->trip_id;
@@ -199,15 +199,15 @@ class CarerController extends Controller
         $trip = Trip::find($trip_id);
         if($trip == NULL){
             $response = [ 'message ' => 'Không tìm thấy chuyến' ];
-            return response()->json($response, 400);
+            return response()->json($response, 430);
         }
         if($trip->end_at != NULL){
             $response = [ 'message ' => 'Chuyến đã kết thúc' ];
-            return response()->json($response, 400);
+            return response()->json($response, 430);
         }
         if($trip->carer_id != $carer_id){
             $response = [ 'message ' => 'Không có quyền kết thúc đầu chuyến' ];
-            return response()->json($response, 400);
+            return response()->json($response, 430);
         }
 
         $allIn = true;
@@ -216,7 +216,7 @@ class CarerController extends Controller
         }
         if(!$allIn){
             $response = [ 'message ' => 'Học sinh chưa lên xe đủ' ];
-            return response()->json($response, 400);
+            return response()->json($response, 430);
         }
 
         $allOut = true;
@@ -225,7 +225,7 @@ class CarerController extends Controller
         }
         if(!$allOut){
             $response = [ 'message ' => 'Học sinh chưa xuống xe hết' ];
-            return response()->json($response, 400);
+            return response()->json($response, 430);
         }
 
         $end_at = Carbon::now()->setTimezone('+7');

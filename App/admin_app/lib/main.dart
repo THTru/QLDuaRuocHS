@@ -139,7 +139,7 @@ class MyApp extends StatelessWidget {
     var check_auth = true;
     // return const MaterialApp(
     return MaterialApp(
-      home: StudentListScreen(),
+      home: const MyHomePage(title: 'Hệ thống quản lý đưa rước học sinh'),
       // home: check_auth ? StudentListScreen() : LoginScreen(),
     );
   }
@@ -184,9 +184,6 @@ class _HomeState extends State<Home> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            // Text(_users[index]['firstName']),
-                            // Text(_users[index]['email']),
-                            // Text(_users[index]['phone']),
                             Text(_users[index]['student_id'].toString()),
                             Text(_users[index]['student_name']),
                             Text(_users[index]['class']['class_name']),
@@ -216,13 +213,10 @@ class _HomeState extends State<Home> {
     final params = {'student_name': ''};
     var res = await http
         .get(Uri.http("localhost:8000", "/api/students/name", params));
-    // var res = await http.get(Uri.https("dummyjson.com", "users"));
     if (res.statusCode == 200) {
       var jsonData = jsonDecode(res.body);
-      // if (jsonData['users'].isNotEmpty) {
       if (jsonData.isNotEmpty) {
         setState(() {
-          // _users = jsonData['users'];
           _users = jsonData;
           _loading = false;
         });

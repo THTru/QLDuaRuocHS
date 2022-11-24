@@ -22,22 +22,32 @@ class GeneralController extends Controller
     const limitofPage = 1;
     //=========================================== USER ==============================================
     public function users(Request $req){
-        $page=$req->page; //Số trang
-        $type=$req->type; //Loại
+        // $page=$req->page; //Số trang
+        // $type=$req->type; //Loại
         
-        $skip=0;
-        if($req->page != NULL && $req->page>0){
-            $skip=$req->page-1;
-        }
-        $users = User::with('student');
-        if($req->type != NULL){
-            $users = $users->where('type', '=', $req->type);
-        }
+        // $skip=0;
+        // if($req->page != NULL && $req->page>0){
+        //     $skip=$req->page-1;
+        // }
+        // $users = User::with('student');
+        // if($req->type != NULL){
+        //     $users = $users->where('type', '=', $req->type);
+        // }
 
-        return $users->skip($skip)->take(self::limitofPage)->get();
+        // return $users->skip($skip)->take(self::limitofPage)->get();
+        return User::all();
+    }
+
+    public function usersbyType(Request $req){
+        $keyword1 = $req->type;
+        $keyword2 = $req->name;
+        $users = User::where('name', 'LIKE', '%'.$keyword2.'%');
+        if ($keyword1 != 0)
+            return $users->where('type', '=', $keyword1)->get();
+        else return $users->get();
     }
     
-    public function test(Request $req){
+    public function test(Request $req){ //Test thôi
         return Student::with('class')->get();
     }
 
@@ -175,19 +185,19 @@ class GeneralController extends Controller
 
     //Lọc, tìm kiếm các loại tuyến theo kiểu đi hay về, buổi
     public function linetypesFilter(Request $req){
-        $keyword1 = $req->is_back; // 0 là đi về, 1 là đi học, -1 là cả hai
+        $keyword1 = $req->is_back; // 0 là đi học, 1 là đi về, -1 là cả hai
         $keyword2 = $req->shift; // 0 là sáng, 1 là chiều, -1 là cả hai
 
-        $linetypes = Linetype::get();
+        $linetypes = Linetype::where('linetype_name', 'LIKE', '%');
         if($keyword1 != -1)
-            $linetypes = $linetypes->where('is_back','=',$keyword1);
+            $linetypes = $linetypes->where('is_back','=', $keyword1);
         if($keyword2 != -1){
             if($keyword2==0)
                 $linetypes =  $linetypes->where('time_start','<','12:00:00');
-            else if($keyword2==1)
-                $linetypes = $linetypes->where('time_start','>','12:00:00');
+            else
+                $linetypes = $linetypes->where('time_start','>=','12:00:00');
         }
-        return $linetypes;
+        return $linetypes->get();
     }
 
     //Lấy loại tuyến theo ID

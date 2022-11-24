@@ -27,6 +27,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::get('/test', [GeneralController::class, 'test']);
 
 Route::get('/users', [GeneralController::class, 'users']);
+Route::get('/users/type', [GeneralController::class, 'usersbyType']);
 
 Route::get('/classes', [GeneralController::class, 'classes']);
 Route::get('/class', [GeneralController::class, 'class']);

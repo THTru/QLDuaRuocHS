@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:admin_app/rounded_button.dart';
 import 'package:admin_app/General/general.dart';
 import 'package:http/http.dart' as http;
 
@@ -13,90 +12,206 @@ class UserListScreen extends StatefulWidget {
 }
 
 class _UserListScreenState extends State<UserListScreen> {
-  bool _loading = false;
+  bool _loading = true;
   bool _error = false;
   List<dynamic> _users = [];
+  int _type = 0;
+  String _name = '';
 
   loadUserList() async {
     setState(() {
+      _users = [];
       _loading = true;
     });
-    final params = {'student_name': ''};
+    final params = {'type': _type.toString(), 'name': _name};
     await http
-        .get(Uri.http(baseURL(), "/api/students/name", params))
+        .get(Uri.http(baseURL(), "/api/users/type", params))
         .then((response) {
       if (response.statusCode == 200) {
         var jsonData = jsonDecode(response.body);
-        if (jsonData.isNotEmpty) {
-          setState(() {
-            _users = jsonData;
-            _loading = false;
-          });
-        }
-      }
-    }).catchError((error) {
-      // errorSnackBar(context, 'Có lỗi Server');
+        setState(() {
+          _users = jsonData;
+        });
+      } else
+        setState(() {
+          _error = true;
+        });
+    }).catchError((e) {
       setState(() {
-        _error = true;
+        _error = false;
       });
+    });
+    setState(() {
+      _loading = false;
     });
   }
 
-  callerror() {
-    errorSnackBar(context, 'Có lỗi Server');
+  @override
+  void initState() {
+    super.initState();
+    loadUserList();
   }
 
   @override
   Widget build(BuildContext) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.lightBlue,
-        centerTitle: true,
-        elevation: 0,
-        title: const Text(
-          'Danh sách người dùng',
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ),
-      body: _users.isNotEmpty
-          ? ListView.builder(
-              itemCount: _users.length,
-              itemBuilder: ((context, index) {
-                return Card(
-                  margin: const EdgeInsets.symmetric(
-                    horizontal: 15.0,
-                    vertical: 10.0,
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      children: [
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(_users[index]['student_id'].toString()),
-                            Text(_users[index]['student_name']),
-                            Text(_users[index]['class']['class_name']),
+      body: SingleChildScrollView(
+          child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+            Wrap(children: [
+              TextButton(
+                  onPressed: () {
+                    setState(() {
+                      _type = 0;
+                    });
+                    loadUserList();
+                  },
+                  child: Text('Tất cả')),
+              TextButton(
+                  onPressed: () {
+                    setState(() {
+                      _type = 1;
+                    });
+                    loadUserList();
+                  },
+                  child: Text('Admin')),
+              TextButton(
+                  onPressed: () {
+                    setState(() {
+                      _type = 2;
+                    });
+                    loadUserList();
+                  },
+                  child: Text('Bảo mẫu')),
+              TextButton(
+                  onPressed: () {
+                    setState(() {
+                      _type = 3;
+                    });
+                    loadUserList();
+                  },
+                  child: Text('Phụ huynh')),
+            ]),
+            Wrap(children: [
+              TextField(
+                decoration: const InputDecoration(
+                  hintText: 'Nhập tên',
+                ),
+                onChanged: (value) {
+                  _name = value;
+                },
+              ),
+              TextButton(
+                  onPressed: () {
+                    loadUserList();
+                  },
+                  child: Text('Tìm')),
+            ]),
+            _error
+                ? const Text('Có lỗi server')
+                : _loading
+                    ? Center(child: CircularProgressIndicator())
+                    : DataTable(
+                        columns: const <DataColumn>[
+                            DataColumn(
+                              label: Expanded(
+                                child: Text(
+                                  'ID',
+                                  style: TextStyle(fontStyle: FontStyle.italic),
+                                ),
+                              ),
+                            ),
+                            DataColumn(
+                              label: Expanded(
+                                child: Text(
+                                  'Tên',
+                                  style: TextStyle(fontStyle: FontStyle.italic),
+                                ),
+                              ),
+                            ),
+                            DataColumn(
+                              label: Expanded(
+                                child: Text(
+                                  'Email',
+                                  style: TextStyle(fontStyle: FontStyle.italic),
+                                ),
+                              ),
+                            ),
+                            DataColumn(
+                              label: Expanded(
+                                child: Text(
+                                  'Điện thoại',
+                                  style: TextStyle(fontStyle: FontStyle.italic),
+                                ),
+                              ),
+                            ),
+                            DataColumn(
+                              label: Expanded(
+                                child: Text(
+                                  'Loại',
+                                  style: TextStyle(fontStyle: FontStyle.italic),
+                                ),
+                              ),
+                            ),
+                            DataColumn(
+                              label: Expanded(
+                                child: Text(
+                                  'Trạng thái',
+                                  style: TextStyle(fontStyle: FontStyle.italic),
+                                ),
+                              ),
+                            ),
+                            DataColumn(label: Text('')),
+                            DataColumn(label: Text('')),
                           ],
-                        )
-                      ],
-                    ),
-                  ),
-                );
-              }),
-            )
-          : Center(
-              child: _loading
-                  ? CircularProgressIndicator()
-                  : ElevatedButton(
-                      child: const Text("fetch users"),
-                      onPressed: loadUserList,
-                    ),
-            ),
+                        rows: List<DataRow>.generate(
+                            _users.length,
+                            (index) => DataRow(cells: [
+                                  DataCell(
+                                      Text(_users[index]['id'].toString())),
+                                  DataCell(
+                                      Text(_users[index]['name'].toString())),
+                                  DataCell(
+                                      Text(_users[index]['email'].toString())),
+                                  DataCell(
+                                      Text(_users[index]['phone'].toString())),
+                                  DataCell(int.parse(_users[index]['type']) == 1
+                                      ? const Text('Admin')
+                                      : int.parse(_users[index]['type']) == 2
+                                          ? const Text('Bảo mẫu')
+                                          : int.parse(_users[index]['type']) ==
+                                                  3
+                                              ? const Text('Phụ huynh')
+                                              : const Text('Không xác định')),
+                                  DataCell(
+                                      int.parse(_users[index]['status']) == 1
+                                          ? const Text('Active')
+                                          : const Text('Unactive')),
+                                  DataCell(TextButton(
+                                      child: Icon(Icons.edit),
+                                      onPressed: () {
+                                        setState(() {
+                                          _type++;
+                                        });
+                                      })),
+                                  DataCell(TextButton(
+                                      child: Icon(Icons.delete),
+                                      onPressed: () {
+                                        setState(() {
+                                          _type++;
+                                        });
+                                      }))
+                                ])))
+          ])),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      floatingActionButton: FloatingActionButton.extended(
+          onPressed: () {
+            _type++;
+          },
+          label: Text('Thêm'),
+          icon: Icon(Icons.add)),
     );
   }
 }

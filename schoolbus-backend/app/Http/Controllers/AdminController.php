@@ -35,7 +35,7 @@ class AdminController extends Controller
         $validator = Validator::make($req->all(), $rules);
         if($validator->fails()){
             $response = [ 'message ' => 'Xin nhập đủ thông tin đúng yêu cầu' ];
-            return response()->json($response, 400);
+            return response()->json($response, 430);
         }
 
         $date = $req->date;
@@ -60,7 +60,7 @@ class AdminController extends Controller
         $validator = Validator::make($req->all(), $rules);
         if($validator->fails()){
             $response = [ 'message ' => 'Xin nhập đủ thông tin đúng yêu cầu' ];
-            return response()->json($response, 400);
+            return response()->json($response, 430);
         }
 
         $id = $req->id;
@@ -70,7 +70,7 @@ class AdminController extends Controller
         $dayOff = DayOff::find($id);
         if($dayOff == NULL){
             $response = ['message' => 'Không tìm thấy user'];
-            return response()->json($response, 400);
+            return response()->json($response, 430);
         }
         $dayOff->date = $date;
         $dayOff->name = $name;
@@ -88,7 +88,7 @@ class AdminController extends Controller
         $dayOff = DayOff::find($id);
         if($dayOff == NULL){
             $response = ['message' => 'Không tìm thấy người dùng'];
-            return response()->json($response, 400);
+            return response()->json($response, 430);
         }
 
         $dayOff->delete();
@@ -108,7 +108,7 @@ class AdminController extends Controller
         $validator = Validator::make($req->all(), $rules);
         if($validator->fails()){
             $response = [ 'message ' => 'Xin nhập đủ thông tin đúng yêu cầu' ];
-            return response()->json($response, 400);
+            return response()->json($response, 430);
         }
 
         $name = $req->name;
@@ -118,7 +118,7 @@ class AdminController extends Controller
         $phone = $req->phone;
         if(User::where('email', $email)->exists()){
             $response = ['message' => 'Email đã được sử dụng'];
-            return response()->json($response, 400);
+            return response()->json($response, 430);
         }
         $newUser = new User;
         $newUser->name = $name;
@@ -143,7 +143,7 @@ class AdminController extends Controller
         $validator = Validator::make($req->all(), $rules);
         if($validator->fails()){
             $response = [ 'message ' => 'Xin nhập đủ thông tin đúng yêu cầu' ];
-            return response()->json($response, 400);
+            return response()->json($response, 430);
         }
 
         $name = $req->name;
@@ -154,7 +154,7 @@ class AdminController extends Controller
         $user = User::find($id);
         if($user == NULL){
             $response = ['message' => 'Không tìm thấy user'];
-            return response()->json($response, 400);
+            return response()->json($response, 430);
         }
         $user->name = $name;
         $user->phone = $phone;
@@ -174,7 +174,7 @@ class AdminController extends Controller
         $validator = Validator::make($req->all(), $rules);
         if($validator->fails()){
             $response = [ 'message ' => 'Xin nhập đủ thông tin đúng yêu cầu' ];
-            return response()->json($response, 400);
+            return response()->json($response, 430);
         }
 
         $password = $req->password;
@@ -183,7 +183,7 @@ class AdminController extends Controller
         $user = User::find($id);
         if($user == NULL){
             $response = ['message' => 'Không tìm thấy user'];
-            return response()->json($response, 400);
+            return response()->json($response, 430);
         }
         $user->password = Hash::make($password);
         $user->save();
@@ -200,7 +200,7 @@ class AdminController extends Controller
         $user = User::find($id);
         if($user == NULL){
             $response = ['message' => 'Không tìm thấy người dùng'];
-            return response()->json($response, 400);
+            return response()->json($response, 430);
         }
 
         $user->delete();
@@ -218,7 +218,7 @@ class AdminController extends Controller
         $validator = Validator::make($req->all(), $rules);
         if($validator->fails()){
             $response = [ 'message ' => 'Xin nhập đủ thông tin đúng yêu cầu' ];
-            return response()->json($response, 400);
+            return response()->json($response, 430);
         }
 
         $class_id = $req->class_id;
@@ -226,7 +226,7 @@ class AdminController extends Controller
 
         if(Hclass::find($class_id) != NULL){
             $response = ['message' => 'Mã lớp đã sử dụng'];
-            return response()->json($response, 400);
+            return response()->json($response, 430);
         }
         $newClass = new Hclass;
         $newClass->class_id = $class_id;
@@ -246,7 +246,7 @@ class AdminController extends Controller
         $validator = Validator::make($req->all(), $rules);
         if($validator->fails()){
             $response = [ 'message ' => 'Xin nhập đủ thông tin đúng yêu cầu' ];
-            return response()->json($response, 400);
+            return response()->json($response, 430);
         }
 
         $class_id = $req->class_id;
@@ -255,7 +255,7 @@ class AdminController extends Controller
         $class = Hclass::find($class_id);
         if($class == NULL){
             $response = ['message' => 'Không tìm thấy lớp'];
-            return response()->json($response, 400);
+            return response()->json($response, 430);
         }
         $class->class_name = $class_name;
         $class->save();
@@ -272,7 +272,7 @@ class AdminController extends Controller
         $class = Hclass::find($class_id);
         if($class == NULL){
             $response = ['message' => 'Không tìm thấy lớp'];
-            return response()->json($response, 400);
+            return response()->json($response, 430);
         }
 
         $class->delete();
@@ -291,7 +291,7 @@ class AdminController extends Controller
         $validator = Validator::make($req->all(), $rules);
         if($validator->fails()){
             $response = [ 'message ' => 'Xin nhập đủ thông tin đúng yêu cầu' ];
-            return response()->json($response, 400);
+            return response()->json($response, 430);
         }
 
         $student_id = $req->student_id;
@@ -300,11 +300,11 @@ class AdminController extends Controller
 
         if(Student::where('student_id', $student_id)->exists()){
             $response = ['message' => 'Mã học sinh đã sử dụng'];
-            return response()->json($response, 400);
+            return response()->json($response, 430);
         }
         if(!Hclass::where('class_id', $class_id)->exists()){
             $response = ['message' => 'Mã lớp không tồn tại'];
-            return response()->json($response, 400);
+            return response()->json($response, 430);
         }
 
         $newStudent = new Student;
@@ -327,7 +327,7 @@ class AdminController extends Controller
         $validator = Validator::make($req->all(), $rules);
         if($validator->fails()){
             $response = [ 'message ' => 'Xin nhập đủ thông tin đúng yêu cầu' ];
-            return response()->json($response, 400);
+            return response()->json($response, 430);
         }
 
         $student_id = $req->student_id;
@@ -337,11 +337,11 @@ class AdminController extends Controller
         $student = Student::find($student_id);
         if($student == NULL){
             $response = ['message' => 'Không tìm thấy học sinh'];
-            return response()->json($response, 400);
+            return response()->json($response, 430);
         }
         if(!Hclass::where('class_id', $class_id)->exists()){
             $response = ['message' => 'Mã lớp không tồn tại'];
-            return response()->json($response, 400);
+            return response()->json($response, 430);
         }
 
         $student->student_name = $student_name;
@@ -361,7 +361,7 @@ class AdminController extends Controller
         $validator = Validator::make($req->all(), $rules);
         if($validator->fails()){
             $response = [ 'message ' => 'Xin nhập đủ thông tin đúng yêu cầu' ];
-            return response()->json($response, 400);
+            return response()->json($response, 430);
         }
 
         $student_id = $req->student_id;
@@ -370,13 +370,13 @@ class AdminController extends Controller
         $student = Student::find($student_id);
         if($student == NULL){
             $response = ['message' => 'Không tìm thấy học sinh'];
-            return response()->json($response, 400);
+            return response()->json($response, 430);
         }
 
         $parent = User::find($parent_id);
         if($parent == NULL || $parent->type != 3){
             $response = ['message' => 'Không tìm thấy phụ huynh'];
-            return response()->json($response, 400);
+            return response()->json($response, 430);
         }
 
         $student->parent_id = $parent_id;
@@ -393,7 +393,7 @@ class AdminController extends Controller
         $student = Student::find($student_id);
         if($student == NULL){
             $response = ['message' => 'Không tìm thấy học sinh'];
-            return response()->json($response, 400);
+            return response()->json($response, 430);
         }
 
         $student->delete();
@@ -411,7 +411,7 @@ class AdminController extends Controller
         $validator = Validator::make($req->all(), $rules);
         if($validator->fails()){
             $response = [ 'message ' => 'Xin nhập đủ thông tin đúng yêu cầu' ];
-            return response()->json($response, 400);
+            return response()->json($response, 430);
         }
 
         $vehicle_no = $req->vehicle_no;
@@ -419,7 +419,7 @@ class AdminController extends Controller
 
         if(Vehicle::where('vehicle_no', $vehicle_no)->exists()){
             $response = ['message' => 'Số xe đã sử dụng'];
-            return response()->json($response, 400);
+            return response()->json($response, 430);
         }
         $newVehicle = new Vehicle;
         $newVehicle->vehicle_no = $vehicle_no;
@@ -442,7 +442,7 @@ class AdminController extends Controller
         $validator = Validator::make($req->all(), $rules);
         if($validator->fails()){
             $response = [ 'message ' => 'Xin nhập đủ thông tin đúng yêu cầu' ];
-            return response()->json($response, 400);
+            return response()->json($response, 430);
         }
 
         $vehicle_id = $req->vehicle_id;
@@ -453,7 +453,7 @@ class AdminController extends Controller
         $vehicle = Vehicle::find($vehicle_id);
         if($vehicle == NULL){
             $response = ['message' => 'Không tìm thấy xe'];
-            return response()->json($response, 400);
+            return response()->json($response, 430);
         }
         $vehicle->vehicle_no = $vehicle_no;
         $vehicle->vehicle_status = $vehicle_status;
@@ -472,7 +472,7 @@ class AdminController extends Controller
         $vehicle = Vehicle::find($vehicle_id);
         if($vehicle == NULL){
             $response = ['message' => 'Không tìm thấy xe'];
-            return response()->json($response, 400);
+            return response()->json($response, 430);
         }
 
         $vehicle->delete();
@@ -491,7 +491,7 @@ class AdminController extends Controller
         $validator = Validator::make($req->all(), $rules);
         if($validator->fails()){
             $response = [ 'message ' => 'Xin nhập đủ thông tin đúng yêu cầu' ];
-            return response()->json($response, 400);
+            return response()->json($response, 430);
         }
 
         $driver_name = $req->driver_name;
@@ -519,7 +519,7 @@ class AdminController extends Controller
         $validator = Validator::make($req->all(), $rules);
         if($validator->fails()){
             $response = [ 'message ' => 'Xin nhập đủ thông tin đúng yêu cầu' ];
-            return response()->json($response, 400);
+            return response()->json($response, 430);
         }
 
         $driver_id = $req->driver_id;
@@ -530,7 +530,7 @@ class AdminController extends Controller
         $driver = Driver::find($driver_id);
         if($driver == NULL){
             $response = ['message' => 'Không tìm thấy tài xế'];
-            return response()->json($response, 400);
+            return response()->json($response, 430);
         }
         $driver->driver_name = $driver_name;
         $driver->driver_phone = $driver_phone;
@@ -549,7 +549,7 @@ class AdminController extends Controller
         $driver = Driver::find($driver_id);
         if($driver == NULL){
             $response = ['message' => 'Không tìm thấy tài xế'];
-            return response()->json($response, 400);
+            return response()->json($response, 430);
         }
 
         $driver->delete();
@@ -568,7 +568,7 @@ class AdminController extends Controller
         $validator = Validator::make($req->all(), $rules);
         if($validator->fails()){
             $response = [ 'message ' => 'Xin nhập đủ thông tin đúng yêu cầu' ];
-            return response()->json($response, 400);
+            return response()->json($response, 430);
         }
 
         $location = $req->location;
@@ -596,7 +596,7 @@ class AdminController extends Controller
         $validator = Validator::make($req->all(), $rules);
         if($validator->fails()){
             $response = [ 'message ' => 'Xin nhập đủ thông tin đúng yêu cầu' ];
-            return response()->json($response, 400);
+            return response()->json($response, 430);
         }
 
         $stop_id = $req->stop_id;
@@ -607,7 +607,7 @@ class AdminController extends Controller
         $stop = Stop::find($stop_id);
         if($stop == NULL){
             $response = ['message' => 'Không tìm thấy điểm dừng'];
-            return response()->json($response, 400);
+            return response()->json($response, 430);
         }
         $stop->location = $location;
         $stop->ward = $ward;
@@ -626,14 +626,14 @@ class AdminController extends Controller
         $stop = Stop::find($stop_id);
         if($stop == NULL){
             $response = ['message' => 'Không tìm thấy điểm dừng'];
-            return response()->json($response, 400);
+            return response()->json($response, 430);
         }
 
         $stop->delete();
         return response()->json($response, 200);
     }
 
-    //=========================================== STOP ==============================================
+    //=========================================== LINETYPE ==============================================
     //Tạo loại tuyến
     public function newLineType(Request $req){
         $response = [ 'message' => 'OK'];
@@ -653,7 +653,7 @@ class AdminController extends Controller
         $validator = Validator::make($req->all(), $rules);
         if($validator->fails()){
             $response = [ 'message ' => 'Xin nhập đủ thông tin đúng yêu cầu' ];
-            return response()->json($response, 400);
+            return response()->json($response, 430);
         }
 
         $linetype_name = $req->linetype_name;
@@ -705,7 +705,7 @@ class AdminController extends Controller
         $validator = Validator::make($req->all(), $rules);
         if($validator->fails()){
             $response = [ 'message ' => 'Xin nhập đủ thông tin đúng yêu cầu' ];
-            return response()->json($response, 400);
+            return response()->json($response, 430);
         }
 
         $linetype_id = $req->linetype_id;
@@ -724,7 +724,7 @@ class AdminController extends Controller
         $lineType = LineType::find($linetype_id);
         if($lineType == NULL){
             $response = ['message' => 'Không tìm thấy loại tuyến'];
-            return response()->json($response, 400);
+            return response()->json($response, 430);
         }
 
         $lineType->linetype_name = $linetype_name;
@@ -752,7 +752,7 @@ class AdminController extends Controller
         $lineType = LineType::find($linetype_id);
         if($lineType == NULL){
             $response = ['message' => 'Không tìm thấy loại tuyến'];
-            return response()->json($response, 400);
+            return response()->json($response, 430);
         }
 
         $lineType->delete();
@@ -772,7 +772,7 @@ class AdminController extends Controller
         $validator = Validator::make($req->all(), $rules);
         if($validator->fails()){
             $response = [ 'message ' => 'Xin nhập đủ thông tin đúng yêu cầu' ];
-            return response()->json($response, 400);
+            return response()->json($response, 430);
         }
 
         $schedule_name = $req->schedule_name;
@@ -783,7 +783,7 @@ class AdminController extends Controller
         for($i=0; $i<count($stops); $i++){
             if(Stop::find($stops[$i]) == NULL){
                 $response = ['message' => 'Không tìm thấy điểm dừng'];
-                return response()->json($response, 400);
+                return response()->json($response, 430);
             }
         }
 
@@ -815,7 +815,7 @@ class AdminController extends Controller
         $validator = Validator::make($req->all(), $rules);
         if($validator->fails()){
             $response = [ 'message ' => 'Xin nhập đủ thông tin đúng yêu cầu' ];
-            return response()->json($response, 400);
+            return response()->json($response, 430);
         }
 
         $schedule_id = $req->schedule_id;
@@ -825,7 +825,7 @@ class AdminController extends Controller
         $schedule = Schedule::find($schedule_id);
         if($schedule == NULL){
             $response = ['message' => 'Không tìm thấy lịch trình'];
-            return response()->json($response, 400);
+            return response()->json($response, 430);
         }
         $schedule->schedule_name = $schedule_name;
         $schedule->schedule_des = $schedule_des;
@@ -843,7 +843,7 @@ class AdminController extends Controller
         $schedule = Schedule::find($schedule_id);
         if($schedule == NULL){
             $response = ['message' => 'Không tìm thấy lịch trình'];
-            return response()->json($response, 400);
+            return response()->json($response, 430);
         }
 
         $schedule->delete();
@@ -866,7 +866,7 @@ class AdminController extends Controller
         $validator = Validator::make($req->all(), $rules);
         if($validator->fails()){
             $response = [ 'message ' => 'Xin nhập đủ thông tin đúng yêu cầu' ];
-            return response()->json($response, 400);
+            return response()->json($response, 430);
         }
 
         $line_name = $req->line_name;
@@ -882,23 +882,23 @@ class AdminController extends Controller
 
         if(!LineType::where('linetype_id', $linetype_id)->exists()){
             $response = ['message' => 'Mã loại tuyến không tồn tại'];
-            return response()->json($response, 400);
+            return response()->json($response, 430);
         }
         if(!Schedule::where('schedule_id', $schedule_id)->exists()){
             $response = ['message' => 'Mã lịch trình không tồn tại'];
-            return response()->json($response, 400);
+            return response()->json($response, 430);
         }
         if($vehicle_id != NULL && !Vehicle::where('vehicle_id', $vehicle_id)->exists()){
             $response = ['message' => 'Mã xe không tồn tại'];
-            return response()->json($response, 400);
+            return response()->json($response, 430);
         }
         if($driver_id != NULL && !Driver::where('driver_id', $driver_id)->exists()){
             $response = ['message' => 'Mã tài xế không tồn tại'];
-            return response()->json($response, 400);
+            return response()->json($response, 430);
         }
         if($carer_id != NULL && !User::where('id', $carer_id)->exists()){
             $response = ['message' => 'Mã bảo mẫu không tồn tại'];
-            return response()->json($response, 400);
+            return response()->json($response, 430);
         }
 
         $newLine = new Line;
@@ -932,7 +932,7 @@ class AdminController extends Controller
         $validator = Validator::make($req->all(), $rules);
         if($validator->fails()){
             $response = [ 'message ' => 'Xin nhập đủ thông tin đúng yêu cầu' ];
-            return response()->json($response, 400);
+            return response()->json($response, 430);
         }
 
         $line_id = $req->line_id;
@@ -948,21 +948,21 @@ class AdminController extends Controller
         
         if($vehicle_id != NULL && !Vehicle::where('vehicle_id', $vehicle_id)->exists()){
             $response = ['message' => 'Mã xe không tồn tại'];
-            return response()->json($response, 400);
+            return response()->json($response, 430);
         }
         if($driver_id != NULL && !Driver::where('driver_id', $driver_id)->exists()){
             $response = ['message' => 'Mã tài xế không tồn tại'];
-            return response()->json($response, 400);
+            return response()->json($response, 430);
         }
         if($carer_id != NULL && !User::where('id', $carer_id)->exists()){
             $response = ['message' => 'Mã bảo mẫu không tồn tại'];
-            return response()->json($response, 400);
+            return response()->json($response, 430);
         }
 
         $line = Line::find($line_id);
         if($line == NULL){
             $response = ['message' => 'Không tìm thấy tuyến'];
-            return response()->json($response, 400);
+            return response()->json($response, 430);
         }
 
         $line->line_name = $line_name;
@@ -988,7 +988,7 @@ class AdminController extends Controller
         $validator = Validator::make($req->all(), $rules);
         if($validator->fails()){
             $response = [ 'message ' => 'Xin nhập đủ thông tin đúng yêu cầu' ];
-            return response()->json($response, 400);
+            return response()->json($response, 430);
         }
 
         $line_id = $req->line_id;
@@ -997,7 +997,7 @@ class AdminController extends Controller
         $line = Line::find($line_id);
         if($line == NULL){
             $response = ['message' => 'Không tìm thấy tuyến'];
-            return response()->json($response, 400);
+            return response()->json($response, 430);
         }
 
         $line->line_status = $line_status;
@@ -1014,7 +1014,7 @@ class AdminController extends Controller
         $line = Line::find($line_id);
         if($line == NULL){
             $response = ['message' => 'Không tìm thấy tuyến'];
-            return response()->json($response, 400);
+            return response()->json($response, 430);
         }
 
         $line->delete();
@@ -1031,7 +1031,7 @@ class AdminController extends Controller
         $validator = Validator::make($req->all(), $rules);
         if($validator->fails()){
             $response = [ 'message ' => 'Xin nhập đủ thông tin đúng yêu cầu' ];
-            return response()->json($response, 400);
+            return response()->json($response, 430);
         }
 
         $line_id = $req->line_id;
@@ -1039,11 +1039,11 @@ class AdminController extends Controller
         $line = Line::find($line_id);
         if($line == NULL || $line->line_status > 1){
             $response = [ 'message ' => 'Không tìm thấy tuyến' ];
-            return response()->json($response, 400);
+            return response()->json($response, 430);
         }
         if($line->carer_id == NULL || $line->driver_id == NULL || $line->vehicle_id == NULL || $line->carer->id != 2){
             $response = [ 'message ' => 'Xin xác định tài xế, xe và bảo mẫu' ];
-            return response()->json($response, 400);
+            return response()->json($response, 430);
         }
 
         $first_date = new DateTime($line->first_date);
@@ -1104,7 +1104,7 @@ class AdminController extends Controller
         $validator = Validator::make($req->all(), $rules);
         if($validator->fails()){
             $response = [ 'message ' => 'Xin nhập đủ thông tin đúng yêu cầu' ];
-            return response()->json($response, 400);
+            return response()->json($response, 430);
         }
 
         $trip_id = $req->trip_id;
@@ -1115,19 +1115,19 @@ class AdminController extends Controller
         $trip = Trip::find($trip_id);
         if($trip == NULL){
             $response = [ 'message ' => 'Không tìm thấy chuyến xe' ];
-            return response()->json($response, 400);
+            return response()->json($response, 430);
         }
         if(User::find($carer_id) == NULL || User::find($carer_id)->type != 2){
             $response = [ 'message ' => 'Không tìm thấy bảo mẫu' ];
-            return response()->json($response, 400);
+            return response()->json($response, 430);
         }
         if(Vehicle::find($vehicle_id) == NULL){
             $response = [ 'message ' => 'Không tìm thấy xe' ];
-            return response()->json($response, 400);
+            return response()->json($response, 430);
         }
         if(Driver::find($driver_id) == NULL){
             $response = [ 'message ' => 'Không tìm thấy tài xế' ];
-            return response()->json($response, 400);
+            return response()->json($response, 430);
         }
 
         $trip->carer_id = $carer_id;
