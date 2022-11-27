@@ -146,6 +146,7 @@ class AdminController extends Controller
             return response()->json($response, 430);
         }
 
+        $password = $req->password;
         $name = $req->name;
         $id = $req->id;
         $phone = $req->phone;
@@ -156,6 +157,7 @@ class AdminController extends Controller
             $response = ['message' => 'Không tìm thấy user'];
             return response()->json($response, 430);
         }
+        $user->password = Hash::make($password);
         $user->name = $name;
         $user->phone = $phone;
         $user->status = $status;

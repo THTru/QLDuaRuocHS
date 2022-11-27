@@ -4,35 +4,31 @@ import 'package:flutter/material.dart';
 import 'package:admin_app/General/general.dart';
 import 'package:http/http.dart' as http;
 
-import 'package:admin_app/Screens/drivernew.dart';
+import 'package:admin_app/Screens/classnew.dart';
 
-class DriverListScreen extends StatefulWidget {
-  const DriverListScreen({Key? key}) : super(key: key);
+class ClassListScreen extends StatefulWidget {
+  const ClassListScreen({Key? key}) : super(key: key);
 
   @override
-  _DriverListScreenState createState() => _DriverListScreenState();
+  _ClassListScreenState createState() => _ClassListScreenState();
 }
 
-class _DriverListScreenState extends State<DriverListScreen> {
+class _ClassListScreenState extends State<ClassListScreen> {
   bool _loading = true;
   bool _error = false;
-  List<dynamic> _drivers = [];
-  String _driver_name = '';
+  List<dynamic> _classes = [];
   int _type = 0;
 
-  loadDriverList() async {
+  loadStudentList() async {
     setState(() {
-      _drivers = [];
+      _classes = [];
       _loading = true;
     });
-    final params = {'driver_name': _driver_name};
-    await http
-        .get(Uri.http(baseURL(), "/api/drivers/name", params))
-        .then((response) {
+    await http.get(Uri.http(baseURL(), "/api/classes")).then((response) {
       if (response.statusCode == 200) {
         var jsonData = jsonDecode(response.body);
         setState(() {
-          _drivers = jsonData;
+          _classes = jsonData;
         });
       } else
         setState(() {
@@ -51,31 +47,35 @@ class _DriverListScreenState extends State<DriverListScreen> {
   @override
   void initState() {
     super.initState();
-    loadDriverList();
+    loadStudentList();
   }
 
   @override
   Widget build(BuildContext) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.lightBlue,
+        centerTitle: true,
+        elevation: 0,
+        title: const Text(
+          'Danh sách lớp',
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
       body: SingleChildScrollView(
           child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
             Wrap(children: [
-              TextField(
-                decoration: const InputDecoration(
-                  hintText: 'Nhập tên',
-                ),
-                onChanged: (value) {
-                  _driver_name = value;
-                },
-              ),
               TextButton(
                   onPressed: () {
-                    loadDriverList();
+                    loadStudentList();
                   },
-                  child: Text('Tìm')),
+                  child: Icon(Icons.refresh)),
             ]),
             _error
                 ? const Text('Có lỗi server')
@@ -94,50 +94,21 @@ class _DriverListScreenState extends State<DriverListScreen> {
                             DataColumn(
                               label: Expanded(
                                 child: Text(
-                                  'Tên',
+                                  'Tên lớp',
                                   style: TextStyle(fontStyle: FontStyle.italic),
                                 ),
                               ),
                             ),
-                            DataColumn(
-                              label: Expanded(
-                                child: Text(
-                                  'Điện thoại',
-                                  style: TextStyle(fontStyle: FontStyle.italic),
-                                ),
-                              ),
-                            ),
-                            DataColumn(
-                              label: Expanded(
-                                child: Text(
-                                  'Địa chỉ',
-                                  style: TextStyle(fontStyle: FontStyle.italic),
-                                ),
-                              ),
-                            ),
-                            DataColumn(label: Text('')),
                             DataColumn(label: Text('')),
                             DataColumn(label: Text('')),
                           ],
                         rows: List<DataRow>.generate(
-                            _drivers.length,
+                            _classes.length,
                             (index) => DataRow(cells: [
                                   DataCell(Text(
-                                      _drivers[index]['driver_id'].toString())),
-                                  DataCell(Text(_drivers[index]['driver_name']
+                                      _classes[index]['class_id'].toString())),
+                                  DataCell(Text(_classes[index]['class_name']
                                       .toString())),
-                                  DataCell(Text(_drivers[index]['driver_phone']
-                                      .toString())),
-                                  DataCell(Text(_drivers[index]
-                                          ['driver_address']
-                                      .toString())),
-                                  DataCell(TextButton(
-                                      child: Icon(Icons.info),
-                                      onPressed: () {
-                                        setState(() {
-                                          _type++;
-                                        });
-                                      })),
                                   DataCell(TextButton(
                                       child: Icon(Icons.edit),
                                       onPressed: () {
@@ -156,15 +127,11 @@ class _DriverListScreenState extends State<DriverListScreen> {
           ])),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButton: FloatingActionButton.extended(
-          onPressed: () async {
-            final reloadPage = await Navigator.push(
+          onPressed: () {
+            Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => NewDriverScreen()),
+              MaterialPageRoute(builder: (context) => NewClassScreen()),
             );
-
-            if (reloadPage) {
-              setState(() {});
-            }
           },
           label: Text('Thêm'),
           icon: Icon(Icons.add)),

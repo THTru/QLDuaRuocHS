@@ -32,8 +32,8 @@ dependencies:
   flutter:
     sdk: flutter
   easy_sidemenu: ^0.4.1
-  data_table_2: ^2.3.8
   fl_chart: ^0.55.2
+  intl: ^0.17.0
 
 
   # The following adds the Cupertino Icons font to your application.

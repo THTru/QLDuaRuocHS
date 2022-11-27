@@ -17,7 +17,7 @@ class RoundedButton extends StatelessWidget {
         onPressed: () {
           onBtnPressed();
         },
-        minWidth: 320,
+        minWidth: 60,
         height: 60,
         child: Text(
           btnText,

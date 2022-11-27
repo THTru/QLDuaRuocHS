@@ -9,8 +9,10 @@ import 'package:admin_app/Screens/userlist.dart';
 import 'package:admin_app/Screens/studentlist.dart';
 import 'package:admin_app/Screens/driverslist.dart';
 import 'package:admin_app/Screens/vehiclelist.dart';
+import 'package:admin_app/Screens/linelist.dart';
 import 'package:admin_app/Screens/linetypelist.dart';
 import 'package:admin_app/Screens/schedulelist.dart';
+import 'package:admin_app/Screens/dayofflist.dart';
 
 import 'package:easy_sidemenu/easy_sidemenu.dart';
 
@@ -264,11 +266,11 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               SideMenuItem(
                 priority: 8,
-                title: 'Settings',
+                title: 'Ngày nghỉ',
                 onTap: () {
                   page.jumpToPage(8);
                 },
-                icon: const Icon(Icons.settings),
+                icon: const Icon(Icons.calendar_month),
               ),
               // const SideMenuItem(
               //   priority: 9,
@@ -295,12 +297,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
                 Container(
                   color: Colors.white,
-                  child: const Center(
-                    child: Text(
-                      'Tuyến xe',
-                      style: TextStyle(fontSize: 35),
-                    ),
-                  ),
+                  child: const Center(child: LineListScreen()),
                 ),
                 Container(
                   color: Colors.white,
@@ -320,12 +317,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
                 Container(
                   color: Colors.white,
-                  child: const Center(
-                    child: Text(
-                      'Settings',
-                      style: TextStyle(fontSize: 35),
-                    ),
-                  ),
+                  child: const Center(child: DayOffListScreen()),
                 ),
               ],
             ),

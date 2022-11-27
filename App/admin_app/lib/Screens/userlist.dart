@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:admin_app/General/general.dart';
 import 'package:http/http.dart' as http;
 
+import 'package:admin_app/Screens/usernew.dart';
+
 class UserListScreen extends StatefulWidget {
   const UserListScreen({Key? key}) : super(key: key);
 
@@ -208,7 +210,10 @@ class _UserListScreenState extends State<UserListScreen> {
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButton: FloatingActionButton.extended(
           onPressed: () {
-            _type++;
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => NewUserScreen()),
+            );
           },
           label: Text('Thêm'),
           icon: Icon(Icons.add)),

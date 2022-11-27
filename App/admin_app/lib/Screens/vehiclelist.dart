@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:admin_app/General/general.dart';
 import 'package:http/http.dart' as http;
 
-import 'package:admin_app/login.dart';
+import 'package:admin_app/Screens/vehiclenew.dart';
 
 class VehicleListScreen extends StatefulWidget {
   const VehicleListScreen({Key? key}) : super(key: key);
@@ -148,7 +148,7 @@ class _VehicleListScreenState extends State<VehicleListScreen> {
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => LoginScreen()),
+              MaterialPageRoute(builder: (context) => NewVehicleScreen()),
             );
           },
           label: Text('Thêm'),

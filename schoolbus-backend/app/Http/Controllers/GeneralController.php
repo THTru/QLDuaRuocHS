@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 use App\Models\Hclass;
 use App\Models\Student;
 use App\Models\Vehicle;
@@ -16,6 +17,7 @@ use App\Models\Registration;
 use App\Models\Trip;
 use App\Models\StudentTrip;
 use App\Models\User;
+use App\Models\DayOff;
 
 class GeneralController extends Controller
 {
@@ -54,7 +56,7 @@ class GeneralController extends Controller
     //=========================================== CLASS ==============================================
     //Lấy toàn bộ lớp
     public function classes(Request  $req){
-        return Hclass::get();
+        return Hclass::get()->sortBy('class_id');
     }
 
     //Lấy lớp theo ID
@@ -84,7 +86,7 @@ class GeneralController extends Controller
     //Lấy các học sinh theo lớp
     public function studentsbyClass(Request $req){
         $keyword = $req->class_id;
-        return Student::where('class_id', '=', $keyword)->get();
+        return Student::where('class_id', '=', $keyword)->with('class')->get();
     }
 
     //Lấy học sinh + lớp theo ID
@@ -220,13 +222,18 @@ class GeneralController extends Controller
         $keyword4 = $req->carer_id; // -1 là tất cả
         $keyword5 = $req->driver_id; // -1 là tất cả
         $keyword6 = $req->vehicle_id; // -1 là tất cả
+        $today = Carbon::now();
 
         $lines = Line::with('linetype');
         if($keyword1 != -1){
             $lines = $lines->whereDate('first_date','<=', $keyword1)->whereDate('last_date','>=', $keyword1);
         }
         if($keyword2 != -1){
-            $lines = $lines->where('line_status','=', $keyword2);
+            if($keyword2 == 1)
+            $lines = $lines->where('line_status','=', $keyword2)->whereDate('reg_deadline', '>=', $today);
+            else if($keyword2 == 4)
+            $lines = $lines->where('line_status','=', 1)->whereDate('reg_deadline', '<', $today);
+            else $lines = $lines->where('line_status','=', $keyword2);
         }
         if($keyword3 != -1){
             $lines = $lines->where('linetype_id','=', $keyword3);
@@ -292,5 +299,11 @@ class GeneralController extends Controller
     public function trip(Request $req){
         $keyword = $req->trip_id;
         return Trip::with('carer', 'driver', 'vehicle')->find($keyword);
+    }
+
+    //=========================================== DAYOFF ==============================================
+    //Lấy tất cả ngày nghỉ
+    public function dayoffs(Request $req){
+        return DayOff::get()->sortBy('date')->values();
     }
 }

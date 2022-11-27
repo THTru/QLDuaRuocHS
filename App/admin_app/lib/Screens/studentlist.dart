@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:admin_app/General/general.dart';
 import 'package:http/http.dart' as http;
 
-import 'package:admin_app/login.dart';
+import 'package:admin_app/Screens/studentnew.dart';
+import 'package:admin_app/Screens/classlist.dart';
+import 'package:admin_app/rounded_button.dart';
 
 class StudentListScreen extends StatefulWidget {
   const StudentListScreen({Key? key}) : super(key: key);
@@ -18,6 +20,9 @@ class _StudentListScreenState extends State<StudentListScreen> {
   bool _error = false;
   List<dynamic> _students = [];
   String _student_name = '';
+  List<dynamic> _classes = [];
+  String _class_id = '';
+
   int _type = 0;
 
   loadStudentList() async {
@@ -48,10 +53,54 @@ class _StudentListScreenState extends State<StudentListScreen> {
     });
   }
 
+  loadStudentListbyClass() async {
+    setState(() {
+      _students = [];
+      _loading = true;
+    });
+    final params = {'class_id': _class_id};
+    await http
+        .get(Uri.http(baseURL(), "/api/students/class", params))
+        .then((response) {
+      if (response.statusCode == 200) {
+        var jsonData = jsonDecode(response.body);
+        setState(() {
+          _students = jsonData;
+        });
+      } else
+        setState(() {
+          _error = true;
+        });
+    }).catchError((e) {
+      setState(() {
+        _error = false;
+      });
+    });
+    setState(() {
+      _loading = false;
+    });
+  }
+
+  loadClassforStudent() async {
+    setState(() {
+      _classes = [];
+    });
+    await http.get(Uri.http(baseURL(), "/api/classes")).then((response) {
+      if (response.statusCode == 200) {
+        var jsonData = jsonDecode(response.body);
+        setState(() {
+          _classes = jsonData;
+          _class_id = _classes[0]['class_id'];
+        });
+      }
+    });
+  }
+
   @override
   void initState() {
     super.initState();
     loadStudentList();
+    loadClassforStudent();
   }
 
   @override
@@ -62,6 +111,14 @@ class _StudentListScreenState extends State<StudentListScreen> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+            RoundedButton(
+                btnText: 'Xem danh sách lớp',
+                onBtnPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ClassListScreen()));
+                }),
             Wrap(children: [
               TextField(
                 decoration: const InputDecoration(
@@ -75,7 +132,26 @@ class _StudentListScreenState extends State<StudentListScreen> {
                   onPressed: () {
                     loadStudentList();
                   },
-                  child: Text('Tìm')),
+                  child: Text('Tìm theo tên')),
+            ]),
+            Row(children: [
+              TextButton(
+                  onPressed: () {
+                    loadStudentListbyClass();
+                  },
+                  child: Text('Tìm theo lớp')),
+              DropdownButton(
+                  items: _classes.map((valueItem) {
+                    return DropdownMenuItem(
+                        value: valueItem['class_id'],
+                        child: Text(valueItem['class_name']));
+                  }).toList(),
+                  value: _class_id,
+                  onChanged: (newValue) {
+                    setState(() {
+                      _class_id = newValue.toString();
+                    });
+                  })
             ]),
             _error
                 ? const Text('Có lỗi server')
@@ -149,7 +225,7 @@ class _StudentListScreenState extends State<StudentListScreen> {
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => LoginScreen()),
+              MaterialPageRoute(builder: (context) => NewStudentScreen()),
             );
           },
           label: Text('Thêm'),

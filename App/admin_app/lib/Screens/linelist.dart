@@ -3,48 +3,45 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:admin_app/General/general.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 
-import 'package:admin_app/Screens/linetypenew.dart';
+import 'package:admin_app/Screens/linenew.dart';
 
-class LineTypeListScreen extends StatefulWidget {
-  const LineTypeListScreen({Key? key}) : super(key: key);
+class LineListScreen extends StatefulWidget {
+  const LineListScreen({Key? key}) : super(key: key);
 
   @override
-  _LineTypeListScreenState createState() => _LineTypeListScreenState();
+  _LineListScreenState createState() => _LineListScreenState();
 }
 
-class _LineTypeListScreenState extends State<LineTypeListScreen> {
+class _LineListScreenState extends State<LineListScreen> {
   bool _loading = true;
   bool _error = false;
-  List<dynamic> _linetypes = [];
-  int _is_back = -1;
-  int _shift = -1;
+  List<dynamic> _lines = [];
+  int _linetype_id = -1;
+  int _line_status = -1;
   int _type = 0;
-  List isback_list = [
-    {'tag': 'Tất cả', 'value': -1},
-    {'tag': 'Đi', 'value': 0},
-    {'tag': 'Về', 'value': 1},
-  ];
-  List shift_list = [
-    {'tag': 'Tất cả', 'value': -1},
-    {'tag': 'Sáng', 'value': 0},
-    {'tag': 'Chiều', 'value': 1},
-  ];
-  var valueChoose = null;
 
-  loadLineTypeList() async {
+  loadLineList() async {
     setState(() {
-      _linetypes = [];
+      _lines = [];
       _loading = true;
     });
-    final params = {'is_back': _is_back.toString(), 'shift': _shift.toString()};
+    final params = {
+      'date': '-1',
+      'carer_id': '-1',
+      'driver_id': '-1',
+      'vehicle_id': '-1',
+      'linetype_id': _linetype_id.toString(),
+      'line_status': _line_status.toString()
+    };
     await http
-        .get(Uri.http(baseURL(), "/api/linetypes/filter", params))
+        .get(Uri.http(baseURL(), "/api/lines/filter", params))
         .then((response) {
       if (response.statusCode == 200) {
         var jsonData = jsonDecode(response.body);
         setState(() {
-          _linetypes = jsonData;
+          _lines = jsonData;
         });
       } else
         setState(() {
@@ -63,7 +60,7 @@ class _LineTypeListScreenState extends State<LineTypeListScreen> {
   @override
   void initState() {
     super.initState();
-    loadLineTypeList();
+    loadLineList();
   }
 
   @override
@@ -75,43 +72,56 @@ class _LineTypeListScreenState extends State<LineTypeListScreen> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(children: [
-                Text('Loại:',
-                    style: TextStyle(fontSize: 17, color: Colors.orangeAccent)),
-                DropdownButton(
-                    items: isback_list.map((valueItem) {
-                      return DropdownMenuItem(
-                          value: valueItem['value'],
-                          child: Text(valueItem['tag'].toString()));
-                    }).toList(),
-                    value: _is_back,
-                    onChanged: (newValue) {
+              Wrap(children: [
+                TextButton(
+                    onPressed: () {
                       setState(() {
-                        _is_back = int.tryParse(newValue.toString())!;
+                        _line_status = -1;
                       });
-                    })
-              ]),
-              Row(children: [
-                Text('Buổi:',
-                    style: TextStyle(fontSize: 17, color: Colors.orangeAccent)),
-                DropdownButton(
-                    items: shift_list.map((valueItem) {
-                      return DropdownMenuItem(
-                          value: valueItem['value'],
-                          child: Text(valueItem['tag'].toString()));
-                    }).toList(),
-                    value: _shift,
-                    onChanged: (newValue) {
+                      loadLineList();
+                    },
+                    child: Text('Tất cả')),
+                TextButton(
+                    onPressed: () {
                       setState(() {
-                        _shift = int.tryParse(newValue.toString())!;
+                        _line_status = 0;
                       });
-                    })
+                      loadLineList();
+                    },
+                    child: Text('Chưa công bố')),
+                TextButton(
+                    onPressed: () {
+                      setState(() {
+                        _line_status = 1;
+                      });
+                      loadLineList();
+                    },
+                    child: Text('Đang công bố')),
+                TextButton(
+                    onPressed: () {
+                      setState(() {
+                        _line_status = 4;
+                      });
+                      loadLineList();
+                    },
+                    child: Text('Chờ duyệt')),
+                TextButton(
+                    onPressed: () {
+                      setState(() {
+                        _line_status = 2;
+                      });
+                      loadLineList();
+                    },
+                    child: Text('Đã duyệt')),
+                TextButton(
+                    onPressed: () {
+                      setState(() {
+                        _line_status = 3;
+                      });
+                      loadLineList();
+                    },
+                    child: Text('Đã hủy')),
               ]),
-              TextButton(
-                  onPressed: () {
-                    loadLineTypeList();
-                  },
-                  child: Text('Tìm')),
               _error
                   ? const Text('Có lỗi server')
                   : _loading
@@ -139,7 +149,7 @@ class _LineTypeListScreenState extends State<LineTypeListScreen> {
                               DataColumn(
                                 label: Expanded(
                                   child: Text(
-                                    'Bắt đầu',
+                                    'Ngày đầu',
                                     style:
                                         TextStyle(fontStyle: FontStyle.italic),
                                   ),
@@ -148,7 +158,7 @@ class _LineTypeListScreenState extends State<LineTypeListScreen> {
                               DataColumn(
                                 label: Expanded(
                                   child: Text(
-                                    'Kết thúc',
+                                    'Ngày cuối',
                                     style:
                                         TextStyle(fontStyle: FontStyle.italic),
                                   ),
@@ -159,19 +169,17 @@ class _LineTypeListScreenState extends State<LineTypeListScreen> {
                               DataColumn(label: Text('')),
                             ],
                           rows: List<DataRow>.generate(
-                              _linetypes.length,
+                              _lines.length,
                               (index) => DataRow(cells: [
-                                    DataCell(Text(_linetypes[index]
-                                            ['linetype_id']
-                                        .toString())),
-                                    DataCell(Text(_linetypes[index]
-                                            ['linetype_name']
-                                        .toString())),
-                                    DataCell(Text(_linetypes[index]
-                                            ['time_start']
-                                        .toString())),
-                                    DataCell(Text(_linetypes[index]['time_end']
-                                        .toString())),
+                                    DataCell(Text(
+                                        _lines[index]['line_id'].toString())),
+                                    DataCell(Text(
+                                        _lines[index]['line_name'].toString())),
+                                    DataCell(Text(
+                                        dMY(_lines[index]['first_date'])
+                                            .toString())),
+                                    DataCell(
+                                        Text(dMY(_lines[index]['last_date']))),
                                     DataCell(TextButton(
                                         child: Icon(Icons.info),
                                         onPressed: () {
@@ -201,7 +209,7 @@ class _LineTypeListScreenState extends State<LineTypeListScreen> {
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => NewLineTypeScreen()),
+              MaterialPageRoute(builder: (context) => NewLineScreen()),
             );
           },
           label: Text('Thêm'),

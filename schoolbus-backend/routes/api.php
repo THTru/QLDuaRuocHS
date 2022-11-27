@@ -68,6 +68,8 @@ Route::get('trips', [GeneralController::class, 'trips']);
 Route::get('trips/filter', [GeneralController::class, 'tripsFilter']);
 Route::get('trip', [GeneralController::class, 'trip']);
 
+Route::get('dayoffs', [GeneralController::class, 'dayoffs']);
+
 //Auth API
 Route::post('login', [AuthController::class, 'login']);
 
