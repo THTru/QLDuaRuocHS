@@ -16,7 +16,6 @@ class NewVehicleScreen extends StatefulWidget {
 class _NewVehicleScreenState extends State<NewVehicleScreen> {
   String _vehicle_no = '';
   String _capacity = '';
-  var _chosenDate = DateTime.now();
 
   newDriver() async {
     final params = {
@@ -64,7 +63,6 @@ class _NewVehicleScreenState extends State<NewVehicleScreen> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-              Text(_chosenDate.toString()),
               Wrap(children: [
                 TextField(
                   decoration: const InputDecoration(
@@ -88,15 +86,6 @@ class _NewVehicleScreenState extends State<NewVehicleScreen> {
                     },
                     child: Text('Thêm mới')),
               ]),
-              CalendarDatePicker(
-                  initialDate: DateTime.now(),
-                  firstDate: DateTime(2015, 1, 1),
-                  lastDate: DateTime(2025, 1, 1),
-                  onDateChanged: (chosenDate) {
-                    setState(() {
-                      _chosenDate = chosenDate;
-                    });
-                  })
             ])),
       ),
       RoundedButton(

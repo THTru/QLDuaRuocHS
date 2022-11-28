@@ -768,8 +768,8 @@ class AdminController extends Controller
         $rules = [
             'schedule_name' => 'required',
             'schedule_des' => 'required',
-            'stops' => 'required|array|min:1',
-            'time_take' => 'required|array|min:1',
+            'stops' => 'required',
+            'time_take' => 'required',
         ];
         $validator = Validator::make($req->all(), $rules);
         if($validator->fails()){
@@ -779,8 +779,8 @@ class AdminController extends Controller
 
         $schedule_name = $req->schedule_name;
         $schedule_des = $req->schedule_des;
-        $stops = $req->stops;
-        $time_take = $req->time_take;
+        $stops = json_decode($req->stops);
+        $time_take = json_decode($req->time_take);
 
         for($i=0; $i<count($stops); $i++){
             if(Stop::find($stops[$i]) == NULL){
