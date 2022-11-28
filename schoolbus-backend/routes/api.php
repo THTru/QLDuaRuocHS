@@ -48,8 +48,6 @@ Route::get('/vehicle', [GeneralController::class, 'vehicle']);
 
 Route::get('/stops', [GeneralController::class, 'stops']);
 Route::get('/stops/name', [GeneralController::class, 'stopsbyName']);
-Route::get('/stops/district', [GeneralController::class, 'stopsbyDistrict']);
-Route::get('/stops/ward', [GeneralController::class, 'stopsbyWard']);
 Route::get('/stop', [GeneralController::class, 'stop']);
 
 Route::get('/schedules', [GeneralController::class, 'schedules']);

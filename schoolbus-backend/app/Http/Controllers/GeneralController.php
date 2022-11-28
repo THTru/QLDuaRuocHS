@@ -134,25 +134,13 @@ class GeneralController extends Controller
     //=========================================== STOP ==============================================
     //Lấy tất cả điểm dừng
     public function stops(Request $req){
-        return Stop::get();
+        return Stop::get()->sortBy('location')->values();
     }
 
     //Lấy các điểm dừng theo tên
     public function stopsbyName(Request $req){
         $keyword = $req->location;
-        return Stop::where('location', 'LIKE', '%'.$keyword.'%')->get();
-    }
-
-    //Lấy các điểm dừng theo quận
-    public function stopsbyDistrict(Request $req){
-        $keyword = $req->district;
-        return Stop::where('district', '=', $keyword)->get();
-    }
-
-    //Lấy các điểm dừng theo phường
-    public function stopsbyWard(Request $req){
-        $keyword = $req->ward;
-        return Stop::where('ward', '=', $keyword)->get();
+        return Stop::where('location', 'LIKE', '%'.$keyword.'%')->get()->sortBy('location')->values();
     }
 
     //Lấy điểm dừng theo ID

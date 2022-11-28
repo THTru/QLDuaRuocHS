@@ -23,6 +23,10 @@ class _StudentListScreenState extends State<StudentListScreen> {
   List<dynamic> _classes = [];
   String _class_id = '';
 
+  List templist = [
+    {'class_id': '0', 'class_name': 'Không có'}
+  ];
+
   int _type = 0;
 
   loadStudentList() async {
@@ -83,15 +87,18 @@ class _StudentListScreenState extends State<StudentListScreen> {
 
   loadClassforStudent() async {
     setState(() {
-      _classes = [];
+      _classes = templist;
+      _class_id = _classes[0]['class_id'];
     });
     await http.get(Uri.http(baseURL(), "/api/classes")).then((response) {
       if (response.statusCode == 200) {
         var jsonData = jsonDecode(response.body);
-        setState(() {
-          _classes = jsonData;
-          _class_id = _classes[0]['class_id'];
-        });
+        if (jsonData.isNotEmpty) {
+          setState(() {
+            _classes = jsonData;
+            _class_id = _classes[0]['class_id'];
+          });
+        }
       }
     });
   }

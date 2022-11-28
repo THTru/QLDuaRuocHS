@@ -5,6 +5,8 @@ import 'package:admin_app/General/general.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:admin_app/Screens/schedulenew.dart';
+import 'package:admin_app/Screens/stoplist.dart';
+import 'package:admin_app/rounded_button.dart';
 
 class ScheduleListScreen extends StatefulWidget {
   const ScheduleListScreen({Key? key}) : super(key: key);
@@ -62,6 +64,14 @@ class _ScheduleListScreenState extends State<ScheduleListScreen> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+            RoundedButton(
+                btnText: 'Quản lý điểm dừng',
+                onBtnPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => StopListScreen()),
+                  );
+                }),
             Wrap(children: [
               TextField(
                 decoration: const InputDecoration(

@@ -16,8 +16,8 @@ return new class extends Migration
         Schema::create('stops', function (Blueprint $table) {
             $table->id('stop_id');
             $table->string('location');
-            $table->string('district');
-            $table->string('ward');
+            $table->double('lat');
+            $table->double('lng');
             $table->timestamps();
         });
     }

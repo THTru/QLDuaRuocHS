@@ -564,8 +564,8 @@ class AdminController extends Controller
         $response = [ 'message' => 'OK'];
         $rules = [
             'location' => 'required',
-            'ward' => 'required',
-            'district' => 'required',
+            'lat' => 'required',
+            'lng' => 'required',
         ];
         $validator = Validator::make($req->all(), $rules);
         if($validator->fails()){
@@ -574,13 +574,13 @@ class AdminController extends Controller
         }
 
         $location = $req->location;
-        $ward = $req->ward;
-        $district = $req->district;
+        $lat = $req->lat;
+        $lng = $req->lng;
 
         $newStop = new Stop;
         $newStop->location = $location;
-        $newStop->ward = $ward;
-        $newStop->district = $district;
+        $newStop->lat = $lat;
+        $newStop->lng = $lng;
         $newStop->save();
 
         return response()->json($response, 200);
@@ -781,6 +781,11 @@ class AdminController extends Controller
         $schedule_des = $req->schedule_des;
         $stops = json_decode($req->stops);
         $time_take = json_decode($req->time_take);
+
+        if(empty($stops)){
+            $response = [ 'message ' => 'Xin nhập đủ thông tin đúng yêu cầu' ];
+            return response()->json($response, 430);
+        }
 
         for($i=0; $i<count($stops); $i++){
             if(Stop::find($stops[$i]) == NULL){

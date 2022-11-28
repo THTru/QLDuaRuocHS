@@ -26,6 +26,7 @@ class _NewScheduleScreenState extends State<NewScheduleScreen> {
   List<dynamic> _stops = [];
   List<dynamic> _stops_name = [];
   List<dynamic> _time_take = [];
+  int markerID = 0;
 
   int _type = 0;
 
@@ -63,15 +64,20 @@ class _NewScheduleScreenState extends State<NewScheduleScreen> {
 
   loadStopforNewSchedule() async {
     setState(() {
-      stoplist = [];
+      stoplist = [
+        {'stop_id:': 0, 'location': 'Không có'}
+      ];
+      _chosenStop = stoplist[0];
     });
     await http.get(Uri.http(baseURL(), "/api/stops")).then((response) {
       if (response.statusCode == 200) {
         var jsonData = jsonDecode(response.body);
-        setState(() {
-          stoplist = jsonData;
-          _chosenStop = stoplist[0];
-        });
+        if (jsonData.isNotEmpty) {
+          setState(() {
+            stoplist = jsonData;
+            _chosenStop = stoplist[0];
+          });
+        }
       }
     });
   }
@@ -95,10 +101,6 @@ class _NewScheduleScreenState extends State<NewScheduleScreen> {
   void initState() {
     super.initState();
     loadStopforNewSchedule();
-    _markers.add(Marker(
-        markerId: MarkerId("mylocation"),
-        infoWindow: const InfoWindow(title: 'Chỗ tôi đây'),
-        position: LatLng(10.0341851, 105.7225507)));
   }
 
   @override
@@ -172,6 +174,13 @@ class _NewScheduleScreenState extends State<NewScheduleScreen> {
                             _stops.add(_chosenStop['stop_id']);
                             _stops_name.add(_chosenStop['location']);
                             _time_take.add(_time);
+                            _markers.add(Marker(
+                                markerId: MarkerId(markerID.toString()),
+                                infoWindow:
+                                    const InfoWindow(title: 'Chỗ tôi đây'),
+                                position: LatLng(
+                                    _chosenStop['lat'], _chosenStop['lng'])));
+                            markerID++;
                           });
                         },
                         child: Text('Thêm điểm')),
@@ -208,18 +217,14 @@ class _NewScheduleScreenState extends State<NewScheduleScreen> {
                                         _stops.removeAt(index);
                                         _stops_name.removeAt(index);
                                         _time_take.removeAt(index);
+                                        _markers.removeAt(index);
                                       });
                                     }))
                               ]))),
                 ]),
-                TextButton(
-                    onPressed: () {
-                      newSchedule();
-                    },
-                    child: Text('Thêm mới')),
                 Container(
-                    height: 300,
-                    width: 1200,
+                    height: 350,
+                    width: 900,
                     child: GoogleMap(
                         markers: Set<Marker>.of(_markers),
                         onMapCreated: (controller) {
@@ -228,8 +233,13 @@ class _NewScheduleScreenState extends State<NewScheduleScreen> {
                           });
                         },
                         initialCameraPosition: CameraPosition(
-                            target: LatLng(10.0341851, 105.7225507),
+                            target: LatLng(10.0324476, 105.7576498),
                             zoom: 13))),
+                TextButton(
+                    onPressed: () {
+                      newSchedule();
+                    },
+                    child: Text('Thêm mới')),
               ]),
         ),
       ),

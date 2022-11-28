@@ -64,37 +64,50 @@ class _NewLineScreenState extends State<NewLineScreen> {
 
   loadLineTypeforNewLine() async {
     setState(() {
-      _linetypes = [];
+      _linetypes = [
+        {'linetype_id': 0, 'linetype_name': 'Không có'}
+      ];
+      _linetype_id = _linetypes[0]['linetype_id'];
     });
     await http.get(Uri.http(baseURL(), "/api/linetypes")).then((response) {
       if (response.statusCode == 200) {
         var jsonData = jsonDecode(response.body);
-        setState(() {
-          _linetypes = jsonData;
-          _linetype_id = _linetypes[0]['linetype_id'];
-        });
+        if (jsonData.isNotEmpty) {
+          setState(() {
+            _linetypes = jsonData;
+            _linetype_id = _linetypes[0]['linetype_id'];
+          });
+        }
       }
     });
   }
 
   loadScheduleforNewLine() async {
     setState(() {
-      _schedules = [];
+      _schedules = [
+        {'schedule_id': 0, 'schedule_name': 'Không có'}
+      ];
+      _schedule_id = _schedules[0]['schedule_id'];
     });
     await http.get(Uri.http(baseURL(), "/api/schedules")).then((response) {
       if (response.statusCode == 200) {
         var jsonData = jsonDecode(response.body);
-        setState(() {
-          _schedules = jsonData;
-          _schedule_id = _schedules[0]['schedule_id'];
-        });
+        if (jsonData.isNotEmpty) {
+          setState(() {
+            _schedules = jsonData;
+            _schedule_id = _schedules[0]['schedule_id'];
+          });
+        }
       }
     });
   }
 
   loadCarerforNewLine() async {
     setState(() {
-      _carers = [];
+      _carers = [
+        {'id': 0, 'name': 'Không có'}
+      ];
+      _carer_id = _carers[0]['id'];
     });
     final params = {'type': '2'};
     await http
@@ -102,40 +115,52 @@ class _NewLineScreenState extends State<NewLineScreen> {
         .then((response) {
       if (response.statusCode == 200) {
         var jsonData = jsonDecode(response.body);
-        setState(() {
-          _carers = jsonData;
-          _carer_id = _carers[0]['id'];
-        });
+        if (jsonData.isNotEmpty) {
+          setState(() {
+            _carers = jsonData;
+            _carer_id = _carers[0]['id'];
+          });
+        }
       }
     });
   }
 
   loadDriverforNewLine() async {
     setState(() {
-      _drivers = [];
+      _drivers = [
+        {'driver_id': 0, 'driver_name': 'Không có'}
+      ];
+      _driver_id = _drivers[0]['driver_id'];
     });
     await http.get(Uri.http(baseURL(), "/api/drivers")).then((response) {
       if (response.statusCode == 200) {
         var jsonData = jsonDecode(response.body);
-        setState(() {
-          _drivers = jsonData;
-          _driver_id = _drivers[0]['driver_id'];
-        });
+        if (jsonData.isNotEmpty) {
+          setState(() {
+            _drivers = jsonData;
+            _driver_id = _drivers[0]['driver_id'];
+          });
+        }
       }
     });
   }
 
   loadVehicleforNewLine() async {
     setState(() {
-      _vehicles = [];
+      _vehicles = [
+        {'vehicle_id': 0, 'vehicle_no': 'Không có'}
+      ];
+      _vehicle_id = _vehicles[0]['vehicle_id'];
     });
     await http.get(Uri.http(baseURL(), "/api/vehicles")).then((response) {
       if (response.statusCode == 200) {
         var jsonData = jsonDecode(response.body);
-        setState(() {
-          _vehicles = jsonData;
-          _vehicle_id = _vehicles[0]['vehicle_id'];
-        });
+        if (jsonData.isNotEmpty) {
+          setState(() {
+            _vehicles = jsonData;
+            _vehicle_id = _vehicles[0]['vehicle_id'];
+          });
+        }
       }
     });
   }
