@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:parent_app/Screens/login.dart';
 import 'package:parent_app/Screens/map.dart';
+
+import 'package:parent_app/Screens/menu.dart';
 
 void main() {
   runApp(const MyApp());
@@ -26,7 +29,8 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       // home: const MyHomePage(title: 'Flutter Demo Home Page'),
-      home: MapSample(),
+      home: LoginScreen(),
+      // home: MapSample(),
     );
   }
 }

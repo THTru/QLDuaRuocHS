@@ -13,18 +13,18 @@ class MapSampleState extends State<MapSample> {
 
   static final CameraPosition _kGooglePlex = CameraPosition(
     target: LatLng(10.0312357, 105.7708309),
-    zoom: 10,
+    zoom: 12,
   );
 
-  static final CameraPosition _kSchool = CameraPosition(
-      target: LatLng(10.0312357, 105.7708309), tilt: 20, zoom: 15);
+  static final CameraPosition _kSchool =
+      CameraPosition(target: LatLng(10.0312357, 105.7708309), zoom: 13);
 
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: AppBar(centerTitle: true, title: Text('Bản đồ')),
       body: GoogleMap(
-        mapType: MapType.hybrid,
+        // mapType: MapType.hybrid,
         initialCameraPosition: _kGooglePlex,
         onMapCreated: (GoogleMapController controller) {
           _controller.complete(controller);

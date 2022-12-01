@@ -66,9 +66,13 @@ Route::get('trips', [GeneralController::class, 'trips']);
 Route::get('trips/filter', [GeneralController::class, 'tripsFilter']);
 Route::get('trip', [GeneralController::class, 'trip']);
 
+Route::get('studenttrips', [GeneralController::class, 'studenttrips']);
+
 Route::get('dayoffs', [GeneralController::class, 'dayoffs']);
 
 //Auth API
+Route::post('login2', [AuthController::class, 'login2']);
+Route::post('authcheck', [AuthController::class, 'authcheck']);
 Route::post('login', [AuthController::class, 'login']);
 
 //AuthTest

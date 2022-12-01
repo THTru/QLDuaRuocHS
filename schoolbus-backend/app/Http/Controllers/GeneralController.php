@@ -92,7 +92,7 @@ class GeneralController extends Controller
     //Lấy học sinh + lớp theo ID
     public function student(Request $req){
         $keyword = $req->student_id;
-        return Student::with('class')->find($keyword);
+        return Student::with('class', 'parent')->find($keyword);
     }
 
     //=========================================== DRIVER ==============================================
@@ -205,7 +205,7 @@ class GeneralController extends Controller
     //Lọc, tìm kiếm các tuyến theo ngày, trạng thái, loại tuyến, bảo mẫu, tài xế, xe
     public function linesFilter(Request $req){
         $keyword1 = $req->date; //ngày trong thời gian tuyến chạy, -1 là tất cả
-        $keyword2 = $req->line_status; // 0: chưa công bố, 1: công bố, 2: chốt đăng ký, 3: hủy
+        $keyword2 = $req->line_status; // 0: chưa công bố, 1: công bố, 2: chốt đăng ký, 3: hủy, 4: quá hạn đk
         $keyword3 = $req->linetype_id; // -1 là tất cả
         $keyword4 = $req->carer_id; // -1 là tất cả
         $keyword5 = $req->driver_id; // -1 là tất cả
@@ -293,5 +293,16 @@ class GeneralController extends Controller
     //Lấy tất cả ngày nghỉ
     public function dayoffs(Request $req){
         return DayOff::get()->sortBy('date')->values();
+    }
+
+    //=========================================== STUDENTTRIPS ==============================================
+    //Lấy tất cả các chuyến đi của học sinh
+    public function studenttrips(Request $req){
+        $keyword1 = $req->student_id;
+        $keyword2 = $req->is_finish; // 0 là chưa 1 là hoàn thành
+
+        if($keyword2 == 0)
+            return StudentTrip::where('student_id', '=', $keyword1)->with('trip', 'stop')->whereNULL('off_at')->where('absence', '=', '0')->get();
+        else return StudentTrip::where('student_id', '=', $keyword1)->with('trip', 'stop')->whereNotNull('off_at')->orWhere('absence', '=', '1')->get();
     }
 }
