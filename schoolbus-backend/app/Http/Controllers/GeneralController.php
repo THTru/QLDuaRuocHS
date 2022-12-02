@@ -241,7 +241,7 @@ class GeneralController extends Controller
     //Lấy tuyến theo ID
     public function line(Request $req){
         $keyword = $req->line_id;
-        return Line::with('linetype', 'carer', 'driver', 'vehicle', 'schedule')->find($keyword);
+        return Line::with('linetype', 'carer', 'driver', 'vehicle', 'schedule.stopschedule.stop', 'registration')->find($keyword);
     }
 
     //=========================================== TRIP ==============================================
@@ -295,6 +295,23 @@ class GeneralController extends Controller
         return DayOff::get()->sortBy('date')->values();
     }
 
+    //=========================================== REGISTRATIONS ==============================================
+    //Lấy tất cả các chuyến đi của học sinh
+    public function registrations(Request $req){
+        $keyword1 = $req->student_id;
+
+        $reg = Registration::with('line.linetype', 'stop');
+        if($keyword1 != -1)
+            $reg = $reg->where('student_id', '=', $keyword1);
+        return $reg->get();
+    }
+
+    public function registration(Request $req){
+        $keyword1 = $req->reg_id;
+
+        return Registration::with('line.carer', 'line.linetype', 'line.vehicle', 'line.driver', 'stop')->find($keyword1);
+    }
+    
     //=========================================== STUDENTTRIPS ==============================================
     //Lấy tất cả các chuyến đi của học sinh
     public function studenttrips(Request $req){

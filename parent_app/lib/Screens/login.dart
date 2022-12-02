@@ -33,9 +33,8 @@ class _LoginScreenState extends State<LoginScreen> {
           await storage.write(key: 'token', value: jsonData['token']);
           await storage.write(key: 'user', value: jsonEncode(jsonData['user']));
           await storage.write(
-              key: 'user', value: jsonEncode(jsonData['user']['student'][0]));
-          // await storage.write(
-          //     key: 'student_id', value: jsonData['user']['student'][0]['id']);
+              key: 'student',
+              value: jsonEncode(jsonData['user']['student'][0]));
           successSnackBar(context, 'Xin chào');
           goToHomePage();
         } else {
@@ -50,7 +49,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   goToHomePage() {
-    Navigator.push(
+    Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (context) => MenuScreen()),
     );

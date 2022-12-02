@@ -8,7 +8,7 @@ const Map<String, String> headers = {"Content-Type": "application/json"};
 errorSnackBar(BuildContext context, String text) {
   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
     backgroundColor: Colors.red,
-    content: Text(text),
+    content: Text(text, style: TextStyle(fontSize: 18)),
     duration: const Duration(milliseconds: 1400),
   ));
 }
@@ -16,7 +16,7 @@ errorSnackBar(BuildContext context, String text) {
 successSnackBar(BuildContext context, String text) {
   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
     backgroundColor: Colors.green,
-    content: Text(text),
+    content: Text(text, style: TextStyle(fontSize: 18)),
     duration: const Duration(milliseconds: 1400),
   ));
 }

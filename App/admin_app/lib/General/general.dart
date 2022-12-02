@@ -1,3 +1,4 @@
+import 'dart:html';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -34,8 +35,8 @@ yMD(String ymd) {
   DateTime temp = DateFormat('y-M-d').parse(ymd);
   // return DateFormat('y/M/d').format(temp);
   String day = temp.day.toString();
-  // String month = temp.day.toString();
+  String month = temp.month.toString();
   if (temp.day < 10) day = '0' + temp.day.toString();
-  // if (temp.month < 10) month = '0' + temp.month.toString();
-  return temp.year.toString() + '/' + temp.month.toString() + '/' + day;
+  if (temp.month < 10) month = '0' + temp.month.toString();
+  return temp.year.toString() + '/' + month + '/' + day;
 }

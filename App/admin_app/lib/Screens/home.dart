@@ -16,126 +16,6 @@ import 'package:admin_app/Screens/dayofflist.dart';
 
 import 'package:easy_sidemenu/easy_sidemenu.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
-
-  @override
-  _HomeScreenState createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-  goToUserList() {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (BuildContext context) => const UserListScreen(),
-        ));
-  }
-
-  goToStudentList() {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (BuildContext context) => const StudentListScreen(),
-        ));
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.lightBlue,
-          centerTitle: true,
-          elevation: 0,
-          title: const Text(
-            'Trang chủ',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-        body: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    Material(
-                        color: Colors.orange,
-                        elevation: 5,
-                        child: MaterialButton(
-                          minWidth: 250,
-                          height: 60,
-                          onPressed: () {
-                            goToUserList();
-                          },
-                          child: Text(
-                            "Người dùng",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 20,
-                            ),
-                          ),
-                        )),
-                    Material(
-                        color: Colors.orange,
-                        elevation: 5,
-                        child: MaterialButton(
-                          minWidth: 250,
-                          height: 60,
-                          onPressed: () {
-                            goToStudentList();
-                          },
-                          child: Text(
-                            "Học sinh",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 20,
-                            ),
-                          ),
-                        )),
-                    Material(
-                        color: Colors.orange,
-                        elevation: 5,
-                        child: MaterialButton(
-                          minWidth: 250,
-                          height: 60,
-                          onPressed: () {
-                            errorSnackBar(context, 'Xe & tài xế');
-                          },
-                          child: Text(
-                            "Xe & tài xế",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 20,
-                            ),
-                          ),
-                        )),
-                    Material(
-                        color: Colors.orange,
-                        elevation: 5,
-                        child: MaterialButton(
-                          minWidth: 250,
-                          height: 60,
-                          onPressed: () {
-                            errorSnackBar(context, 'Lịch trình');
-                          },
-                          child: Text(
-                            "Lịch trình",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 20,
-                            ),
-                          ),
-                        )),
-                  ],
-                ),
-              ],
-            )));
-  }
-}
-
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key, required this.title}) : super(key: key);
 
@@ -174,30 +54,12 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             title: Column(
               children: [
-                // ConstrainedBox(
-                //   constraints: const BoxConstraints(
-                //     maxHeight: 150,
-                //     maxWidth: 150,
-                //   ),
-                //   child: const Icon(
-                //     Icons.school_outlined,
-                //     color: Colors.blueAccent,
-                //     size: 100,
-                //   ),
-                // ),
                 const Divider(
                   indent: 8.0,
                   endIndent: 8.0,
                 ),
               ],
             ),
-            // footer: const Padding(
-            //   padding: EdgeInsets.all(8.0),
-            //   child: Text(
-            //     'mohada',
-            //     style: TextStyle(fontSize: 15),
-            //   ),
-            // ),
             items: [
               SideMenuItem(
                 priority: 0,
@@ -283,10 +145,7 @@ class _MyHomePageState extends State<MyHomePage> {
             child: PageView(
               controller: page,
               children: [
-                Container(
-                  color: Colors.white,
-                  child: const Center(child: ChartsScreen()),
-                ),
+                Container(color: Colors.white, child: const Text('YES')),
                 Container(
                   color: Colors.white,
                   child: const Center(child: UserListScreen()),

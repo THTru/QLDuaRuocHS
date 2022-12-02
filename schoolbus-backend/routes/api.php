@@ -66,6 +66,9 @@ Route::get('trips', [GeneralController::class, 'trips']);
 Route::get('trips/filter', [GeneralController::class, 'tripsFilter']);
 Route::get('trip', [GeneralController::class, 'trip']);
 
+Route::get('registrations', [GeneralController::class, 'registrations']);
+Route::get('registration', [GeneralController::class, 'registration']);
+
 Route::get('studenttrips', [GeneralController::class, 'studenttrips']);
 
 Route::get('dayoffs', [GeneralController::class, 'dayoffs']);

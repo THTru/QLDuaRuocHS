@@ -89,12 +89,9 @@ class AuthController extends Controller
     }
 
     public function logout2(Request $req){
-        if(Auth::logout()){
-            $response = [ 'message' => 'Logout thành công' ];
-            return response()->json($response, 200);
-        }
-        $response = [ 'message' => 'Đã xảy ra lỗi' ];
-        return response()->json($response, 400);
+        auth()->logout();
+        $response = [ 'message' => 'Logout thành công' ];
+        return response()->json($response, 200);
     }
 
     public function user2(Request $req){

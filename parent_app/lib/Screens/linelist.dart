@@ -2,12 +2,14 @@ import 'dart:convert';
 // import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:parent_app/Screens/reglist.dart';
 import 'package:parent_app/rounded_button.dart';
 import 'package:parent_app/General/general.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 
-import 'package:parent_app/Screens/map.dart';
+import 'package:parent_app/Screens/linereg.dart';
+import 'package:parent_app/Screens/reglist.dart';
 
 class LineListScreen extends StatefulWidget {
   const LineListScreen({Key? key}) : super(key: key);
@@ -20,10 +22,6 @@ class _LineListScreenState extends State<LineListScreen> {
   List<dynamic> _linelist = [];
   bool _error = false;
   bool _loading = true;
-
-  String _email = '';
-  String _password = '';
-  String _type = '3';
 
   loadLineList() async {
     setState(() {
@@ -80,10 +78,10 @@ class _LineListScreenState extends State<LineListScreen> {
   // }
 
   // goToMapPage() {
-  //   // Navigator.push(
-  //   //   context,
-  //   //   MaterialPageRoute(builder: (context) => MapSample()),
-  //   // );
+  //   Navigator.push(
+  //     context,
+  //     MaterialPageRoute(builder: (context) => MapSample()),
+  //   );
   //   print('Các chuyến xe đăng ký');
   // }
 
@@ -114,7 +112,6 @@ class _LineListScreenState extends State<LineListScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text(_linelist.length.toString()),
               _error == true
                   ? Center(
                       child: Text(
@@ -125,23 +122,72 @@ class _LineListScreenState extends State<LineListScreen> {
                       ? Center(child: CircularProgressIndicator())
                       : Expanded(
                           child: ListView.builder(
-                              padding: EdgeInsets.all(10),
+                              padding: EdgeInsets.all(8),
                               itemCount: _linelist.length,
                               itemBuilder: (context, index) {
                                 return Card(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                      side: BorderSide(
+                                        color: Colors.orangeAccent,
+                                      ),
+                                    ),
                                     child: Padding(
-                                        padding: EdgeInsets.all(10),
+                                        padding: EdgeInsets.all(8),
                                         child: Column(
                                           mainAxisAlignment:
                                               MainAxisAlignment.start,
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
-                                            Text(_linelist[index]['line_name']),
-                                            Text(_linelist[index]['first_date']
-                                                .toString()),
-                                            Text(_linelist[index]['last_date']
-                                                .toString()),
+                                            Text(_linelist[index]['line_name'],
+                                                style: TextStyle(
+                                                    color: Colors.deepOrange,
+                                                    fontSize: 20,
+                                                    fontWeight:
+                                                        FontWeight.bold)),
+                                            Text(
+                                                'Bắt đầu: ' +
+                                                    _linelist[index]['linetype']
+                                                            ['time_start']
+                                                        .toString(),
+                                                style: TextStyle(fontSize: 19)),
+                                            Text(
+                                                'Kết thúc: ' +
+                                                    _linelist[index]['linetype']
+                                                            ['time_end']
+                                                        .toString(),
+                                                style: TextStyle(fontSize: 19)),
+                                            Text(
+                                                'Từ ' +
+                                                    dMY(_linelist[index]
+                                                        ['first_date']) +
+                                                    ' tới ' +
+                                                    dMY(_linelist[index]
+                                                        ['last_date']),
+                                                style: TextStyle(fontSize: 19)),
+                                            MaterialButton(
+                                              onPressed: () {
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          LineRegScreen(
+                                                              lineID: _linelist[
+                                                                      index]
+                                                                  ['line_id'])),
+                                                );
+                                              },
+                                              textColor: Colors.white,
+                                              child: Wrap(children: [
+                                                Icon(Icons.info_outline),
+                                                Text(' Chi tiết',
+                                                    style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: 19))
+                                              ]),
+                                              color: Colors.orangeAccent,
+                                            )
                                           ],
                                         )));
                               }))
@@ -172,9 +218,12 @@ class _LineListScreenState extends State<LineListScreen> {
       floatingActionButton: FloatingActionButton.extended(
         backgroundColor: Colors.orangeAccent,
         onPressed: () {
-          print('Các chuyến xe đã đăng ký');
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => RegListScreen()),
+          );
         },
-        label: Text('Các tuyến đã đăng ký'),
+        label: Text('Tuyến đã đăng ký'),
         icon: Icon(Icons.check),
       ),
     );

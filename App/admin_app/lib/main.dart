@@ -125,7 +125,7 @@ import 'package:http/http.dart' as http;
 
 import 'package:admin_app/login.dart';
 import 'package:admin_app/Screens/home.dart';
-import 'package:admin_app/Screens/studentlist.dart';
+import 'package:admin_app/Screens/charts.dart';
 
 void main() {
   runApp(const MyApp());
@@ -136,12 +136,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var check_auth = true;
+    // var check_auth = true;
     // return const MaterialApp(
-    return MaterialApp(
-      home: const MyHomePage(title: 'Hệ thống quản lý đưa rước học sinh'),
-      // home: check_auth ? StudentListScreen() : LoginScreen(),
-    );
+    return MaterialApp(home: const Home());
   }
 }
 
@@ -153,74 +150,16 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  bool _loading = false;
-  List<dynamic> _users = [];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   title: const FittedBox(
-      //     child: Text(
-      //       "API Call",
-      //     ),
-      //   ),
-      // ),
-      body: _users.isNotEmpty
-          ? ListView.builder(
-              itemCount: _users.length,
-              itemBuilder: ((context, index) {
-                return Card(
-                  margin: const EdgeInsets.symmetric(
-                    horizontal: 15.0,
-                    vertical: 10.0,
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      children: [
-                        // Image.network(_users[index]['image']),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(_users[index]['student_id'].toString()),
-                            Text(_users[index]['student_name']),
-                            Text(_users[index]['class']['class_name']),
-                          ],
-                        )
-                      ],
-                    ),
-                  ),
-                );
-              }),
-            )
-          : Center(
-              child: _loading
-                  ? CircularProgressIndicator()
-                  : ElevatedButton(
-                      child: const Text("fetch users"),
-                      onPressed: loadUserList,
-                    ),
-            ),
-    );
-  }
-
-  loadUserList() async {
-    setState(() {
-      _loading = true;
-    });
-    final params = {'student_name': ''};
-    var res = await http
-        .get(Uri.http("localhost:8000", "/api/students/name", params));
-    if (res.statusCode == 200) {
-      var jsonData = jsonDecode(res.body);
-      if (jsonData.isNotEmpty) {
-        setState(() {
-          _users = jsonData;
-          _loading = false;
-        });
-      }
-    }
+        // appBar: AppBar(
+        //   title: const FittedBox(
+        //     child: Text(
+        //       "API Call",
+        //     ),
+        //   ),
+        // ),
+        body: ChartsScreen());
   }
 }

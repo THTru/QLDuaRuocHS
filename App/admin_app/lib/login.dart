@@ -1,13 +1,13 @@
 import 'dart:convert';
 
+import 'package:admin_app/Screens/home.dart';
 import 'package:flutter/material.dart';
 // import 'package:flutterapp/Services/auth_services.dart';
 // import 'package:flutterapp/Services/globals.dart';
 import 'package:admin_app/rounded_button.dart';
 import 'package:admin_app/General/general.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
-
-import 'main.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -22,41 +22,33 @@ class _LoginScreenState extends State<LoginScreen> {
   String _type = '1';
 
   loginPressed() async {
+    final storage = new FlutterSecureStorage();
     if (_email.isNotEmpty && _password.isNotEmpty) {
-      // http.Response response = await AuthServices.login(_email, _password);
-      // Map responseMap = jsonDecode(response.body);
       final params = {'password': _password, 'email': _email, 'type': _type};
-      // var response =
-      //     await http.post(Uri.http("localhost:8000", "/api/login2", params));
-      // var jsonData = jsonDecode(response.body);
-      // if (response.statusCode == 200) {
-      //   Navigator.pushReplacement(
-      //       context,
-      //       MaterialPageRoute(
-      //         builder: (BuildContext context) => const Home(),
-      //       ));
-      // } else {
-      //   errorSnackBar(context, jsonData.values.first);
-      // }
       await http
           .post(Uri.http(baseURL(), "/api/login2", params))
-          .then((response) {
+          .then((response) async {
         var jsonData = jsonDecode(response.body);
         if (response.statusCode == 200) {
-          Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (BuildContext context) => const Home(),
-              ));
+          await storage.write(key: 'token', value: jsonData['token']);
+          successSnackBar(context, 'Xin chào');
+          goToHomePage();
         } else {
           errorSnackBar(context, jsonData.values.first);
         }
-      }).catchError((error) {
-        errorSnackBar(context, 'Có lỗi Server');
       });
     } else {
       errorSnackBar(context, 'Xin điền email và password');
     }
+  }
+
+  goToHomePage() {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+          builder: (context) =>
+              const MyHomePage(title: 'Quản lý đưa đón học sinh')),
+    );
   }
 
   @override

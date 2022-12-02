@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:admin_app/General/general.dart';
 import 'package:http/http.dart' as http;
 
+import 'package:admin_app/Screens/student.dart';
 import 'package:admin_app/Screens/studentnew.dart';
 import 'package:admin_app/Screens/classlist.dart';
 import 'package:admin_app/rounded_button.dart';
@@ -205,12 +206,17 @@ class _StudentListScreenState extends State<StudentListScreen> {
                                           ['class_name']
                                       .toString())),
                                   DataCell(TextButton(
-                                      child: Icon(Icons.info),
-                                      onPressed: () {
-                                        setState(() {
-                                          _type++;
-                                        });
-                                      })),
+                                    child: Icon(Icons.info),
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => StudentScreen(
+                                                studentID: _students[index]
+                                                    ['student_id'])),
+                                      );
+                                    },
+                                  )),
                                   DataCell(TextButton(
                                       child: Icon(Icons.edit),
                                       onPressed: () {
