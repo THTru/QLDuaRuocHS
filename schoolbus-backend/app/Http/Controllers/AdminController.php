@@ -1048,7 +1048,7 @@ class AdminController extends Controller
             $response = [ 'message ' => 'Không tìm thấy tuyến' ];
             return response()->json($response, 430);
         }
-        if($line->carer_id == NULL || $line->driver_id == NULL || $line->vehicle_id == NULL || $line->carer->id != 2){
+        if($line->carer_id == NULL || $line->driver_id == NULL || $line->vehicle_id == NULL || $line->carer->type != 2){
             $response = [ 'message ' => 'Xin xác định tài xế, xe và bảo mẫu' ];
             return response()->json($response, 430);
         }

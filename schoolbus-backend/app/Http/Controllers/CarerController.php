@@ -137,6 +137,10 @@ class CarerController extends Controller
             $response = [ 'message ' => 'Học sinh chưa lên xe' ];
             return response()->json($response, 430);
         }
+        if($studenttrip->off_at != NULL){
+            $response = [ 'message ' => 'Học sinh đã xuống xe' ];
+            return response()->json($response, 430);
+        }
 
         $off_at = Carbon::now()->setTimezone('+7');
         $studenttrip->off_at = $off_at->format('H:i:s');

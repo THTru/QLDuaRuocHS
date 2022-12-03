@@ -1,13 +1,15 @@
 import 'dart:convert';
 // import 'dart:io';
 
-import 'package:parent_app/Screens/timesheet.dart';
+import 'package:carer_app/Screens/studentstriplist.dart';
 import 'package:flutter/material.dart';
-import 'package:parent_app/rounded_button.dart';
-import 'package:parent_app/General/general.dart';
+import 'package:carer_app/rounded_button.dart';
+import 'package:carer_app/General/general.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
+
+// import 'package:parent_app/Screens/map.dart';
 
 class MapScreen extends StatefulWidget {
   var stop;

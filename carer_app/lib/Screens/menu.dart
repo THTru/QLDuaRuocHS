@@ -1,18 +1,16 @@
 import 'dart:convert';
 // import 'dart:io';
 
+import 'package:carer_app/Screens/timesheet.dart';
 import 'package:flutter/material.dart';
-import 'package:parent_app/Screens/login.dart';
-import 'package:parent_app/Screens/timesheet.dart';
-import 'package:parent_app/rounded_button.dart';
-import 'package:parent_app/General/general.dart';
+import 'package:carer_app/rounded_button.dart';
+import 'package:carer_app/General/general.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 
-import 'package:parent_app/Screens/login.dart';
-import 'package:parent_app/Screens/linelist.dart';
-import 'package:parent_app/Screens/userinfo.dart';
-import 'package:parent_app/Screens/timesheet.dart';
+import 'package:carer_app/Screens/login.dart';
+import 'package:carer_app/Screens/timesheet.dart';
+// import 'package:carer_app/Screens/userinfo.dart';
 
 class MenuScreen extends StatefulWidget {
   const MenuScreen({Key? key}) : super(key: key);
@@ -23,10 +21,11 @@ class MenuScreen extends StatefulWidget {
 
 class _MenuScreenState extends State<MenuScreen> {
   goToListLinePage() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => LineListScreen()),
-    );
+    // Navigator.push(
+    //   context,
+    //   MaterialPageRoute(builder: (context) => LineListScreen()),
+    // );
+    print('yes');
   }
 
   logoutPressed() async {
@@ -59,11 +58,11 @@ class _MenuScreenState extends State<MenuScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.greenAccent,
+          backgroundColor: Colors.orangeAccent,
           centerTitle: true,
           elevation: 0,
           title: const Text(
-            'Cùng con tới trường',
+            'Cùng bé đến trường',
             style: TextStyle(
               fontSize: 25,
               fontWeight: FontWeight.bold,
@@ -81,18 +80,19 @@ class _MenuScreenState extends State<MenuScreen> {
                     child: Transform.scale(
                         scale: 5,
                         child: Icon(
-                          Icons.airport_shuttle,
-                          color: Colors.greenAccent,
+                          Icons.airport_shuttle_rounded,
+                          color: Colors.orangeAccent,
                         ))),
                 FractionallySizedBox(
                     widthFactor: 1,
                     child: InkWell(
                         onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => UserInfoScreen()),
-                          );
+                          // Navigator.push(
+                          //   context,
+                          //   MaterialPageRoute(
+                          //       builder: (context) => UserInfoScreen()),
+                          // );
+                          print('YES');
                         },
                         child: Card(
                             margin: EdgeInsets.all(5.0),
@@ -127,28 +127,9 @@ class _MenuScreenState extends State<MenuScreen> {
                                   children: [
                                     Icon(Icons.calendar_month,
                                         color: Colors.white),
-                                    Text(' Xem lịch trình của con',
+                                    Text(' Xem lịch làm việc',
                                         style: TextStyle(
                                             color: Colors.white, fontSize: 22)),
-                                  ],
-                                ))))),
-                FractionallySizedBox(
-                    widthFactor: 1,
-                    child: InkWell(
-                        onTap: () {
-                          goToListLinePage();
-                        },
-                        child: Card(
-                            margin: EdgeInsets.all(5.0),
-                            color: Colors.orangeAccent,
-                            child: Padding(
-                                padding: EdgeInsets.all(30),
-                                child: Wrap(
-                                  children: [
-                                    Icon(Icons.list, color: Colors.white),
-                                    Text(' Đăng ký tuyến xe cho con',
-                                        style: TextStyle(
-                                            color: Colors.white, fontSize: 22))
                                   ],
                                 ))))),
                 FractionallySizedBox(
@@ -159,7 +140,7 @@ class _MenuScreenState extends State<MenuScreen> {
                         },
                         child: Card(
                             margin: EdgeInsets.all(5.0),
-                            color: Colors.greenAccent,
+                            color: Colors.orangeAccent,
                             child: Padding(
                                 padding: EdgeInsets.all(30),
                                 child: Wrap(

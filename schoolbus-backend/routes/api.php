@@ -70,6 +70,8 @@ Route::get('registrations', [GeneralController::class, 'registrations']);
 Route::get('registration', [GeneralController::class, 'registration']);
 
 Route::get('studenttrips', [GeneralController::class, 'studenttrips']);
+Route::get('studenttrips/date', [GeneralController::class, 'studenttripsbyDate']);
+Route::get('studenttrips/trip', [GeneralController::class, 'studenttripsbyTrip']);
 
 Route::get('dayoffs', [GeneralController::class, 'dayoffs']);
 

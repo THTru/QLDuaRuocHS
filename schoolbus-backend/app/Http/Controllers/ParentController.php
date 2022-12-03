@@ -110,6 +110,10 @@ class ParentController extends Controller
             $response = [ 'message ' => 'Không tìm thấy đăng ký' ];
             return response()->json($response, 430);
         }
+        if($registration->line->line_status != 1){
+            $response = [ 'message ' => 'Tuyến đã duyệt hoặc đã hủy' ];
+            return response()->json($response, 430);
+        }
         if($registration->student->parent_id != $parent_id){
             $response = [ 'message ' => 'Không có quyền hủy đăng ký này' ];
             return response()->json($response, 430);

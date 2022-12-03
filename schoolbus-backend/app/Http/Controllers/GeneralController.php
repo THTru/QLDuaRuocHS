@@ -259,9 +259,9 @@ class GeneralController extends Controller
         $keyword5 = $req->vehicle_id; // -1 là tất cả
         $keyword6 = $req->finish; // 0 là chưa chạy, 1 là chạy rồi, -1 là tất cả
         
-        $trips = Trip::with('carer');
+        $trips = Trip::with('carer', 'line.linetype');
         if($keyword1 != -1){
-            $trips = $trips->whereDate('date','=', $keyword1);
+            $trips = $trips->whereDate('date', $keyword1);
         }
         if($keyword2 != -1){
             $trips = $trips->where('line_id','=', $keyword2);
@@ -286,7 +286,7 @@ class GeneralController extends Controller
     //Lấy chuyến theo ID
     public function trip(Request $req){
         $keyword = $req->trip_id;
-        return Trip::with('carer', 'driver', 'vehicle')->find($keyword);
+        return Trip::with('carer', 'driver', 'vehicle', 'studenttrip', 'line.linetype')->find($keyword);
     }
 
     //=========================================== DAYOFF ==============================================
@@ -296,7 +296,7 @@ class GeneralController extends Controller
     }
 
     //=========================================== REGISTRATIONS ==============================================
-    //Lấy tất cả các chuyến đi của học sinh
+    //Lấy tất cả các đăng ký theo học sinh của học sinh
     public function registrations(Request $req){
         $keyword1 = $req->student_id;
 
@@ -321,5 +321,18 @@ class GeneralController extends Controller
         if($keyword2 == 0)
             return StudentTrip::where('student_id', '=', $keyword1)->with('trip', 'stop')->whereNULL('off_at')->where('absence', '=', '0')->get();
         else return StudentTrip::where('student_id', '=', $keyword1)->with('trip', 'stop')->whereNotNull('off_at')->orWhere('absence', '=', '1')->get();
+    }
+
+    public function studenttripsbyDate(Request $req){
+        $keyword1 = $req->student_id;
+        $keyword2 = $req->date;
+        return StudentTrip::where('student_id', '=', $keyword1)->whereHas('trip', function($q) use($keyword2) {$q->whereDate('date', $keyword2);})
+        ->with('stop' ,'trip.line', 'trip.driver', 'trip.vehicle', 'trip.carer')->get();
+    }
+
+    public function studenttripsbyTrip(Request $req){
+        $keyword1 = $req->trip_id; // 0 là chưa 1 là hoàn thành
+
+        return StudentTrip::where('trip_id', '=', $keyword1)->with('student', 'stop')->get()->sortBy('est_time')->values();
     }
 }
