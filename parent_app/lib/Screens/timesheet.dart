@@ -68,14 +68,17 @@ class _TimeSheetScreenState extends State<TimeSheetScreen> {
   requestAbsence(studenttripID) async {
     final storage = new FlutterSecureStorage();
     var user = await storage.read(key: 'user');
+    var token = await storage.read(key: 'token');
 
     if (user != null) {
       final params = {
         'studenttrip_id': studenttripID.toString(),
         'parent_id': jsonDecode(user)['id'].toString(),
       };
+      final headers = {'Authorization': 'Bearer ' + token.toString()};
       await http
-          .patch(Uri.parse(baseURL() + '/api/requestAbsence'), body: params)
+          .patch(Uri.parse(baseURL() + '/api/requestAbsence'),
+              body: params, headers: headers)
           .then((response) {
         if (response.statusCode == 200) {
           successSnackBar(context, 'Xin phép nghỉ thành công');

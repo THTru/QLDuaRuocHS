@@ -70,7 +70,9 @@ class _ScheduleListScreenState extends State<ScheduleListScreen> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => StopListScreen()),
-                  );
+                  ).then((value) {
+                    loadSchedueList();
+                  });
                 }),
             Wrap(children: [
               TextField(
@@ -161,7 +163,9 @@ class _ScheduleListScreenState extends State<ScheduleListScreen> {
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => NewScheduleScreen()),
-            );
+            ).then((value) {
+              loadSchedueList();
+            });
           },
           label: Text('Thêm'),
           icon: Icon(Icons.add)),

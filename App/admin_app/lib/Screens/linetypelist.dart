@@ -154,7 +154,69 @@ class _LineTypeListScreenState extends State<LineTypeListScreen> {
                                   ),
                                 ),
                               ),
-                              DataColumn(label: Text('')),
+                              DataColumn(
+                                label: Expanded(
+                                  child: Text(
+                                    'T2',
+                                    style:
+                                        TextStyle(fontStyle: FontStyle.italic),
+                                  ),
+                                ),
+                              ),
+                              DataColumn(
+                                label: Expanded(
+                                  child: Text(
+                                    'T3',
+                                    style:
+                                        TextStyle(fontStyle: FontStyle.italic),
+                                  ),
+                                ),
+                              ),
+                              DataColumn(
+                                label: Expanded(
+                                  child: Text(
+                                    'T4',
+                                    style:
+                                        TextStyle(fontStyle: FontStyle.italic),
+                                  ),
+                                ),
+                              ),
+                              DataColumn(
+                                label: Expanded(
+                                  child: Text(
+                                    'T5',
+                                    style:
+                                        TextStyle(fontStyle: FontStyle.italic),
+                                  ),
+                                ),
+                              ),
+                              DataColumn(
+                                label: Expanded(
+                                  child: Text(
+                                    'T6',
+                                    style:
+                                        TextStyle(fontStyle: FontStyle.italic),
+                                  ),
+                                ),
+                              ),
+                              DataColumn(
+                                label: Expanded(
+                                  child: Text(
+                                    'T7',
+                                    style:
+                                        TextStyle(fontStyle: FontStyle.italic),
+                                  ),
+                                ),
+                              ),
+                              DataColumn(
+                                label: Expanded(
+                                  child: Text(
+                                    'CN',
+                                    style:
+                                        TextStyle(fontStyle: FontStyle.italic),
+                                  ),
+                                ),
+                              ),
                               DataColumn(label: Text('')),
                               DataColumn(label: Text('')),
                             ],
@@ -172,13 +234,69 @@ class _LineTypeListScreenState extends State<LineTypeListScreen> {
                                         .toString())),
                                     DataCell(Text(_linetypes[index]['time_end']
                                         .toString())),
-                                    DataCell(TextButton(
-                                        child: Icon(Icons.info),
-                                        onPressed: () {
-                                          setState(() {
-                                            _type++;
-                                          });
-                                        })),
+                                    DataCell(_linetypes[index]['mon'] == 1
+                                        ? Icon(
+                                            Icons.check_circle,
+                                            color: Colors.green,
+                                          )
+                                        : Icon(
+                                            Icons.cancel,
+                                            color: Colors.red,
+                                          )),
+                                    DataCell(_linetypes[index]['tue'] == 1
+                                        ? Icon(
+                                            Icons.check_circle,
+                                            color: Colors.green,
+                                          )
+                                        : Icon(
+                                            Icons.cancel,
+                                            color: Colors.red,
+                                          )),
+                                    DataCell(_linetypes[index]['wed'] == 1
+                                        ? Icon(
+                                            Icons.check_circle,
+                                            color: Colors.green,
+                                          )
+                                        : Icon(
+                                            Icons.cancel,
+                                            color: Colors.red,
+                                          )),
+                                    DataCell(_linetypes[index]['thu'] == 1
+                                        ? Icon(
+                                            Icons.check_circle,
+                                            color: Colors.green,
+                                          )
+                                        : Icon(
+                                            Icons.cancel,
+                                            color: Colors.red,
+                                          )),
+                                    DataCell(_linetypes[index]['fri'] == 1
+                                        ? Icon(
+                                            Icons.check_circle,
+                                            color: Colors.green,
+                                          )
+                                        : Icon(
+                                            Icons.cancel,
+                                            color: Colors.red,
+                                          )),
+                                    DataCell(_linetypes[index]['sat'] == 1
+                                        ? Icon(
+                                            Icons.check_circle,
+                                            color: Colors.green,
+                                          )
+                                        : Icon(
+                                            Icons.cancel,
+                                            color: Colors.red,
+                                          )),
+                                    DataCell(_linetypes[index]['sun'] == 1
+                                        ? Icon(
+                                            Icons.check_circle,
+                                            color: Colors.green,
+                                          )
+                                        : Icon(
+                                            Icons.cancel,
+                                            color: Colors.red,
+                                          )),
                                     DataCell(TextButton(
                                         child: Icon(Icons.edit),
                                         onPressed: () {
@@ -202,7 +320,9 @@ class _LineTypeListScreenState extends State<LineTypeListScreen> {
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => NewLineTypeScreen()),
-            );
+            ).then((value) {
+              loadLineTypeList();
+            });
           },
           label: Text('Thêm'),
           icon: Icon(Icons.add)),

@@ -117,7 +117,6 @@ class _DriverListScreenState extends State<DriverListScreen> {
                             ),
                             DataColumn(label: Text('')),
                             DataColumn(label: Text('')),
-                            DataColumn(label: Text('')),
                           ],
                         rows: List<DataRow>.generate(
                             _drivers.length,
@@ -131,13 +130,6 @@ class _DriverListScreenState extends State<DriverListScreen> {
                                   DataCell(Text(_drivers[index]
                                           ['driver_address']
                                       .toString())),
-                                  DataCell(TextButton(
-                                      child: Icon(Icons.info),
-                                      onPressed: () {
-                                        setState(() {
-                                          _type++;
-                                        });
-                                      })),
                                   DataCell(TextButton(
                                       child: Icon(Icons.edit),
                                       onPressed: () {
@@ -160,11 +152,9 @@ class _DriverListScreenState extends State<DriverListScreen> {
             final reloadPage = await Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => NewDriverScreen()),
-            );
-
-            if (reloadPage) {
-              setState(() {});
-            }
+            ).then((value) {
+              loadDriverList();
+            });
           },
           label: Text('Thêm'),
           icon: Icon(Icons.add)),

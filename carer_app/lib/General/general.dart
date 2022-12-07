@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 // const String baseURL = "http://localhost:8000/api/"; //emulator localhost
 const Map<String, String> headers = {"Content-Type": "application/json"};
@@ -38,4 +41,8 @@ yMD(String ymd) {
   if (temp.day < 10) day = '0' + temp.day.toString();
   if (temp.month < 10) month = '0' + temp.month.toString();
   return temp.year.toString() + '/' + month + '/' + day;
+}
+
+headerswithToken(token) {
+  return {"Authorization": "Bearer " + token.toString()};
 }

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:admin_app/General/general.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'package:admin_app/rounded_button.dart';
 
@@ -29,8 +30,8 @@ class _NewLineTypeScreenState extends State<NewLineTypeScreen> {
   var picked;
 
   List isback_list = [
-    {'tag': 'Về', 'value': 1},
     {'tag': 'Đi', 'value': 0},
+    {'tag': 'Về', 'value': 1},
   ];
 
   List choose_list = [
@@ -40,7 +41,10 @@ class _NewLineTypeScreenState extends State<NewLineTypeScreen> {
 
   var _chosenDate = DateTime.now();
 
-  newDriver() async {
+  newLineType() async {
+    final storage = new FlutterSecureStorage();
+    var token = await storage.read(key: 'token');
+
     final params = {
       'linetype_name': _linetype_name.toString(),
       'is_back': _is_back.toString(),
@@ -55,7 +59,8 @@ class _NewLineTypeScreenState extends State<NewLineTypeScreen> {
       'sun': _sun.toString(),
     };
     await http
-        .post(Uri.http(baseURL(), "/api/newLineType", params))
+        .post(Uri.http(baseURL(), "/api/newLineType", params),
+            headers: headerswithToken(token))
         .then((response) {
       if (response.statusCode == 200) {
         successSnackBar(context, 'Thêm mới thành công');
@@ -114,7 +119,7 @@ class _NewLineTypeScreenState extends State<NewLineTypeScreen> {
                 children: [
               Row(children: [
                 Column(children: [
-                  Text('Thứ:',
+                  Text('Loại:',
                       style: TextStyle(fontSize: 17, color: Colors.blueAccent)),
                   DropdownButton(
                       items: isback_list.map((valueItem) {
@@ -248,20 +253,24 @@ class _NewLineTypeScreenState extends State<NewLineTypeScreen> {
                 ]),
               ]),
               Wrap(children: [
-                TextButton(
+                MaterialButton(
                     onPressed: () {
                       selectTime(context, 0);
                     },
+                    color: Colors.green,
+                    textColor: Colors.white,
                     child: Text('Giờ khởi hành')),
-                Text(_time_start),
+                Text(_time_start, style: TextStyle(fontSize: 19)),
               ]),
               Wrap(children: [
-                TextButton(
+                MaterialButton(
                     onPressed: () {
                       selectTime(context, 1);
                     },
+                    color: Colors.orangeAccent,
+                    textColor: Colors.white,
                     child: Text('Giờ kết thúc')),
-                Text(_time_end),
+                Text(_time_end, style: TextStyle(fontSize: 19)),
               ]),
               TextField(
                 decoration: const InputDecoration(
@@ -271,10 +280,12 @@ class _NewLineTypeScreenState extends State<NewLineTypeScreen> {
                   _linetype_name = value;
                 },
               ),
-              TextButton(
+              MaterialButton(
                   onPressed: () {
-                    newDriver();
+                    newLineType();
                   },
+                  color: Colors.blueAccent,
+                  textColor: Colors.white,
                   child: Text('Thêm mới')),
             ])),
       ),

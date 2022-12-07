@@ -5,9 +5,8 @@ import 'package:admin_app/General/general.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
-// import 'package:google_maps/google_maps.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-// import 'package:google_maps_flutter_web/google_maps_flutter_web.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'package:admin_app/rounded_button.dart';
 
@@ -37,6 +36,9 @@ class _NewScheduleScreenState extends State<NewScheduleScreen> {
   var picked;
 
   newSchedule() async {
+    final storage = new FlutterSecureStorage();
+    var token = await storage.read(key: 'token');
+
     final params = {
       'schedule_name': _schedule_name,
       'schedule_des': _schedule_des,
@@ -45,7 +47,8 @@ class _NewScheduleScreenState extends State<NewScheduleScreen> {
     };
 
     await http
-        .post(Uri.http(baseURL(), "/api/newSchedule", params))
+        .post(Uri.http(baseURL(), "/api/newSchedule", params),
+            headers: headerswithToken(token))
         .then((response) {
       if (response.statusCode == 200) {
         successSnackBar(context, 'Thêm mới thành công');
@@ -168,7 +171,7 @@ class _NewScheduleScreenState extends State<NewScheduleScreen> {
                         child: Text(_time,
                             style:
                                 TextStyle(fontSize: 17, color: Colors.black))),
-                    TextButton(
+                    MaterialButton(
                         onPressed: () {
                           setState(() {
                             _stops.add(_chosenStop['stop_id']);
@@ -176,13 +179,15 @@ class _NewScheduleScreenState extends State<NewScheduleScreen> {
                             _time_take.add(_time);
                             _markers.add(Marker(
                                 markerId: MarkerId(markerID.toString()),
-                                infoWindow:
-                                    const InfoWindow(title: 'Chỗ tôi đây'),
+                                infoWindow: InfoWindow(
+                                    title: _chosenStop['location'].toString()),
                                 position: LatLng(
                                     _chosenStop['lat'], _chosenStop['lng'])));
                             markerID++;
                           });
                         },
+                        color: Colors.orangeAccent,
+                        textColor: Colors.white,
                         child: Text('Thêm điểm')),
                   ]),
                   DataTable(
@@ -235,11 +240,13 @@ class _NewScheduleScreenState extends State<NewScheduleScreen> {
                         initialCameraPosition: CameraPosition(
                             target: LatLng(10.0324476, 105.7576498),
                             zoom: 13))),
-                TextButton(
+                MaterialButton(
                     onPressed: () {
                       newSchedule();
                     },
-                    child: Text('Thêm mới')),
+                    color: Colors.blueAccent,
+                    textColor: Colors.white,
+                    child: Text('Thêm lộ trình mới')),
               ]),
         ),
       ),

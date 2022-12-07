@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:admin_app/General/general.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'package:admin_app/rounded_button.dart';
 
@@ -27,6 +28,9 @@ class _NewUserScreenState extends State<NewUserScreen> {
   ];
 
   newUser() async {
+    final storage = new FlutterSecureStorage();
+    var token = await storage.read(key: 'token');
+
     final params = {
       'name': _name,
       'email': _email,
@@ -35,7 +39,8 @@ class _NewUserScreenState extends State<NewUserScreen> {
       'phone': _phone,
     };
     await http
-        .post(Uri.http(baseURL(), "/api/newUser", params))
+        .post(Uri.http(baseURL(), "/api/newUser", params),
+            headers: headerswithToken(token))
         .then((response) {
       if (response.statusCode == 200) {
         successSnackBar(context, 'Thêm mới thành công');
@@ -124,10 +129,12 @@ class _NewUserScreenState extends State<NewUserScreen> {
                         });
                       })
                 ]),
-                TextButton(
+                MaterialButton(
                     onPressed: () {
                       newUser();
                     },
+                    color: Colors.blueAccent,
+                    textColor: Colors.white,
                     child: Text('Thêm mới')),
               ]),
             ])),

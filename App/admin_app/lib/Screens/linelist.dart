@@ -210,7 +210,9 @@ class _LineListScreenState extends State<LineListScreen> {
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => NewLineScreen()),
-            );
+            ).then((value) {
+              loadLineList();
+            });
           },
           label: Text('Thêm'),
           icon: Icon(Icons.add)),

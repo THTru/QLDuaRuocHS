@@ -3,9 +3,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:admin_app/General/general.dart';
 import 'package:http/http.dart' as http;
-
 import 'package:admin_app/rounded_button.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class NewDayOffScreen extends StatefulWidget {
   const NewDayOffScreen({Key? key}) : super(key: key);
@@ -21,12 +21,16 @@ class _NewDayOffScreenState extends State<NewDayOffScreen> {
   String _dateDMY = '';
 
   newDayOff() async {
+    final storage = new FlutterSecureStorage();
+    var token = await storage.read(key: 'token');
+
     final params = {
       'date': _date,
       'name': _name,
     };
     await http
-        .post(Uri.http(baseURL(), "/api/newDayOff", params))
+        .post(Uri.http(baseURL(), "/api/newDayOff", params),
+            headers: headerswithToken(token))
         .then((response) {
       if (response.statusCode == 200) {
         successSnackBar(context, 'Thêm mới thành công');
@@ -66,7 +70,9 @@ class _NewDayOffScreenState extends State<NewDayOffScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
               Row(children: [
-                TextButton(
+                MaterialButton(
+                  color: Colors.orangeAccent,
+                  textColor: Colors.white,
                   child: Text('Chọn ngày'),
                   onPressed: () async {
                     var chosenDate = await showDatePicker(
@@ -81,7 +87,7 @@ class _NewDayOffScreenState extends State<NewDayOffScreen> {
                       });
                   },
                 ),
-                Text(_dateDMY)
+                Text(_dateDMY, style: TextStyle(fontSize: 18))
               ]),
               Wrap(children: [
                 TextField(
@@ -92,10 +98,12 @@ class _NewDayOffScreenState extends State<NewDayOffScreen> {
                     _name = value;
                   },
                 ),
-                TextButton(
+                MaterialButton(
                     onPressed: () {
                       newDayOff();
                     },
+                    color: Colors.blueAccent,
+                    textColor: Colors.white,
                     child: Text('Thêm mới')),
               ]),
             ])),

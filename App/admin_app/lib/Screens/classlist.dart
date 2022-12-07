@@ -19,7 +19,7 @@ class _ClassListScreenState extends State<ClassListScreen> {
   List<dynamic> _classes = [];
   int _type = 0;
 
-  loadStudentList() async {
+  loadClassList() async {
     setState(() {
       _classes = [];
       _loading = true;
@@ -47,7 +47,7 @@ class _ClassListScreenState extends State<ClassListScreen> {
   @override
   void initState() {
     super.initState();
-    loadStudentList();
+    loadClassList();
   }
 
   @override
@@ -70,13 +70,6 @@ class _ClassListScreenState extends State<ClassListScreen> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-            Wrap(children: [
-              TextButton(
-                  onPressed: () {
-                    loadStudentList();
-                  },
-                  child: Icon(Icons.refresh)),
-            ]),
             _error
                 ? const Text('Có lỗi server')
                 : _loading
@@ -131,7 +124,9 @@ class _ClassListScreenState extends State<ClassListScreen> {
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => NewClassScreen()),
-            );
+            ).then((value) {
+              loadClassList();
+            });
           },
           label: Text('Thêm'),
           icon: Icon(Icons.add)),

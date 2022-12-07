@@ -87,6 +87,8 @@ Route::post('logout2', [AuthController::class, 'logout2']);
 Route::get('user2', [AuthController::class, 'user2']);
 
 //Admin API
+Route::group(['middleware' => 'auth.admin'], function(){
+
 Route::post('newUser', [AdminController::class, 'newUser']); //Tạo người dùng mới
 Route::patch('editUser', [AdminController::class, 'editUser']); //Sửa thông tin người dùng
 Route::patch('changePassword', [AdminController::class, 'changePassword']); //Đổi mật khẩu người dùng
@@ -134,16 +136,25 @@ Route::delete('deleteDayOff', [AdminController::class, 'deleteDayOff']); //Xóa
 Route::post('createTrips', [AdminController::class, 'createTrips']); //Tạo các chuyến theo tuyến
 Route::patch('editTrip', [AdminController::class, 'editTrip']); //Sửa thông tin chuyến
 
+});
 //Parent API
+Route::group(['middleware' => 'auth.parent'], function(){
+
 Route::post('regLine', [ParentController::class, 'regLine']); //Đăng ký
 Route::delete('cancelRegLine', [ParentController::class, 'cancelRegLine']); //Đăng ký
 
 Route::patch('requestAbsence', [ParentController::class, 'requestAbsence']); //Xin phép học sinh không tham gia chuyến
 
+});
+
 //Carer API
+Route::group(['middleware' => 'auth.carer'], function(){
+
 Route::patch('startTrip', [CarerController::class, 'startTrip']); //Bắt đầu chuyến
 Route::patch('endTrip', [CarerController::class, 'endTrip']); //Kết thúc chuyến
 
 Route::patch('checkOnStudentTrip', [CarerController::class, 'checkOnStudentTrip']); //Điểm danh học sinh lên xe
 Route::patch('checkOffStudentTrip', [CarerController::class, 'checkOffStudentTrip']); //Điểm danh học sinh xuống xe
 Route::patch('checkAbsenceStudentTrip', [CarerController::class, 'checkAbsenceStudentTrip']); //Điểm danh học sinh vắng
+
+});

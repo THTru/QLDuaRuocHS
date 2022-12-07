@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:admin_app/General/general.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class StudentBondScreen extends StatefulWidget {
   var studentID;
@@ -52,10 +53,14 @@ class _StudentBondScreenState extends State<StudentBondScreen> {
   }
 
   bondParentStudentList(int parentID) async {
+    final storage = new FlutterSecureStorage();
+    var token = await storage.read(key: 'token');
+
     final params = {'student_id': studentID, 'parent_id': parentID.toString()};
     print(params);
     await http
-        .patch(Uri.http(baseURL(), "/api/bondParentStudent", params))
+        .patch(Uri.http(baseURL(), "/api/bondParentStudent", params),
+            headers: headerswithToken(token))
         .then((response) {
       if (response.statusCode == 200) {
         successSnackBar(context, 'Thêm liên kết thành công');

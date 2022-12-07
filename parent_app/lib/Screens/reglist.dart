@@ -61,14 +61,17 @@ class _RegListScreenState extends State<RegListScreen> {
   cancelReg(regID) async {
     final storage = new FlutterSecureStorage();
     var user = await storage.read(key: 'user');
+    var token = await storage.read(key: 'token');
 
-    if (user != null) {
+    if (user != null && token != null) {
       final params = {
         'reg_id': regID.toString(),
         'parent_id': jsonDecode(user)['id'].toString(),
       };
+      final headers = {'Authorization': 'Bearer ' + token.toString()};
       await http
-          .delete(Uri.parse(baseURL() + '/api/cancelRegLine'), body: params)
+          .delete(Uri.parse(baseURL() + '/api/cancelRegLine'),
+              body: params, headers: headers)
           .then((response) {
         if (response.statusCode == 200) {
           successSnackBar(context, 'Hủy thành công');

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:admin_app/General/general.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'package:admin_app/rounded_button.dart';
 
@@ -32,6 +33,9 @@ class _NewLineScreenState extends State<NewLineScreen> {
   List<dynamic> _schedules = [];
 
   newLine() async {
+    final storage = new FlutterSecureStorage();
+    var token = await storage.read(key: 'token');
+
     final params = {
       'line_name': _line_name,
       'slot': _slot.toString(),
@@ -45,7 +49,8 @@ class _NewLineScreenState extends State<NewLineScreen> {
       'schedule_id': _schedule_id.toString(),
     };
     await http
-        .post(Uri.http(baseURL(), "/api/newLine", params))
+        .post(Uri.http(baseURL(), "/api/newLine", params),
+            headers: headerswithToken(token))
         .then((response) {
       if (response.statusCode == 200) {
         successSnackBar(context, 'Thêm mới thành công');
@@ -195,7 +200,7 @@ class _NewLineScreenState extends State<NewLineScreen> {
         body: SingleChildScrollView(
             child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
               Wrap(children: [
                 TextField(
@@ -303,7 +308,9 @@ class _NewLineScreenState extends State<NewLineScreen> {
                       })
                 ]),
                 Row(children: [
-                  TextButton(
+                  MaterialButton(
+                    color: Colors.green,
+                    textColor: Colors.white,
                     child: Text('Chọn ngày đầu tiên'),
                     onPressed: () async {
                       var chosenDate = await showDatePicker(
@@ -317,11 +324,13 @@ class _NewLineScreenState extends State<NewLineScreen> {
                         });
                     },
                   ),
-                  Text(_first_date)
+                  Text(_first_date, style: TextStyle(fontSize: 18))
                 ]),
                 Row(children: [
-                  TextButton(
+                  MaterialButton(
                     child: Text('Chọn ngày cuối'),
+                    color: Colors.orangeAccent,
+                    textColor: Colors.white,
                     onPressed: () async {
                       var chosenDate = await showDatePicker(
                           context: context,
@@ -334,11 +343,13 @@ class _NewLineScreenState extends State<NewLineScreen> {
                         });
                     },
                   ),
-                  Text(_last_date)
+                  Text(_last_date, style: TextStyle(fontSize: 18))
                 ]),
                 Row(children: [
-                  TextButton(
+                  MaterialButton(
                     child: Text('Chọn hạn đăng ký'),
+                    color: Colors.pinkAccent,
+                    textColor: Colors.white,
                     onPressed: () async {
                       var chosenDate = await showDatePicker(
                           context: context,
@@ -351,12 +362,14 @@ class _NewLineScreenState extends State<NewLineScreen> {
                         });
                     },
                   ),
-                  Text(_reg_deadline)
+                  Text(_reg_deadline, style: TextStyle(fontSize: 18))
                 ]),
-                TextButton(
+                MaterialButton(
                     onPressed: () {
                       newLine();
                     },
+                    color: Colors.blueAccent,
+                    textColor: Colors.white,
                     child: Text('Thêm mới')),
               ]),
             ])),

@@ -13,8 +13,10 @@ import 'package:admin_app/Screens/linelist.dart';
 import 'package:admin_app/Screens/linetypelist.dart';
 import 'package:admin_app/Screens/schedulelist.dart';
 import 'package:admin_app/Screens/dayofflist.dart';
+import 'package:admin_app/login.dart';
 
 import 'package:easy_sidemenu/easy_sidemenu.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key, required this.title}) : super(key: key);
@@ -27,6 +29,34 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   PageController page = PageController();
+
+  logoutPressed() async {
+    final storage = new FlutterSecureStorage();
+    final token = await storage.read(key: 'token');
+    if (token != null) {
+      final headers = {"Authorization": "Bearer $token"};
+      print(headers);
+      await http
+          .post(Uri.http(baseURL(), '/api/logout2'), headers: headers)
+          .then((response) async {
+        var jsonData = jsonDecode(response.body);
+        print(response.statusCode);
+        if (response.statusCode == 200) {
+          successSnackBar(context, 'Đăng xuất thành công');
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => LoginScreen()),
+          );
+        } else {
+          errorSnackBar(context, 'Có lỗi xảy ra 1');
+        }
+      }).catchError((error) {
+        errorSnackBar(context, 'Có lỗi xảy ra 2');
+      });
+    } else {
+      errorSnackBar(context, 'Có lỗi xảy ra 3');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,78 +91,86 @@ class _MyHomePageState extends State<MyHomePage> {
               ],
             ),
             items: [
+              // SideMenuItem(
+              //   priority: 0,
+              //   title: 'Trang chủ',
+              //   onTap: () {
+              //     page.jumpToPage(0);
+              //   },
+              //   icon: const Icon(Icons.home),
+              //   tooltipContent: "This is a tooltip for Dashboard item",
+              // ),
               SideMenuItem(
                 priority: 0,
-                title: 'Trang chủ',
-                onTap: () {
-                  page.jumpToPage(0);
-                },
-                icon: const Icon(Icons.home),
-                tooltipContent: "This is a tooltip for Dashboard item",
-              ),
-              SideMenuItem(
-                priority: 1,
                 title: 'Người dùng',
                 onTap: () {
-                  page.jumpToPage(1);
+                  page.jumpToPage(0);
                 },
                 icon: const Icon(Icons.supervisor_account),
               ),
               SideMenuItem(
-                priority: 2,
+                priority: 1,
                 title: 'Học sinh',
                 onTap: () {
-                  page.jumpToPage(2);
+                  page.jumpToPage(1);
                 },
                 icon: const Icon(Icons.school),
               ),
               SideMenuItem(
-                priority: 3,
+                priority: 2,
                 title: 'Các tuyến xe',
                 onTap: () {
-                  page.jumpToPage(3);
+                  page.jumpToPage(2);
                 },
                 icon: const Icon(Icons.format_list_numbered),
               ),
               SideMenuItem(
-                priority: 4,
+                priority: 3,
                 title: 'Loại Tuyến',
                 onTap: () {
-                  page.jumpToPage(4);
+                  page.jumpToPage(3);
                 },
                 icon: const Icon(Icons.type_specimen_rounded),
               ),
               SideMenuItem(
-                priority: 5,
+                priority: 4,
                 title: 'Lộ trình',
                 onTap: () {
-                  page.jumpToPage(5);
+                  page.jumpToPage(4);
                 },
                 icon: const Icon(Icons.location_on_sharp),
               ),
               SideMenuItem(
-                priority: 6,
+                priority: 5,
                 title: 'Tài xế',
                 onTap: () {
-                  page.jumpToPage(6);
+                  page.jumpToPage(5);
                 },
                 icon: const Icon(Icons.support),
               ),
               SideMenuItem(
-                priority: 7,
+                priority: 6,
                 title: 'Xe',
                 onTap: () {
-                  page.jumpToPage(7);
+                  page.jumpToPage(6);
                 },
                 icon: const Icon(Icons.drive_eta),
               ),
               SideMenuItem(
-                priority: 8,
+                priority: 7,
                 title: 'Ngày nghỉ',
                 onTap: () {
-                  page.jumpToPage(8);
+                  page.jumpToPage(7);
                 },
                 icon: const Icon(Icons.calendar_month),
+              ),
+              SideMenuItem(
+                priority: 8,
+                title: 'Đăng xuất',
+                onTap: () {
+                  logoutPressed();
+                },
+                icon: const Icon(Icons.logout),
               ),
               // const SideMenuItem(
               //   priority: 9,
@@ -145,7 +183,7 @@ class _MyHomePageState extends State<MyHomePage> {
             child: PageView(
               controller: page,
               children: [
-                Container(color: Colors.white, child: const Text('YES')),
+                // Container(color: Colors.white, child: const Text('YES')),
                 Container(
                   color: Colors.white,
                   child: const Center(child: UserListScreen()),

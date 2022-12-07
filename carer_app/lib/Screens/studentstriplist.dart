@@ -62,6 +62,7 @@ class _StudentTripListScreenState extends State<StudentTripListScreen> {
   checkOn(studenttripID) async {
     final storage = new FlutterSecureStorage();
     var user = await storage.read(key: 'user');
+    var token = await storage.read(key: 'token');
 
     if (user != null) {
       final params = {
@@ -69,7 +70,8 @@ class _StudentTripListScreenState extends State<StudentTripListScreen> {
         'carer_id': jsonDecode(user)['id'].toString(),
       };
       await http
-          .patch(Uri.parse(baseURL() + '/api/checkOnStudentTrip'), body: params)
+          .patch(Uri.parse(baseURL() + '/api/checkOnStudentTrip'),
+              body: params, headers: headerswithToken(token))
           .then((response) {
         if (response.statusCode == 200) {
           successSnackBar(context, 'Xác nhận học sinh lên xe');
@@ -90,6 +92,7 @@ class _StudentTripListScreenState extends State<StudentTripListScreen> {
   checkOff(studenttripID) async {
     final storage = new FlutterSecureStorage();
     var user = await storage.read(key: 'user');
+    var token = await storage.read(key: 'token');
 
     if (user != null) {
       final params = {
@@ -98,7 +101,7 @@ class _StudentTripListScreenState extends State<StudentTripListScreen> {
       };
       await http
           .patch(Uri.parse(baseURL() + '/api/checkOffStudentTrip'),
-              body: params)
+              body: params, headers: headerswithToken(token))
           .then((response) {
         if (response.statusCode == 200) {
           successSnackBar(context, 'Xác nhận học sinh xuống xe');
@@ -119,6 +122,7 @@ class _StudentTripListScreenState extends State<StudentTripListScreen> {
   checkAbsence(studenttripID) async {
     final storage = new FlutterSecureStorage();
     var user = await storage.read(key: 'user');
+    var token = await storage.read(key: 'token');
 
     if (user != null) {
       final params = {
@@ -127,7 +131,7 @@ class _StudentTripListScreenState extends State<StudentTripListScreen> {
       };
       await http
           .patch(Uri.parse(baseURL() + '/api/checkAbsenceStudentTrip'),
-              body: params)
+              body: params, headers: headerswithToken(token))
           .then((response) {
         if (response.statusCode == 200) {
           successSnackBar(context, 'Xác nhận học sinh nghỉ');

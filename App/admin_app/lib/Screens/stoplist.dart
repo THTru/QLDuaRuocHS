@@ -166,7 +166,7 @@ class _StopListScreenState extends State<StopListScreen> {
             ]),
         _openMap
             ? Container(
-                height: 500,
+                height: 600,
                 width: 1200,
                 child: Stack(children: [
                   GoogleMap(
@@ -189,11 +189,9 @@ class _StopListScreenState extends State<StopListScreen> {
             final reloadPage = await Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => NewStopScreen()),
-            );
-
-            if (reloadPage) {
-              setState(() {});
-            }
+            ).then((value) {
+              loadStopList();
+            });
           },
           label: Text('Thêm'),
           icon: Icon(Icons.add)),

@@ -21,6 +21,7 @@ class LineRegScreen extends StatefulWidget {
 class _LineRegScreenState extends State<LineRegScreen> {
   final lineID;
   _LineRegScreenState(this.lineID);
+
   var _line = null;
   List<dynamic> _stoplist = [];
   bool _error = false;
@@ -77,6 +78,7 @@ class _LineRegScreenState extends State<LineRegScreen> {
 
   registerLine() async {
     final storage = new FlutterSecureStorage();
+    var token = await storage.read(key: 'token');
     var user = await storage.read(key: 'user');
     var student = await storage.read(key: 'student');
 
@@ -87,8 +89,10 @@ class _LineRegScreenState extends State<LineRegScreen> {
         'line_id': lineID.toString(),
         'stop_id': _stop_id.toString(),
       };
+      final headers = {'Authorization': 'Bearer ' + token.toString()};
       await http
-          .post(Uri.parse(baseURL() + '/api/regLine'), body: params)
+          .post(Uri.parse(baseURL() + '/api/regLine'),
+              body: params, headers: headers)
           .then((response) {
         if (response.statusCode == 200) {
           successSnackBar(context, 'Đăng ký thành công');

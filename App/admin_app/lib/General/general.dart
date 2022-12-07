@@ -40,3 +40,7 @@ yMD(String ymd) {
   if (temp.month < 10) month = '0' + temp.month.toString();
   return temp.year.toString() + '/' + month + '/' + day;
 }
+
+headerswithToken(token) {
+  return {'Authorization': 'Bearer ' + token.toString()};
+}

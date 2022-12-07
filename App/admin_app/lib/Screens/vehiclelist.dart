@@ -102,12 +102,11 @@ class _VehicleListScreenState extends State<VehicleListScreen> {
                             DataColumn(
                               label: Expanded(
                                 child: Text(
-                                  'Sức chứa',
+                                  'Số chỗ',
                                   style: TextStyle(fontStyle: FontStyle.italic),
                                 ),
                               ),
                             ),
-                            DataColumn(label: Text('')),
                             DataColumn(label: Text('')),
                             DataColumn(label: Text('')),
                           ],
@@ -120,13 +119,6 @@ class _VehicleListScreenState extends State<VehicleListScreen> {
                                       .toString())),
                                   DataCell(Text(
                                       _vehicles[index]['capacity'].toString())),
-                                  DataCell(TextButton(
-                                      child: Icon(Icons.info),
-                                      onPressed: () {
-                                        setState(() {
-                                          _type++;
-                                        });
-                                      })),
                                   DataCell(TextButton(
                                       child: Icon(Icons.edit),
                                       onPressed: () {
@@ -149,7 +141,9 @@ class _VehicleListScreenState extends State<VehicleListScreen> {
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => NewVehicleScreen()),
-            );
+            ).then((value) {
+              loadVehicleList();
+            });
           },
           label: Text('Thêm'),
           icon: Icon(Icons.add)),

@@ -19,7 +19,7 @@ class _DayOffListScreenState extends State<DayOffListScreen> {
   List<dynamic> _dayoffs = [];
   int _type = 0;
 
-  loadVehicleList() async {
+  loadDayOffList() async {
     setState(() {
       _dayoffs = [];
       _loading = true;
@@ -47,7 +47,7 @@ class _DayOffListScreenState extends State<DayOffListScreen> {
   @override
   void initState() {
     super.initState();
-    loadVehicleList();
+    loadDayOffList();
   }
 
   @override
@@ -58,11 +58,6 @@ class _DayOffListScreenState extends State<DayOffListScreen> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-            TextButton(
-                onPressed: () {
-                  loadVehicleList();
-                },
-                child: Icon(Icons.refresh)),
             _error
                 ? const Text('Có lỗi server')
                 : _loading
@@ -117,7 +112,9 @@ class _DayOffListScreenState extends State<DayOffListScreen> {
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => NewDayOffScreen()),
-            );
+            ).then((value) {
+              loadDayOffList();
+            });
           },
           label: Text('Thêm'),
           icon: Icon(Icons.add)),

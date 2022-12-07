@@ -123,9 +123,12 @@ class _StudentListScreenState extends State<StudentListScreen> {
                 btnText: 'Xem danh sách lớp',
                 onBtnPressed: () {
                   Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => ClassListScreen()));
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ClassListScreen()))
+                      .then((value) {
+                    loadClassforStudent();
+                  });
                 }),
             Wrap(children: [
               TextField(
@@ -239,7 +242,9 @@ class _StudentListScreenState extends State<StudentListScreen> {
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => NewStudentScreen()),
-            );
+            ).then((value) {
+              loadStudentList();
+            });
           },
           label: Text('Thêm'),
           icon: Icon(Icons.add)),

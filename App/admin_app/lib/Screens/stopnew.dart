@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:admin_app/General/general.dart';
 import 'package:http/http.dart' as http;
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'package:admin_app/rounded_button.dart';
 
@@ -23,13 +24,17 @@ class _NewStopScreenState extends State<NewStopScreen> {
   int _markerID = 0;
 
   newStop() async {
+    final storage = new FlutterSecureStorage();
+    var token = await storage.read(key: 'token');
+
     final params = {
       'location': _location,
       'lat': _lat.toString(),
       'lng': _lng.toString()
     };
     await http
-        .post(Uri.http(baseURL(), "/api/newStop", params))
+        .post(Uri.http(baseURL(), "/api/newStop", params),
+            headers: headerswithToken(token))
         .then((response) {
       if (response.statusCode == 200) {
         successSnackBar(context, 'Thêm mới thành công');
@@ -91,10 +96,12 @@ class _NewStopScreenState extends State<NewStopScreen> {
                     _location = value;
                   },
                 ),
-                TextButton(
+                MaterialButton(
                     onPressed: () {
                       newStop();
                     },
+                    color: Colors.blueAccent,
+                    textColor: Colors.white,
                     child: Text('Thêm mới')),
               ]),
               Container(

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:admin_app/General/general.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'package:admin_app/rounded_button.dart';
 
@@ -23,13 +24,17 @@ class _NewStudentScreenState extends State<NewStudentScreen> {
   ];
 
   newStudent() async {
+    final storage = new FlutterSecureStorage();
+    var token = await storage.read(key: 'token');
+
     final params = {
       'student_id': _student_id,
       'student_name': _student_name,
       'class_id': _class_id,
     };
     await http
-        .post(Uri.http(baseURL(), "/api/newStudent", params))
+        .post(Uri.http(baseURL(), "/api/newStudent", params),
+            headers: headerswithToken(token))
         .then((response) {
       if (response.statusCode == 200) {
         successSnackBar(context, 'Thêm mới thành công');
@@ -126,10 +131,12 @@ class _NewStudentScreenState extends State<NewStudentScreen> {
                         });
                       })
                 ]),
-                TextButton(
+                MaterialButton(
                     onPressed: () {
                       newStudent();
                     },
+                    color: Colors.blueAccent,
+                    textColor: Colors.white,
                     child: Text('Thêm mới')),
               ]),
             ])),

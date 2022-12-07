@@ -63,6 +63,7 @@ class _TripScreenState extends State<TripScreen> {
   startTrip() async {
     final storage = new FlutterSecureStorage();
     var user = await storage.read(key: 'user');
+    var token = await storage.read(key: 'token');
 
     if (user != null) {
       final params = {
@@ -70,7 +71,8 @@ class _TripScreenState extends State<TripScreen> {
         'trip_id': tripID.toString(),
       };
       await http
-          .patch(Uri.parse(baseURL() + '/api/startTrip'), body: params)
+          .patch(Uri.parse(baseURL() + '/api/startTrip'),
+              body: params, headers: headerswithToken(token))
           .then((response) {
         if (response.statusCode == 200) {
           successSnackBar(context, 'Chuyến xe khởi hành');
@@ -91,6 +93,7 @@ class _TripScreenState extends State<TripScreen> {
   endTrip() async {
     final storage = new FlutterSecureStorage();
     var user = await storage.read(key: 'user');
+    var token = await storage.read(key: 'token');
 
     if (user != null) {
       final params = {
@@ -98,7 +101,8 @@ class _TripScreenState extends State<TripScreen> {
         'trip_id': tripID.toString(),
       };
       await http
-          .patch(Uri.parse(baseURL() + '/api/endTrip'), body: params)
+          .patch(Uri.parse(baseURL() + '/api/endTrip'),
+              body: params, headers: headerswithToken(token))
           .then((response) {
         if (response.statusCode == 200) {
           successSnackBar(context, 'Chuyến xe hoàn thành');

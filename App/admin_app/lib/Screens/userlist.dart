@@ -157,14 +157,6 @@ class _UserListScreenState extends State<UserListScreen> {
                                 ),
                               ),
                             ),
-                            DataColumn(
-                              label: Expanded(
-                                child: Text(
-                                  'Trạng thái',
-                                  style: TextStyle(fontStyle: FontStyle.italic),
-                                ),
-                              ),
-                            ),
                             DataColumn(label: Text('')),
                             DataColumn(label: Text('')),
                           ],
@@ -187,10 +179,6 @@ class _UserListScreenState extends State<UserListScreen> {
                                                   3
                                               ? const Text('Phụ huynh')
                                               : const Text('Không xác định')),
-                                  DataCell(
-                                      int.parse(_users[index]['status']) == 1
-                                          ? const Text('Active')
-                                          : const Text('Unactive')),
                                   DataCell(TextButton(
                                       child: Icon(Icons.edit),
                                       onPressed: () {
@@ -213,7 +201,9 @@ class _UserListScreenState extends State<UserListScreen> {
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => NewUserScreen()),
-            );
+            ).then((value) {
+              loadUserList();
+            });
           },
           label: Text('Thêm'),
           icon: Icon(Icons.add)),
