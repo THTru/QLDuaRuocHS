@@ -5,6 +5,7 @@ import 'package:admin_app/General/general.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:admin_app/Screens/drivernew.dart';
+import 'package:admin_app/Screens/driveredit.dart';
 
 class DriverListScreen extends StatefulWidget {
   const DriverListScreen({Key? key}) : super(key: key);
@@ -134,7 +135,17 @@ class _DriverListScreenState extends State<DriverListScreen> {
                                       child: Icon(Icons.edit),
                                       onPressed: () {
                                         setState(() {
-                                          _type++;
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    EditDriverScreen(
+                                                      driverID: _drivers[index]
+                                                          ['driver_id'],
+                                                    )),
+                                          ).then((value) {
+                                            loadDriverList();
+                                          });
                                         });
                                       })),
                                   DataCell(TextButton(
@@ -148,8 +159,8 @@ class _DriverListScreenState extends State<DriverListScreen> {
           ])),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButton: FloatingActionButton.extended(
-          onPressed: () async {
-            final reloadPage = await Navigator.push(
+          onPressed: () {
+            Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => NewDriverScreen()),
             ).then((value) {

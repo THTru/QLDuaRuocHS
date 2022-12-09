@@ -93,53 +93,56 @@ class _NewStudentScreenState extends State<NewStudentScreen> {
           ),
         ),
         body: SingleChildScrollView(
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-              Wrap(children: [
-                TextField(
-                  decoration: const InputDecoration(
-                    hintText: 'Nhập ID*',
-                  ),
-                  onChanged: (value) {
-                    _student_id = value;
-                  },
-                ),
-                TextField(
-                  decoration: const InputDecoration(
-                    hintText: 'Nhập tên*',
-                  ),
-                  onChanged: (value) {
-                    _student_name = value;
-                  },
-                ),
-                Row(children: [
-                  Text('Lớp:',
-                      style:
-                          TextStyle(fontSize: 17, color: Colors.orangeAccent)),
-                  DropdownButton(
-                      items: _classes.map((valueItem) {
-                        return DropdownMenuItem(
-                            value: valueItem['class_id'],
-                            child: Text(valueItem['class_name'].toString()));
-                      }).toList(),
-                      value: _class_id,
-                      onChanged: (newValue) {
-                        setState(() {
-                          _class_id = newValue.toString();
-                        });
-                      })
-                ]),
-                MaterialButton(
-                    onPressed: () {
-                      newStudent();
-                    },
-                    color: Colors.blueAccent,
-                    textColor: Colors.white,
-                    child: Text('Thêm mới')),
-              ]),
-            ])),
+            child: Padding(
+                padding: EdgeInsets.all(20.0),
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Wrap(children: [
+                        TextField(
+                          decoration: const InputDecoration(
+                            hintText: 'Nhập ID*',
+                          ),
+                          onChanged: (value) {
+                            _student_id = value;
+                          },
+                        ),
+                        TextField(
+                          decoration: const InputDecoration(
+                            hintText: 'Nhập tên*',
+                          ),
+                          onChanged: (value) {
+                            _student_name = value;
+                          },
+                        ),
+                        Row(children: [
+                          Text('Lớp:',
+                              style: TextStyle(
+                                  fontSize: 17, color: Colors.orangeAccent)),
+                          DropdownButton(
+                              items: _classes.map((valueItem) {
+                                return DropdownMenuItem(
+                                    value: valueItem['class_id'],
+                                    child: Text(
+                                        valueItem['class_name'].toString()));
+                              }).toList(),
+                              value: _class_id,
+                              onChanged: (newValue) {
+                                setState(() {
+                                  _class_id = newValue.toString();
+                                });
+                              })
+                        ]),
+                        MaterialButton(
+                            onPressed: () {
+                              newStudent();
+                            },
+                            color: Colors.blueAccent,
+                            textColor: Colors.white,
+                            child: Text('Thêm mới')),
+                      ]),
+                    ]))),
       ),
       RoundedButton(
           btnText: '⬅',

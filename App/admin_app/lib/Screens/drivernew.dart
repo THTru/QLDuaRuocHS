@@ -65,44 +65,46 @@ class _NewDriverScreenState extends State<NewDriverScreen> {
           ),
         ),
         body: SingleChildScrollView(
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-              Wrap(children: [
-                TextField(
-                  decoration: const InputDecoration(
-                    hintText: 'Nhập tên*',
-                  ),
-                  onChanged: (value) {
-                    _driver_name = value;
-                  },
-                ),
-                TextField(
-                  decoration: const InputDecoration(
-                    hintText: 'Nhập số điện thoại*',
-                  ),
-                  onChanged: (value) {
-                    _driver_phone = value;
-                  },
-                ),
-                TextField(
-                  decoration: const InputDecoration(
-                    hintText: 'Nhập địa chỉ*',
-                  ),
-                  onChanged: (value) {
-                    _driver_address = value;
-                  },
-                ),
-                MaterialButton(
-                    onPressed: () {
-                      newDriver();
-                    },
-                    color: Colors.blueAccent,
-                    textColor: Colors.white,
-                    child: Text('Thêm mới')),
-              ]),
-            ])),
+            child: Padding(
+                padding: EdgeInsets.all(20.0),
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Wrap(children: [
+                        TextField(
+                          decoration: const InputDecoration(
+                            hintText: 'Nhập tên*',
+                          ),
+                          onChanged: (value) {
+                            _driver_name = value;
+                          },
+                        ),
+                        TextField(
+                          decoration: const InputDecoration(
+                            hintText: 'Nhập số điện thoại*',
+                          ),
+                          onChanged: (value) {
+                            _driver_phone = value;
+                          },
+                        ),
+                        TextField(
+                          decoration: const InputDecoration(
+                            hintText: 'Nhập địa chỉ*',
+                          ),
+                          onChanged: (value) {
+                            _driver_address = value;
+                          },
+                        ),
+                        MaterialButton(
+                            onPressed: () {
+                              newDriver();
+                            },
+                            color: Colors.blueAccent,
+                            textColor: Colors.white,
+                            child: Text('Thêm mới')),
+                      ]),
+                    ]))),
       ),
       RoundedButton(
           btnText: '⬅',

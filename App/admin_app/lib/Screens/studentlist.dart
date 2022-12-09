@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 
 import 'package:admin_app/Screens/student.dart';
 import 'package:admin_app/Screens/studentnew.dart';
+import 'package:admin_app/Screens/studentedit.dart';
 import 'package:admin_app/Screens/classlist.dart';
 import 'package:admin_app/rounded_button.dart';
 
@@ -224,7 +225,17 @@ class _StudentListScreenState extends State<StudentListScreen> {
                                       child: Icon(Icons.edit),
                                       onPressed: () {
                                         setState(() {
-                                          _type++;
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    EditStudentScreen(
+                                                        studentID: _students[
+                                                                index]
+                                                            ['student_id'])),
+                                          ).then((value) {
+                                            loadStudentList();
+                                          });
                                         });
                                       })),
                                   DataCell(TextButton(

@@ -79,52 +79,58 @@ class _NewStopScreenState extends State<NewStopScreen> {
           ),
         ),
         body: SingleChildScrollView(
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-              Wrap(children: [
-                Text('Nhấp trên bản đồ để chọn tọa độ: ',
-                    style: TextStyle(fontSize: 17, color: Colors.orangeAccent)),
-                Text(_lat.toString() + ', ' + _lng.toString(),
-                    style: TextStyle(fontSize: 17, color: Colors.black)),
-                TextField(
-                  decoration: const InputDecoration(
-                    hintText: 'Nhập tên điểm dừng*',
-                  ),
-                  onChanged: (value) {
-                    _location = value;
-                  },
-                ),
-                MaterialButton(
-                    onPressed: () {
-                      newStop();
-                    },
-                    color: Colors.blueAccent,
-                    textColor: Colors.white,
-                    child: Text('Thêm mới')),
-              ]),
-              Container(
-                  height: 400,
-                  width: 900,
-                  child: GoogleMap(
-                      markers: setMarkers,
-                      onTap: (latlng) {
-                        setState(() {
-                          _lat = latlng.latitude;
-                          _lng = latlng.longitude;
-                          _markers = [];
-                          _markerID++;
-                          _markers.add(Marker(
-                              markerId: MarkerId(_markerID.toString()),
-                              infoWindow: InfoWindow(title: 'Điểm dừng mới'),
-                              position: latlng));
-                          setMarkers = Set<Marker>.of(_markers);
-                        });
-                      },
-                      initialCameraPosition: CameraPosition(
-                          target: LatLng(10.0324476, 105.7576498), zoom: 13)))
-            ])),
+            child: Padding(
+                padding: EdgeInsets.all(20.0),
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Wrap(children: [
+                        Text('Nhấp trên bản đồ để chọn tọa độ: ',
+                            style: TextStyle(
+                                fontSize: 17, color: Colors.orangeAccent)),
+                        Text(_lat.toString() + ', ' + _lng.toString(),
+                            style:
+                                TextStyle(fontSize: 17, color: Colors.black)),
+                        TextField(
+                          decoration: const InputDecoration(
+                            hintText: 'Nhập tên điểm dừng*',
+                          ),
+                          onChanged: (value) {
+                            _location = value;
+                          },
+                        ),
+                        MaterialButton(
+                            onPressed: () {
+                              newStop();
+                            },
+                            color: Colors.blueAccent,
+                            textColor: Colors.white,
+                            child: Text('Thêm mới')),
+                      ]),
+                      Container(
+                          height: 400,
+                          width: 900,
+                          child: GoogleMap(
+                              markers: setMarkers,
+                              onTap: (latlng) {
+                                setState(() {
+                                  _lat = latlng.latitude;
+                                  _lng = latlng.longitude;
+                                  _markers = [];
+                                  _markerID++;
+                                  _markers.add(Marker(
+                                      markerId: MarkerId(_markerID.toString()),
+                                      infoWindow:
+                                          InfoWindow(title: 'Điểm dừng mới'),
+                                      position: latlng));
+                                  setMarkers = Set<Marker>.of(_markers);
+                                });
+                              },
+                              initialCameraPosition: CameraPosition(
+                                  target: LatLng(10.0324476, 105.7576498),
+                                  zoom: 13)))
+                    ]))),
       ),
       RoundedButton(
           btnText: '⬅',

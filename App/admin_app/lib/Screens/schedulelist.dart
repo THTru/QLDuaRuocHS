@@ -5,6 +5,7 @@ import 'package:admin_app/General/general.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:admin_app/Screens/schedulenew.dart';
+import 'package:admin_app/Screens/scheduleedit.dart';
 import 'package:admin_app/Screens/stoplist.dart';
 import 'package:admin_app/rounded_button.dart';
 
@@ -145,7 +146,17 @@ class _ScheduleListScreenState extends State<ScheduleListScreen> {
                                       child: Icon(Icons.edit),
                                       onPressed: () {
                                         setState(() {
-                                          _type++;
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    EditScheduleScreen(
+                                                        scheduleID: _schedules[
+                                                                index]
+                                                            ['schedule_id'])),
+                                          ).then((value) {
+                                            loadSchedueList();
+                                          });
                                         });
                                       })),
                                   DataCell(TextButton(

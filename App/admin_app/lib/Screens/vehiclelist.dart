@@ -5,6 +5,7 @@ import 'package:admin_app/General/general.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:admin_app/Screens/vehiclenew.dart';
+import 'package:admin_app/Screens/vehicleedit.dart';
 
 class VehicleListScreen extends StatefulWidget {
   const VehicleListScreen({Key? key}) : super(key: key);
@@ -123,7 +124,17 @@ class _VehicleListScreenState extends State<VehicleListScreen> {
                                       child: Icon(Icons.edit),
                                       onPressed: () {
                                         setState(() {
-                                          _type++;
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    EditVehicleScreen(
+                                                        vehicleID: _vehicles[
+                                                                index]
+                                                            ['vehicle_id'])),
+                                          ).then((value) {
+                                            loadVehicleList();
+                                          });
                                         });
                                       })),
                                   DataCell(TextButton(

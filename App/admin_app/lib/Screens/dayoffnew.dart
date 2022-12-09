@@ -65,48 +65,50 @@ class _NewDayOffScreenState extends State<NewDayOffScreen> {
           ),
         ),
         body: SingleChildScrollView(
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-              Row(children: [
-                MaterialButton(
-                  color: Colors.orangeAccent,
-                  textColor: Colors.white,
-                  child: Text('Chọn ngày'),
-                  onPressed: () async {
-                    var chosenDate = await showDatePicker(
-                        context: context,
-                        initialDate: DateTime.now(),
-                        firstDate: DateTime(2015, 1, 1),
-                        lastDate: DateTime(2025, 12, 31));
-                    if (chosenDate != null)
-                      setState(() {
-                        _date = yMD(chosenDate.toString());
-                        _dateDMY = dMY(chosenDate.toString());
-                      });
-                  },
-                ),
-                Text(_dateDMY, style: TextStyle(fontSize: 18))
-              ]),
-              Wrap(children: [
-                TextField(
-                  decoration: const InputDecoration(
-                    hintText: 'Nhập tên ngày nghỉ*',
-                  ),
-                  onChanged: (value) {
-                    _name = value;
-                  },
-                ),
-                MaterialButton(
-                    onPressed: () {
-                      newDayOff();
-                    },
-                    color: Colors.blueAccent,
-                    textColor: Colors.white,
-                    child: Text('Thêm mới')),
-              ]),
-            ])),
+            child: Padding(
+                padding: EdgeInsets.all(20.0),
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(children: [
+                        MaterialButton(
+                          color: Colors.orangeAccent,
+                          textColor: Colors.white,
+                          child: Text('Chọn ngày'),
+                          onPressed: () async {
+                            var chosenDate = await showDatePicker(
+                                context: context,
+                                initialDate: DateTime.now(),
+                                firstDate: DateTime(2015, 1, 1),
+                                lastDate: DateTime(2025, 12, 31));
+                            if (chosenDate != null)
+                              setState(() {
+                                _date = yMD(chosenDate.toString());
+                                _dateDMY = dMY(chosenDate.toString());
+                              });
+                          },
+                        ),
+                        Text(_dateDMY, style: TextStyle(fontSize: 18))
+                      ]),
+                      Wrap(children: [
+                        TextField(
+                          decoration: const InputDecoration(
+                            hintText: 'Nhập tên ngày nghỉ*',
+                          ),
+                          onChanged: (value) {
+                            _name = value;
+                          },
+                        ),
+                        MaterialButton(
+                            onPressed: () {
+                              newDayOff();
+                            },
+                            color: Colors.blueAccent,
+                            textColor: Colors.white,
+                            child: Text('Thêm mới')),
+                      ]),
+                    ]))),
       ),
       RoundedButton(
           btnText: '⬅',

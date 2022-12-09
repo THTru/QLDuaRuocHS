@@ -64,36 +64,38 @@ class _NewVehicleScreenState extends State<NewVehicleScreen> {
           ),
         ),
         body: SingleChildScrollView(
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-              Wrap(children: [
-                TextField(
-                  decoration: const InputDecoration(
-                    hintText: 'Nhập biển số*',
-                  ),
-                  onChanged: (value) {
-                    _vehicle_no = value;
-                  },
-                ),
-                TextField(
-                  decoration: const InputDecoration(
-                    hintText: 'Nhập số chỗ*',
-                  ),
-                  onChanged: (value) {
-                    _capacity = value;
-                  },
-                ),
-                MaterialButton(
-                    onPressed: () {
-                      newVehicle();
-                    },
-                    color: Colors.blueAccent,
-                    textColor: Colors.white,
-                    child: Text('Thêm mới')),
-              ]),
-            ])),
+            child: Padding(
+                padding: EdgeInsets.all(20.0),
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Wrap(children: [
+                        TextField(
+                          decoration: const InputDecoration(
+                            hintText: 'Nhập biển số*',
+                          ),
+                          onChanged: (value) {
+                            _vehicle_no = value;
+                          },
+                        ),
+                        TextField(
+                          decoration: const InputDecoration(
+                            hintText: 'Nhập số chỗ*',
+                          ),
+                          onChanged: (value) {
+                            _capacity = value;
+                          },
+                        ),
+                        MaterialButton(
+                            onPressed: () {
+                              newVehicle();
+                            },
+                            color: Colors.blueAccent,
+                            textColor: Colors.white,
+                            child: Text('Thêm mới')),
+                      ]),
+                    ]))),
       ),
       RoundedButton(
           btnText: '⬅',

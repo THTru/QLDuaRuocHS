@@ -198,181 +198,191 @@ class _NewLineScreenState extends State<NewLineScreen> {
           ),
         ),
         body: SingleChildScrollView(
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-              Wrap(children: [
-                TextField(
-                  decoration: const InputDecoration(
-                    hintText: 'Nhập tên*',
-                  ),
-                  onChanged: (value) {
-                    _line_name = value;
-                  },
-                ),
-                TextField(
-                  decoration: const InputDecoration(
-                    hintText: 'Nhập số lượng*',
-                  ),
-                  onChanged: (value) {
-                    _slot = int.tryParse(value)!;
-                  },
-                ),
-                Row(children: [
-                  Text('Loại tuyến:',
-                      style:
-                          TextStyle(fontSize: 17, color: Colors.orangeAccent)),
-                  DropdownButton(
-                      items: _linetypes.map((valueItem) {
-                        return DropdownMenuItem(
-                            value: valueItem['linetype_id'],
-                            child: Text(valueItem['linetype_name'].toString()));
-                      }).toList(),
-                      value: _linetype_id,
-                      onChanged: (newValue) {
-                        setState(() {
-                          _linetype_id = int.tryParse(newValue.toString())!;
-                        });
-                      })
-                ]),
-                Row(children: [
-                  Text('Lộ trình:',
-                      style:
-                          TextStyle(fontSize: 17, color: Colors.orangeAccent)),
-                  DropdownButton(
-                      items: _schedules.map((valueItem) {
-                        return DropdownMenuItem(
-                            value: valueItem['schedule_id'],
-                            child: Text(valueItem['schedule_name'].toString()));
-                      }).toList(),
-                      value: _schedule_id,
-                      onChanged: (newValue) {
-                        setState(() {
-                          _schedule_id = int.tryParse(newValue.toString())!;
-                        });
-                      })
-                ]),
-                Row(children: [
-                  Text('Bảo mẫu:',
-                      style:
-                          TextStyle(fontSize: 17, color: Colors.orangeAccent)),
-                  DropdownButton(
-                      items: _carers.map((valueItem) {
-                        return DropdownMenuItem(
-                            value: valueItem['id'],
-                            child: Text(valueItem['name'].toString()));
-                      }).toList(),
-                      value: _carer_id,
-                      onChanged: (newValue) {
-                        setState(() {
-                          _carer_id = int.tryParse(newValue.toString())!;
-                        });
-                      })
-                ]),
-                Row(children: [
-                  Text('Tài xế:',
-                      style:
-                          TextStyle(fontSize: 17, color: Colors.orangeAccent)),
-                  DropdownButton(
-                      items: _drivers.map((valueItem) {
-                        return DropdownMenuItem(
-                            value: valueItem['driver_id'],
-                            child: Text(valueItem['driver_name'].toString()));
-                      }).toList(),
-                      value: _driver_id,
-                      onChanged: (newValue) {
-                        setState(() {
-                          _driver_id = int.tryParse(newValue.toString())!;
-                        });
-                      })
-                ]),
-                Row(children: [
-                  Text('Xe:',
-                      style:
-                          TextStyle(fontSize: 17, color: Colors.orangeAccent)),
-                  DropdownButton(
-                      items: _vehicles.map((valueItem) {
-                        return DropdownMenuItem(
-                            value: valueItem['vehicle_id'],
-                            child: Text(valueItem['vehicle_no'] +
-                                ' ' +
-                                valueItem['capacity'].toString() +
-                                ' chỗ'));
-                      }).toList(),
-                      value: _vehicle_id,
-                      onChanged: (newValue) {
-                        setState(() {
-                          _vehicle_id = int.tryParse(newValue.toString())!;
-                        });
-                      })
-                ]),
-                Row(children: [
-                  MaterialButton(
-                    color: Colors.green,
-                    textColor: Colors.white,
-                    child: Text('Chọn ngày đầu tiên'),
-                    onPressed: () async {
-                      var chosenDate = await showDatePicker(
-                          context: context,
-                          initialDate: DateTime.now(),
-                          firstDate: DateTime(2015, 1, 1),
-                          lastDate: DateTime(2025, 12, 31));
-                      if (chosenDate != null)
-                        setState(() {
-                          _first_date = yMD(chosenDate.toString());
-                        });
-                    },
-                  ),
-                  Text(_first_date, style: TextStyle(fontSize: 18))
-                ]),
-                Row(children: [
-                  MaterialButton(
-                    child: Text('Chọn ngày cuối'),
-                    color: Colors.orangeAccent,
-                    textColor: Colors.white,
-                    onPressed: () async {
-                      var chosenDate = await showDatePicker(
-                          context: context,
-                          initialDate: DateTime.now(),
-                          firstDate: DateTime(2015, 1, 1),
-                          lastDate: DateTime(2025, 12, 31));
-                      if (chosenDate != null)
-                        setState(() {
-                          _last_date = yMD(chosenDate.toString());
-                        });
-                    },
-                  ),
-                  Text(_last_date, style: TextStyle(fontSize: 18))
-                ]),
-                Row(children: [
-                  MaterialButton(
-                    child: Text('Chọn hạn đăng ký'),
-                    color: Colors.pinkAccent,
-                    textColor: Colors.white,
-                    onPressed: () async {
-                      var chosenDate = await showDatePicker(
-                          context: context,
-                          initialDate: DateTime.now(),
-                          firstDate: DateTime(2015, 1, 1),
-                          lastDate: DateTime(2025, 12, 31));
-                      if (chosenDate != null)
-                        setState(() {
-                          _reg_deadline = yMD(chosenDate.toString());
-                        });
-                    },
-                  ),
-                  Text(_reg_deadline, style: TextStyle(fontSize: 18))
-                ]),
-                MaterialButton(
-                    onPressed: () {
-                      newLine();
-                    },
-                    color: Colors.blueAccent,
-                    textColor: Colors.white,
-                    child: Text('Thêm mới')),
-              ]),
-            ])),
+            child: Padding(
+                padding: EdgeInsets.all(20.0),
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Wrap(children: [
+                        TextField(
+                          decoration: const InputDecoration(
+                            hintText: 'Nhập tên*',
+                          ),
+                          onChanged: (value) {
+                            _line_name = value;
+                          },
+                        ),
+                        TextField(
+                          decoration: const InputDecoration(
+                            hintText: 'Nhập số lượng*',
+                          ),
+                          onChanged: (value) {
+                            _slot = int.tryParse(value)!;
+                          },
+                        ),
+                        Row(children: [
+                          Text('Loại tuyến:',
+                              style: TextStyle(
+                                  fontSize: 17, color: Colors.orangeAccent)),
+                          DropdownButton(
+                              items: _linetypes.map((valueItem) {
+                                return DropdownMenuItem(
+                                    value: valueItem['linetype_id'],
+                                    child: Text(
+                                        valueItem['linetype_name'].toString()));
+                              }).toList(),
+                              value: _linetype_id,
+                              onChanged: (newValue) {
+                                setState(() {
+                                  _linetype_id =
+                                      int.tryParse(newValue.toString())!;
+                                });
+                              })
+                        ]),
+                        Row(children: [
+                          Text('Lộ trình:',
+                              style: TextStyle(
+                                  fontSize: 17, color: Colors.orangeAccent)),
+                          DropdownButton(
+                              items: _schedules.map((valueItem) {
+                                return DropdownMenuItem(
+                                    value: valueItem['schedule_id'],
+                                    child: Text(
+                                        valueItem['schedule_name'].toString()));
+                              }).toList(),
+                              value: _schedule_id,
+                              onChanged: (newValue) {
+                                setState(() {
+                                  _schedule_id =
+                                      int.tryParse(newValue.toString())!;
+                                });
+                              })
+                        ]),
+                        Row(children: [
+                          Text('Bảo mẫu:',
+                              style: TextStyle(
+                                  fontSize: 17, color: Colors.orangeAccent)),
+                          DropdownButton(
+                              items: _carers.map((valueItem) {
+                                return DropdownMenuItem(
+                                    value: valueItem['id'],
+                                    child: Text(valueItem['name'].toString()));
+                              }).toList(),
+                              value: _carer_id,
+                              onChanged: (newValue) {
+                                setState(() {
+                                  _carer_id =
+                                      int.tryParse(newValue.toString())!;
+                                });
+                              })
+                        ]),
+                        Row(children: [
+                          Text('Tài xế:',
+                              style: TextStyle(
+                                  fontSize: 17, color: Colors.orangeAccent)),
+                          DropdownButton(
+                              items: _drivers.map((valueItem) {
+                                return DropdownMenuItem(
+                                    value: valueItem['driver_id'],
+                                    child: Text(
+                                        valueItem['driver_name'].toString()));
+                              }).toList(),
+                              value: _driver_id,
+                              onChanged: (newValue) {
+                                setState(() {
+                                  _driver_id =
+                                      int.tryParse(newValue.toString())!;
+                                });
+                              })
+                        ]),
+                        Row(children: [
+                          Text('Xe:',
+                              style: TextStyle(
+                                  fontSize: 17, color: Colors.orangeAccent)),
+                          DropdownButton(
+                              items: _vehicles.map((valueItem) {
+                                return DropdownMenuItem(
+                                    value: valueItem['vehicle_id'],
+                                    child: Text(valueItem['vehicle_no'] +
+                                        ' ' +
+                                        valueItem['capacity'].toString() +
+                                        ' chỗ'));
+                              }).toList(),
+                              value: _vehicle_id,
+                              onChanged: (newValue) {
+                                setState(() {
+                                  _vehicle_id =
+                                      int.tryParse(newValue.toString())!;
+                                });
+                              })
+                        ]),
+                        Row(children: [
+                          MaterialButton(
+                            color: Colors.green,
+                            textColor: Colors.white,
+                            child: Text('Chọn ngày đầu tiên'),
+                            onPressed: () async {
+                              var chosenDate = await showDatePicker(
+                                  context: context,
+                                  initialDate: DateTime.now(),
+                                  firstDate: DateTime(2015, 1, 1),
+                                  lastDate: DateTime(2025, 12, 31));
+                              if (chosenDate != null)
+                                setState(() {
+                                  _first_date = yMD(chosenDate.toString());
+                                });
+                            },
+                          ),
+                          Text(_first_date, style: TextStyle(fontSize: 18))
+                        ]),
+                        Row(children: [
+                          MaterialButton(
+                            child: Text('Chọn ngày cuối'),
+                            color: Colors.orangeAccent,
+                            textColor: Colors.white,
+                            onPressed: () async {
+                              var chosenDate = await showDatePicker(
+                                  context: context,
+                                  initialDate: DateTime.now(),
+                                  firstDate: DateTime(2015, 1, 1),
+                                  lastDate: DateTime(2025, 12, 31));
+                              if (chosenDate != null)
+                                setState(() {
+                                  _last_date = yMD(chosenDate.toString());
+                                });
+                            },
+                          ),
+                          Text(_last_date, style: TextStyle(fontSize: 18))
+                        ]),
+                        Row(children: [
+                          MaterialButton(
+                            child: Text('Chọn hạn đăng ký'),
+                            color: Colors.pinkAccent,
+                            textColor: Colors.white,
+                            onPressed: () async {
+                              var chosenDate = await showDatePicker(
+                                  context: context,
+                                  initialDate: DateTime.now(),
+                                  firstDate: DateTime(2015, 1, 1),
+                                  lastDate: DateTime(2025, 12, 31));
+                              if (chosenDate != null)
+                                setState(() {
+                                  _reg_deadline = yMD(chosenDate.toString());
+                                });
+                            },
+                          ),
+                          Text(_reg_deadline, style: TextStyle(fontSize: 18))
+                        ]),
+                        MaterialButton(
+                            onPressed: () {
+                              newLine();
+                            },
+                            color: Colors.blueAccent,
+                            textColor: Colors.white,
+                            child: Text('Thêm mới')),
+                      ]),
+                    ]))),
       ),
       RoundedButton(
           btnText: '⬅',

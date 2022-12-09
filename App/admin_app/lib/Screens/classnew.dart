@@ -63,36 +63,38 @@ class _NewClassScreenState extends State<NewClassScreen> {
           ),
         ),
         body: SingleChildScrollView(
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-              Wrap(children: [
-                TextField(
-                  decoration: const InputDecoration(
-                    hintText: 'Nhập ID lớp*',
-                  ),
-                  onChanged: (value) {
-                    _class_id = value;
-                  },
-                ),
-                TextField(
-                  decoration: const InputDecoration(
-                    hintText: 'Nhập tên lớp*',
-                  ),
-                  onChanged: (value) {
-                    _class_name = value;
-                  },
-                ),
-                MaterialButton(
-                    onPressed: () {
-                      newClass();
-                    },
-                    color: Colors.blueAccent,
-                    textColor: Colors.white,
-                    child: Text('Thêm mới')),
-              ]),
-            ])),
+            child: Padding(
+                padding: EdgeInsets.all(20.0),
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Wrap(children: [
+                        TextField(
+                          decoration: const InputDecoration(
+                            hintText: 'Nhập ID lớp*',
+                          ),
+                          onChanged: (value) {
+                            _class_id = value;
+                          },
+                        ),
+                        TextField(
+                          decoration: const InputDecoration(
+                            hintText: 'Nhập tên lớp*',
+                          ),
+                          onChanged: (value) {
+                            _class_name = value;
+                          },
+                        ),
+                        MaterialButton(
+                            onPressed: () {
+                              newClass();
+                            },
+                            color: Colors.blueAccent,
+                            textColor: Colors.white,
+                            child: Text('Thêm mới')),
+                      ]),
+                    ]))),
       ),
       RoundedButton(
           btnText: '⬅',

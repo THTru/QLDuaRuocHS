@@ -113,181 +113,186 @@ class _NewLineTypeScreenState extends State<NewLineTypeScreen> {
           ),
         ),
         body: SingleChildScrollView(
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-              Row(children: [
-                Column(children: [
-                  Text('Loại:',
-                      style: TextStyle(fontSize: 17, color: Colors.blueAccent)),
-                  DropdownButton(
-                      items: isback_list.map((valueItem) {
-                        return DropdownMenuItem(
-                            value: valueItem['value'],
-                            child: Text(valueItem['tag'].toString()));
-                      }).toList(),
-                      value: _is_back,
-                      onChanged: (newValue) {
-                        setState(() {
-                          _is_back = int.tryParse(newValue.toString())!;
-                        });
-                      }),
-                ]),
-                Column(children: [
-                  Text('T2:',
-                      style:
-                          TextStyle(fontSize: 17, color: Colors.orangeAccent)),
-                  DropdownButton(
-                      items: choose_list.map((valueItem) {
-                        return DropdownMenuItem(
-                            value: valueItem['value'],
-                            child: Text(valueItem['tag'].toString()));
-                      }).toList(),
-                      value: _mon,
-                      onChanged: (newValue) {
-                        setState(() {
-                          _mon = int.tryParse(newValue.toString())!;
-                        });
-                      }),
-                ]),
-                Column(children: [
-                  Text('T3:',
-                      style:
-                          TextStyle(fontSize: 17, color: Colors.orangeAccent)),
-                  DropdownButton(
-                      items: choose_list.map((valueItem) {
-                        return DropdownMenuItem(
-                            value: valueItem['value'],
-                            child: Text(valueItem['tag'].toString()));
-                      }).toList(),
-                      value: _tue,
-                      onChanged: (newValue) {
-                        setState(() {
-                          _tue = int.tryParse(newValue.toString())!;
-                        });
-                      }),
-                ]),
-                Column(children: [
-                  Text('T4:',
-                      style:
-                          TextStyle(fontSize: 17, color: Colors.orangeAccent)),
-                  DropdownButton(
-                      items: choose_list.map((valueItem) {
-                        return DropdownMenuItem(
-                            value: valueItem['value'],
-                            child: Text(valueItem['tag'].toString()));
-                      }).toList(),
-                      value: _wed,
-                      onChanged: (newValue) {
-                        setState(() {
-                          _wed = int.tryParse(newValue.toString())!;
-                        });
-                      }),
-                ]),
-                Column(children: [
-                  Text('T5:',
-                      style:
-                          TextStyle(fontSize: 17, color: Colors.orangeAccent)),
-                  DropdownButton(
-                      items: choose_list.map((valueItem) {
-                        return DropdownMenuItem(
-                            value: valueItem['value'],
-                            child: Text(valueItem['tag'].toString()));
-                      }).toList(),
-                      value: _thu,
-                      onChanged: (newValue) {
-                        setState(() {
-                          _thu = int.tryParse(newValue.toString())!;
-                        });
-                      }),
-                ]),
-                Column(children: [
-                  Text('T6:',
-                      style:
-                          TextStyle(fontSize: 17, color: Colors.orangeAccent)),
-                  DropdownButton(
-                      items: choose_list.map((valueItem) {
-                        return DropdownMenuItem(
-                            value: valueItem['value'],
-                            child: Text(valueItem['tag'].toString()));
-                      }).toList(),
-                      value: _fri,
-                      onChanged: (newValue) {
-                        setState(() {
-                          _fri = int.tryParse(newValue.toString())!;
-                        });
-                      }),
-                ]),
-                Column(children: [
-                  Text('T7:',
-                      style: TextStyle(fontSize: 17, color: Colors.redAccent)),
-                  DropdownButton(
-                      items: choose_list.map((valueItem) {
-                        return DropdownMenuItem(
-                            value: valueItem['value'],
-                            child: Text(valueItem['tag'].toString()));
-                      }).toList(),
-                      value: _sat,
-                      onChanged: (newValue) {
-                        setState(() {
-                          _sat = int.tryParse(newValue.toString())!;
-                        });
-                      }),
-                ]),
-                Column(children: [
-                  Text('CN:',
-                      style: TextStyle(fontSize: 17, color: Colors.redAccent)),
-                  DropdownButton(
-                      items: choose_list.map((valueItem) {
-                        return DropdownMenuItem(
-                            value: valueItem['value'],
-                            child: Text(valueItem['tag'].toString()));
-                      }).toList(),
-                      value: _sun,
-                      onChanged: (newValue) {
-                        setState(() {
-                          _sun = int.tryParse(newValue.toString())!;
-                        });
-                      }),
-                ]),
-              ]),
-              Wrap(children: [
-                MaterialButton(
-                    onPressed: () {
-                      selectTime(context, 0);
-                    },
-                    color: Colors.green,
-                    textColor: Colors.white,
-                    child: Text('Giờ khởi hành')),
-                Text(_time_start, style: TextStyle(fontSize: 19)),
-              ]),
-              Wrap(children: [
-                MaterialButton(
-                    onPressed: () {
-                      selectTime(context, 1);
-                    },
-                    color: Colors.orangeAccent,
-                    textColor: Colors.white,
-                    child: Text('Giờ kết thúc')),
-                Text(_time_end, style: TextStyle(fontSize: 19)),
-              ]),
-              TextField(
-                decoration: const InputDecoration(
-                  hintText: 'Nhập tên loại tuyến*',
-                ),
-                onChanged: (value) {
-                  _linetype_name = value;
-                },
-              ),
-              MaterialButton(
-                  onPressed: () {
-                    newLineType();
-                  },
-                  color: Colors.blueAccent,
-                  textColor: Colors.white,
-                  child: Text('Thêm mới')),
-            ])),
+            child: Padding(
+                padding: EdgeInsets.all(20.0),
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(children: [
+                        Column(children: [
+                          Text('Loại:',
+                              style: TextStyle(
+                                  fontSize: 17, color: Colors.blueAccent)),
+                          DropdownButton(
+                              items: isback_list.map((valueItem) {
+                                return DropdownMenuItem(
+                                    value: valueItem['value'],
+                                    child: Text(valueItem['tag'].toString()));
+                              }).toList(),
+                              value: _is_back,
+                              onChanged: (newValue) {
+                                setState(() {
+                                  _is_back = int.tryParse(newValue.toString())!;
+                                });
+                              }),
+                        ]),
+                        Column(children: [
+                          Text('T2:',
+                              style: TextStyle(
+                                  fontSize: 17, color: Colors.orangeAccent)),
+                          DropdownButton(
+                              items: choose_list.map((valueItem) {
+                                return DropdownMenuItem(
+                                    value: valueItem['value'],
+                                    child: Text(valueItem['tag'].toString()));
+                              }).toList(),
+                              value: _mon,
+                              onChanged: (newValue) {
+                                setState(() {
+                                  _mon = int.tryParse(newValue.toString())!;
+                                });
+                              }),
+                        ]),
+                        Column(children: [
+                          Text('T3:',
+                              style: TextStyle(
+                                  fontSize: 17, color: Colors.orangeAccent)),
+                          DropdownButton(
+                              items: choose_list.map((valueItem) {
+                                return DropdownMenuItem(
+                                    value: valueItem['value'],
+                                    child: Text(valueItem['tag'].toString()));
+                              }).toList(),
+                              value: _tue,
+                              onChanged: (newValue) {
+                                setState(() {
+                                  _tue = int.tryParse(newValue.toString())!;
+                                });
+                              }),
+                        ]),
+                        Column(children: [
+                          Text('T4:',
+                              style: TextStyle(
+                                  fontSize: 17, color: Colors.orangeAccent)),
+                          DropdownButton(
+                              items: choose_list.map((valueItem) {
+                                return DropdownMenuItem(
+                                    value: valueItem['value'],
+                                    child: Text(valueItem['tag'].toString()));
+                              }).toList(),
+                              value: _wed,
+                              onChanged: (newValue) {
+                                setState(() {
+                                  _wed = int.tryParse(newValue.toString())!;
+                                });
+                              }),
+                        ]),
+                        Column(children: [
+                          Text('T5:',
+                              style: TextStyle(
+                                  fontSize: 17, color: Colors.orangeAccent)),
+                          DropdownButton(
+                              items: choose_list.map((valueItem) {
+                                return DropdownMenuItem(
+                                    value: valueItem['value'],
+                                    child: Text(valueItem['tag'].toString()));
+                              }).toList(),
+                              value: _thu,
+                              onChanged: (newValue) {
+                                setState(() {
+                                  _thu = int.tryParse(newValue.toString())!;
+                                });
+                              }),
+                        ]),
+                        Column(children: [
+                          Text('T6:',
+                              style: TextStyle(
+                                  fontSize: 17, color: Colors.orangeAccent)),
+                          DropdownButton(
+                              items: choose_list.map((valueItem) {
+                                return DropdownMenuItem(
+                                    value: valueItem['value'],
+                                    child: Text(valueItem['tag'].toString()));
+                              }).toList(),
+                              value: _fri,
+                              onChanged: (newValue) {
+                                setState(() {
+                                  _fri = int.tryParse(newValue.toString())!;
+                                });
+                              }),
+                        ]),
+                        Column(children: [
+                          Text('T7:',
+                              style: TextStyle(
+                                  fontSize: 17, color: Colors.redAccent)),
+                          DropdownButton(
+                              items: choose_list.map((valueItem) {
+                                return DropdownMenuItem(
+                                    value: valueItem['value'],
+                                    child: Text(valueItem['tag'].toString()));
+                              }).toList(),
+                              value: _sat,
+                              onChanged: (newValue) {
+                                setState(() {
+                                  _sat = int.tryParse(newValue.toString())!;
+                                });
+                              }),
+                        ]),
+                        Column(children: [
+                          Text('CN:',
+                              style: TextStyle(
+                                  fontSize: 17, color: Colors.redAccent)),
+                          DropdownButton(
+                              items: choose_list.map((valueItem) {
+                                return DropdownMenuItem(
+                                    value: valueItem['value'],
+                                    child: Text(valueItem['tag'].toString()));
+                              }).toList(),
+                              value: _sun,
+                              onChanged: (newValue) {
+                                setState(() {
+                                  _sun = int.tryParse(newValue.toString())!;
+                                });
+                              }),
+                        ]),
+                      ]),
+                      Wrap(children: [
+                        MaterialButton(
+                            onPressed: () {
+                              selectTime(context, 0);
+                            },
+                            color: Colors.green,
+                            textColor: Colors.white,
+                            child: Text('Giờ khởi hành')),
+                        Text(_time_start, style: TextStyle(fontSize: 19)),
+                      ]),
+                      Wrap(children: [
+                        MaterialButton(
+                            onPressed: () {
+                              selectTime(context, 1);
+                            },
+                            color: Colors.orangeAccent,
+                            textColor: Colors.white,
+                            child: Text('Giờ kết thúc')),
+                        Text(_time_end, style: TextStyle(fontSize: 19)),
+                      ]),
+                      TextField(
+                        decoration: const InputDecoration(
+                          hintText: 'Nhập tên loại tuyến*',
+                        ),
+                        onChanged: (value) {
+                          _linetype_name = value;
+                        },
+                      ),
+                      MaterialButton(
+                          onPressed: () {
+                            newLineType();
+                          },
+                          color: Colors.blueAccent,
+                          textColor: Colors.white,
+                          child: Text('Thêm mới')),
+                    ]))),
       ),
       RoundedButton(
           btnText: '⬅',

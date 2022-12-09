@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'package:admin_app/Screens/stopnew.dart';
+import 'package:admin_app/Screens/stopedit.dart';
 
 class StopListScreen extends StatefulWidget {
   const StopListScreen({Key? key}) : super(key: key);
@@ -76,117 +77,136 @@ class _StopListScreenState extends State<StopListScreen> {
         ),
       ),
       body: SingleChildScrollView(
-          child: Stack(children: [
-        Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Wrap(children: [
-                TextField(
-                  decoration: const InputDecoration(
-                    hintText: 'Nhập điểm dừng',
-                  ),
-                  onChanged: (value) {
-                    _location = value;
-                  },
-                ),
-                TextButton(
-                    onPressed: () {
-                      loadStopList();
-                    },
-                    child: Text('Tìm')),
-              ]),
-              _error
-                  ? const Text('Có lỗi server')
-                  : _loading
-                      ? Center(child: CircularProgressIndicator())
-                      : DataTable(
-                          columns: const <DataColumn>[
-                              DataColumn(
-                                label: Expanded(
-                                  child: Text(
-                                    'ID',
-                                    style:
-                                        TextStyle(fontStyle: FontStyle.italic),
-                                  ),
-                                ),
-                              ),
-                              DataColumn(
-                                label: Expanded(
-                                  child: Text(
-                                    'Điểm dừng',
-                                    style:
-                                        TextStyle(fontStyle: FontStyle.italic),
-                                  ),
-                                ),
-                              ),
-                              DataColumn(label: Text('')),
-                              DataColumn(label: Text('')),
-                              DataColumn(label: Text('')),
-                            ],
-                          rows: List<DataRow>.generate(
-                              _stops.length,
-                              (index) => DataRow(cells: [
-                                    DataCell(Text(
-                                        _stops[index]['stop_id'].toString())),
-                                    DataCell(Text(
-                                        _stops[index]['location'].toString())),
-                                    DataCell(TextButton(
-                                        child: Icon(Icons.map),
-                                        onPressed: () {
-                                          setState(() {
-                                            _openMap = true;
-                                            _markers = [];
-                                            _markers.add(Marker(
-                                                markerId: MarkerId(
-                                                    markerID.toString()),
-                                                infoWindow: InfoWindow(
-                                                    title: _stops[index]
-                                                        ['location']),
-                                                position: LatLng(
-                                                    _stops[index]['lat'],
-                                                    _stops[index]['lng'])));
-                                          });
-                                        })),
-                                    DataCell(TextButton(
-                                        child: Icon(Icons.edit),
-                                        onPressed: () {
-                                          setState(() {
-                                            _type++;
-                                          });
-                                        })),
-                                    DataCell(TextButton(
-                                        child: Icon(Icons.delete),
-                                        onPressed: () {
-                                          setState(() {
-                                            _type++;
-                                          });
-                                        }))
-                                  ])))
-            ]),
-        _openMap
-            ? Container(
-                height: 600,
-                width: 1200,
-                child: Stack(children: [
-                  GoogleMap(
-                      markers: Set<Marker>.of(_markers),
-                      initialCameraPosition: CameraPosition(
-                          target: LatLng(10.0324476, 105.7576498), zoom: 13)),
-                  RoundedButton(
-                      btnText: 'Đóng',
-                      onBtnPressed: () {
-                        setState(() {
-                          _openMap = false;
-                        });
-                      })
-                ]))
-            : Text('')
-      ])),
+          child: Padding(
+              padding: EdgeInsets.all(20.0),
+              child: Stack(children: [
+                Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Wrap(children: [
+                        TextField(
+                          decoration: const InputDecoration(
+                            hintText: 'Nhập điểm dừng',
+                          ),
+                          onChanged: (value) {
+                            _location = value;
+                          },
+                        ),
+                        TextButton(
+                            onPressed: () {
+                              loadStopList();
+                            },
+                            child: Text('Tìm')),
+                      ]),
+                      _error
+                          ? const Text('Có lỗi server')
+                          : _loading
+                              ? Center(child: CircularProgressIndicator())
+                              : DataTable(
+                                  columns: const <DataColumn>[
+                                      DataColumn(
+                                        label: Expanded(
+                                          child: Text(
+                                            'ID',
+                                            style: TextStyle(
+                                                fontStyle: FontStyle.italic),
+                                          ),
+                                        ),
+                                      ),
+                                      DataColumn(
+                                        label: Expanded(
+                                          child: Text(
+                                            'Điểm dừng',
+                                            style: TextStyle(
+                                                fontStyle: FontStyle.italic),
+                                          ),
+                                        ),
+                                      ),
+                                      DataColumn(label: Text('')),
+                                      DataColumn(label: Text('')),
+                                      DataColumn(label: Text('')),
+                                    ],
+                                  rows: List<DataRow>.generate(
+                                      _stops.length,
+                                      (index) => DataRow(cells: [
+                                            DataCell(Text(_stops[index]
+                                                    ['stop_id']
+                                                .toString())),
+                                            DataCell(Text(_stops[index]
+                                                    ['location']
+                                                .toString())),
+                                            DataCell(TextButton(
+                                                child: Icon(Icons.map),
+                                                onPressed: () {
+                                                  setState(() {
+                                                    _openMap = true;
+                                                    _markers = [];
+                                                    _markers.add(Marker(
+                                                        markerId: MarkerId(
+                                                            markerID
+                                                                .toString()),
+                                                        infoWindow: InfoWindow(
+                                                            title: _stops[index]
+                                                                ['location']),
+                                                        position: LatLng(
+                                                            _stops[index]
+                                                                ['lat'],
+                                                            _stops[index]
+                                                                ['lng'])));
+                                                  });
+                                                })),
+                                            DataCell(TextButton(
+                                                child: Icon(Icons.edit),
+                                                onPressed: () {
+                                                  setState(() {
+                                                    Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              EditStopScreen(
+                                                                  stopID: _stops[
+                                                                          index]
+                                                                      [
+                                                                      'stop_id'])),
+                                                    ).then((value) {
+                                                      loadStopList();
+                                                    });
+                                                  });
+                                                })),
+                                            DataCell(TextButton(
+                                                child: Icon(Icons.delete),
+                                                onPressed: () {
+                                                  setState(() {
+                                                    _type++;
+                                                  });
+                                                }))
+                                          ])))
+                    ]),
+                _openMap
+                    ? Container(
+                        height: 600,
+                        width: 1200,
+                        child: Stack(children: [
+                          GoogleMap(
+                              markers: Set<Marker>.of(_markers),
+                              initialCameraPosition: CameraPosition(
+                                  target: LatLng(10.0324476, 105.7576498),
+                                  zoom: 13)),
+                          RoundedButton(
+                              btnText: 'Đóng',
+                              onBtnPressed: () {
+                                setState(() {
+                                  _openMap = false;
+                                });
+                              })
+                        ]))
+                    : Text('')
+              ]))),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButton: FloatingActionButton.extended(
           onPressed: () async {
-            final reloadPage = await Navigator.push(
+            Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => NewStopScreen()),
             ).then((value) {

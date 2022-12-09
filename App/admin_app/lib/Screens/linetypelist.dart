@@ -5,6 +5,7 @@ import 'package:admin_app/General/general.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:admin_app/Screens/linetypenew.dart';
+import 'package:admin_app/Screens/linetypeedit.dart';
 
 class LineTypeListScreen extends StatefulWidget {
   const LineTypeListScreen({Key? key}) : super(key: key);
@@ -301,7 +302,17 @@ class _LineTypeListScreenState extends State<LineTypeListScreen> {
                                         child: Icon(Icons.edit),
                                         onPressed: () {
                                           setState(() {
-                                            _type++;
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      EditLineTypeScreen(
+                                                          linetypeID: _linetypes[
+                                                                  index]
+                                                              ['linetype_id'])),
+                                            ).then((value) {
+                                              loadLineTypeList();
+                                            });
                                           });
                                         })),
                                     DataCell(TextButton(

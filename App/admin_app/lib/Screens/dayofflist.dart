@@ -5,6 +5,7 @@ import 'package:admin_app/General/general.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:admin_app/Screens/dayoffnew.dart';
+import 'package:admin_app/Screens/dayoffedit.dart';
 
 class DayOffListScreen extends StatefulWidget {
   const DayOffListScreen({Key? key}) : super(key: key);
@@ -93,8 +94,15 @@ class _DayOffListScreenState extends State<DayOffListScreen> {
                                   DataCell(TextButton(
                                       child: Icon(Icons.edit),
                                       onPressed: () {
-                                        setState(() {
-                                          _type++;
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  EditDayOffScreen(
+                                                      dayoffID: _dayoffs[index]
+                                                          ['id'])),
+                                        ).then((value) {
+                                          loadDayOffList();
                                         });
                                       })),
                                   DataCell(TextButton(

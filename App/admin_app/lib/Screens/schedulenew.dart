@@ -124,130 +124,136 @@ class _NewScheduleScreenState extends State<NewScheduleScreen> {
           ),
         ),
         body: SingleChildScrollView(
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Wrap(children: [
-                  TextField(
-                    decoration: const InputDecoration(
-                      hintText: 'Nhập tên lộ trình*',
-                    ),
-                    onChanged: (value) {
-                      _schedule_name = value;
-                    },
-                  ),
-                  TextField(
-                    decoration: const InputDecoration(
-                      hintText: 'Nhập mô tả*',
-                    ),
-                    onChanged: (value) {
-                      _schedule_des = value;
-                    },
-                  ),
-                  Row(children: [
-                    Text('Điểm: ',
-                        style: TextStyle(
-                            fontSize: 17, color: Colors.orangeAccent)),
-                    DropdownButton(
-                        items: stoplist.map((valueItem) {
-                          return DropdownMenuItem(
-                              value: valueItem,
-                              child: Text(valueItem['location'].toString()));
-                        }).toList(),
-                        value: _chosenStop,
-                        onChanged: (newValue) {
-                          setState(() {
-                            _chosenStop = newValue;
-                          });
-                        }),
-                    Text('Mất khoảng: ',
-                        style: TextStyle(
-                            fontSize: 17, color: Colors.orangeAccent)),
-                    TextButton(
-                        onPressed: () {
-                          selectTime(context);
+          child: Padding(
+              padding: EdgeInsets.all(20.0),
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Wrap(children: [
+                      TextField(
+                        decoration: const InputDecoration(
+                          hintText: 'Nhập tên lộ trình*',
+                        ),
+                        onChanged: (value) {
+                          _schedule_name = value;
                         },
-                        child: Text(_time,
-                            style:
-                                TextStyle(fontSize: 17, color: Colors.black))),
+                      ),
+                      TextField(
+                        decoration: const InputDecoration(
+                          hintText: 'Nhập mô tả*',
+                        ),
+                        onChanged: (value) {
+                          _schedule_des = value;
+                        },
+                      ),
+                      Row(children: [
+                        Text('Điểm: ',
+                            style: TextStyle(
+                                fontSize: 17, color: Colors.orangeAccent)),
+                        DropdownButton(
+                            items: stoplist.map((valueItem) {
+                              return DropdownMenuItem(
+                                  value: valueItem,
+                                  child:
+                                      Text(valueItem['location'].toString()));
+                            }).toList(),
+                            value: _chosenStop,
+                            onChanged: (newValue) {
+                              setState(() {
+                                _chosenStop = newValue;
+                              });
+                            }),
+                        Text('Mất khoảng: ',
+                            style: TextStyle(
+                                fontSize: 17, color: Colors.orangeAccent)),
+                        TextButton(
+                            onPressed: () {
+                              selectTime(context);
+                            },
+                            child: Text(_time,
+                                style: TextStyle(
+                                    fontSize: 17, color: Colors.black))),
+                        MaterialButton(
+                            onPressed: () {
+                              setState(() {
+                                _stops.add(_chosenStop['stop_id']);
+                                _stops_name.add(_chosenStop['location']);
+                                _time_take.add(_time);
+                                _markers.add(Marker(
+                                    markerId: MarkerId(markerID.toString()),
+                                    infoWindow: InfoWindow(
+                                        title:
+                                            _chosenStop['location'].toString()),
+                                    position: LatLng(_chosenStop['lat'],
+                                        _chosenStop['lng'])));
+                                markerID++;
+                              });
+                            },
+                            color: Colors.orangeAccent,
+                            textColor: Colors.white,
+                            child: Text('Thêm điểm')),
+                      ]),
+                      DataTable(
+                          columns: const <DataColumn>[
+                            DataColumn(
+                              label: Expanded(
+                                child: Text(
+                                  'Điểm',
+                                  style: TextStyle(fontStyle: FontStyle.italic),
+                                ),
+                              ),
+                            ),
+                            DataColumn(
+                              label: Expanded(
+                                child: Text(
+                                  'Mất khoảng',
+                                  style: TextStyle(fontStyle: FontStyle.italic),
+                                ),
+                              ),
+                            ),
+                            DataColumn(label: Text('')),
+                          ],
+                          rows: List<DataRow>.generate(
+                              _stops.length,
+                              (index) => DataRow(cells: [
+                                    DataCell(
+                                        Text(_stops_name[index].toString())),
+                                    DataCell(
+                                        Text(_time_take[index].toString())),
+                                    DataCell(TextButton(
+                                        child: Icon(Icons.delete),
+                                        onPressed: () {
+                                          setState(() {
+                                            _stops.removeAt(index);
+                                            _stops_name.removeAt(index);
+                                            _time_take.removeAt(index);
+                                            _markers.removeAt(index);
+                                          });
+                                        }))
+                                  ]))),
+                    ]),
+                    Container(
+                        height: 350,
+                        width: 900,
+                        child: GoogleMap(
+                            markers: Set<Marker>.of(_markers),
+                            onMapCreated: (controller) {
+                              setState(() {
+                                mapscontroller = controller;
+                              });
+                            },
+                            initialCameraPosition: CameraPosition(
+                                target: LatLng(10.0324476, 105.7576498),
+                                zoom: 13))),
                     MaterialButton(
                         onPressed: () {
-                          setState(() {
-                            _stops.add(_chosenStop['stop_id']);
-                            _stops_name.add(_chosenStop['location']);
-                            _time_take.add(_time);
-                            _markers.add(Marker(
-                                markerId: MarkerId(markerID.toString()),
-                                infoWindow: InfoWindow(
-                                    title: _chosenStop['location'].toString()),
-                                position: LatLng(
-                                    _chosenStop['lat'], _chosenStop['lng'])));
-                            markerID++;
-                          });
+                          newSchedule();
                         },
-                        color: Colors.orangeAccent,
+                        color: Colors.blueAccent,
                         textColor: Colors.white,
-                        child: Text('Thêm điểm')),
-                  ]),
-                  DataTable(
-                      columns: const <DataColumn>[
-                        DataColumn(
-                          label: Expanded(
-                            child: Text(
-                              'Điểm',
-                              style: TextStyle(fontStyle: FontStyle.italic),
-                            ),
-                          ),
-                        ),
-                        DataColumn(
-                          label: Expanded(
-                            child: Text(
-                              'Mất khoảng',
-                              style: TextStyle(fontStyle: FontStyle.italic),
-                            ),
-                          ),
-                        ),
-                        DataColumn(label: Text('')),
-                      ],
-                      rows: List<DataRow>.generate(
-                          _stops.length,
-                          (index) => DataRow(cells: [
-                                DataCell(Text(_stops_name[index].toString())),
-                                DataCell(Text(_time_take[index].toString())),
-                                DataCell(TextButton(
-                                    child: Icon(Icons.delete),
-                                    onPressed: () {
-                                      setState(() {
-                                        _stops.removeAt(index);
-                                        _stops_name.removeAt(index);
-                                        _time_take.removeAt(index);
-                                        _markers.removeAt(index);
-                                      });
-                                    }))
-                              ]))),
-                ]),
-                Container(
-                    height: 350,
-                    width: 900,
-                    child: GoogleMap(
-                        markers: Set<Marker>.of(_markers),
-                        onMapCreated: (controller) {
-                          setState(() {
-                            mapscontroller = controller;
-                          });
-                        },
-                        initialCameraPosition: CameraPosition(
-                            target: LatLng(10.0324476, 105.7576498),
-                            zoom: 13))),
-                MaterialButton(
-                    onPressed: () {
-                      newSchedule();
-                    },
-                    color: Colors.blueAccent,
-                    textColor: Colors.white,
-                    child: Text('Thêm lộ trình mới')),
-              ]),
+                        child: Text('Thêm lộ trình mới')),
+                  ])),
         ),
       ),
       RoundedButton(
