@@ -28,6 +28,7 @@ Route::get('/test', [GeneralController::class, 'test']);
 
 Route::get('/users', [GeneralController::class, 'users']);
 Route::get('/users/type', [GeneralController::class, 'usersbyType']);
+Route::get('/user', [GeneralController::class, 'user']);
 
 Route::get('/classes', [GeneralController::class, 'classes']);
 Route::get('/class', [GeneralController::class, 'class']);
@@ -67,6 +68,7 @@ Route::get('trips/filter', [GeneralController::class, 'tripsFilter']);
 Route::get('trip', [GeneralController::class, 'trip']);
 
 Route::get('registrations', [GeneralController::class, 'registrations']);
+Route::get('registrations/line', [GeneralController::class, 'registrationsbyLine']);
 Route::get('registration', [GeneralController::class, 'registration']);
 
 Route::get('studenttrips', [GeneralController::class, 'studenttrips']);
@@ -74,6 +76,7 @@ Route::get('studenttrips/date', [GeneralController::class, 'studenttripsbyDate']
 Route::get('studenttrips/trip', [GeneralController::class, 'studenttripsbyTrip']);
 
 Route::get('dayoffs', [GeneralController::class, 'dayoffs']);
+Route::get('dayoff', [GeneralController::class, 'dayoff']);
 
 //Auth API
 Route::post('login2', [AuthController::class, 'login2']);

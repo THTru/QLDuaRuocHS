@@ -5,6 +5,8 @@ import 'package:admin_app/General/general.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:admin_app/Screens/usernew.dart';
+import 'package:admin_app/Screens/useredit.dart';
+import 'package:admin_app/Screens/userpw.dart';
 
 class UserListScreen extends StatefulWidget {
   const UserListScreen({Key? key}) : super(key: key);
@@ -159,6 +161,7 @@ class _UserListScreenState extends State<UserListScreen> {
                             ),
                             DataColumn(label: Text('')),
                             DataColumn(label: Text('')),
+                            DataColumn(label: Text('')),
                           ],
                         rows: List<DataRow>.generate(
                             _users.length,
@@ -183,7 +186,32 @@ class _UserListScreenState extends State<UserListScreen> {
                                       child: Icon(Icons.edit),
                                       onPressed: () {
                                         setState(() {
-                                          _type++;
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    EditUserScreen(
+                                                        userID: _users[index]
+                                                            ['id'])),
+                                          ).then((value) {
+                                            loadUserList();
+                                          });
+                                        });
+                                      })),
+                                  DataCell(TextButton(
+                                      child: Icon(Icons.password_sharp),
+                                      onPressed: () {
+                                        setState(() {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    ChangePWUserScreen(
+                                                        userID: _users[index]
+                                                            ['id'])),
+                                          ).then((value) {
+                                            loadUserList();
+                                          });
                                         });
                                       })),
                                   DataCell(TextButton(

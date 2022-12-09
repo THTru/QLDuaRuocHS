@@ -5,7 +5,9 @@ import 'package:admin_app/General/general.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 
+import 'package:admin_app/Screens/line.dart';
 import 'package:admin_app/Screens/linenew.dart';
+import 'package:admin_app/Screens/linereglist.dart';
 
 class LineListScreen extends StatefulWidget {
   const LineListScreen({Key? key}) : super(key: key);
@@ -184,14 +186,30 @@ class _LineListScreenState extends State<LineListScreen> {
                                         child: Icon(Icons.info),
                                         onPressed: () {
                                           setState(() {
-                                            _type++;
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      LineScreen(
+                                                          lineID: _lines[index]
+                                                              ['line_id'])),
+                                            ).then((value) {
+                                              loadLineList();
+                                            });
                                           });
                                         })),
                                     DataCell(TextButton(
-                                        child: Icon(Icons.edit),
+                                        child: Icon(Icons.list_alt),
                                         onPressed: () {
                                           setState(() {
-                                            _type++;
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      LineRegListScreen(
+                                                          lineID: _lines[index]
+                                                              ['line_id'])),
+                                            );
                                           });
                                         })),
                                     DataCell(TextButton(

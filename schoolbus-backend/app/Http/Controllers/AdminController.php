@@ -54,7 +54,7 @@ class AdminController extends Controller
         $response = [ 'message' => 'OK'];
         $rules = [
             'id' => 'required',
-            'date' =>'required|date_format:Y/m/d',
+            'date' =>'required',
             'name' => 'required',
         ];
         $validator = Validator::make($req->all(), $rules);
@@ -137,6 +137,7 @@ class AdminController extends Controller
         $response = [ 'message' => 'OK'];
         $rules = [
             'name' =>'required',
+            'phone' => 'required',
             'id' => 'required|integer',
             'status' => 'required'
         ];
@@ -592,8 +593,8 @@ class AdminController extends Controller
         $rules = [
             'stop_id' =>'required|integer',
             'location' => 'required',
-            'ward' => 'required',
-            'district' => 'required',
+            'lat' => 'required',
+            'lng' => 'required',
         ];
         $validator = Validator::make($req->all(), $rules);
         if($validator->fails()){
@@ -603,8 +604,8 @@ class AdminController extends Controller
 
         $stop_id = $req->stop_id;
         $location = $req->location;
-        $ward = $req->ward;
-        $district = $req->district;
+        $lat = $req->lat;
+        $lng = $req->lng;
 
         $stop = Stop::find($stop_id);
         if($stop == NULL){
@@ -612,8 +613,8 @@ class AdminController extends Controller
             return response()->json($response, 430);
         }
         $stop->location = $location;
-        $stop->ward = $ward;
-        $stop->district = $district;
+        $stop->lat = $lat;
+        $stop->lng = $lng;
         $stop->save();
 
         return response()->json($response, 200);
@@ -694,8 +695,8 @@ class AdminController extends Controller
             'linetype_id' => 'required',
             'linetype_name' =>'required',
             'is_back' => 'required|integer',
-            'time_start' => 'required|date_format:H:i',
-            'time_end' => 'required|date_format:H:i|after:time_start',
+            'time_start' => 'required',
+            'time_end' => 'required',
             'mon' => 'required|integer',
             'tue' => 'required|integer',
             'wed' => 'required|integer',
@@ -951,7 +952,6 @@ class AdminController extends Controller
         $vehicle_id = $req->vehicle_id;
         $driver_id = $req->driver_id;
         $carer_id = $req->carer_id;
-
         
         if($vehicle_id != NULL && !Vehicle::where('vehicle_id', $vehicle_id)->exists()){
             $response = ['message' => 'Mã xe không tồn tại'];

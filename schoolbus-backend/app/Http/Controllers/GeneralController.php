@@ -48,6 +48,11 @@ class GeneralController extends Controller
             return $users->where('type', '=', $keyword1)->get();
         else return $users->get();
     }
+
+    public function user(Request $req){
+        $keyword = $req->id;
+        return User::find($keyword);
+    }
     
     public function test(Request $req){ //Test thôi
         return Student::with('class')->get();
@@ -92,7 +97,7 @@ class GeneralController extends Controller
     //Lấy học sinh + lớp theo ID
     public function student(Request $req){
         $keyword = $req->student_id;
-        return Student::with('class', 'parent')->find($keyword);
+        return Student::with('class', 'parent', 'studenttrip.stop', 'studenttrip.trip')->find($keyword);
     }
 
     //=========================================== DRIVER ==============================================
@@ -241,7 +246,8 @@ class GeneralController extends Controller
     //Lấy tuyến theo ID
     public function line(Request $req){
         $keyword = $req->line_id;
-        return Line::with('linetype', 'carer', 'driver', 'vehicle', 'schedule.stopschedule.stop', 'registration')->find($keyword);
+        return Line::with('linetype', 'carer', 'driver', 'vehicle', 'schedule.stopschedule.stop',
+        'trip.carer', 'trip.vehicle', 'trip.driver')->find($keyword);
     }
 
     //=========================================== TRIP ==============================================
@@ -295,8 +301,12 @@ class GeneralController extends Controller
         return DayOff::get()->sortBy('date')->values();
     }
 
+    public function dayoff(Request $req){
+        return DayOff::find($req->dayoff_id);
+    }
+
     //=========================================== REGISTRATIONS ==============================================
-    //Lấy tất cả các đăng ký theo học sinh của học sinh
+    //Lấy tất cả các đăng ký theo học sinh
     public function registrations(Request $req){
         $keyword1 = $req->student_id;
 
@@ -304,6 +314,12 @@ class GeneralController extends Controller
         if($keyword1 != -1)
             $reg = $reg->where('student_id', '=', $keyword1);
         return $reg->get();
+    }
+
+    public function registrationsbyLine(Request $req){
+        $keyword1 = $req->line_id;
+
+        return Registration::where('line_id', '=', $keyword1)->with('stop', 'student')->get();
     }
 
     public function registration(Request $req){
